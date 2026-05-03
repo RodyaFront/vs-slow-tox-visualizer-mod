@@ -32,8 +32,8 @@ public sealed class SlowToxIntoxicationHud : HudElement
 
     private LoadedTexture? _gearSvg;
     private LoadedTexture? _beerTex;
-    private readonly int[] _statusTextureIds = new int[7];
-    private readonly List<SlowToxHudEffectKind> _activeEffects = new(7);
+    private readonly int[] _statusTextureIds = new int[SlowToxHudEffectKindMeta.KindCount];
+    private readonly List<SlowToxHudEffectKind> _activeEffects = new(SlowToxHudEffectKindMeta.KindCount);
     private float _gearRotationDeg;
     private double _statusIconsWaveTimeSec;
     private int _lastComposedDisplayPercent = int.MinValue;
@@ -60,7 +60,8 @@ public sealed class SlowToxIntoxicationHud : HudElement
     private readonly Dictionary<SlowToxHudEffectKind, float> _prevPulseMetric = new();
     private readonly Dictionary<SlowToxHudEffectKind, SavedIconRect> _lastIconRect = new();
     private bool _statusAnimIntroSynced;
-    private bool _intoxHudWasVisible;
+    private bool _mainIntoxHudWasVisible;
+    private bool _statusChromeWasVisible;
 
     private struct KindRuntimeAnim
     {
@@ -83,6 +84,24 @@ public sealed class SlowToxIntoxicationHud : HudElement
         public double CenterX;
         public double CenterY;
         public int BaselineSize;
+    }
+
+    private readonly struct StatusStripLayout
+    {
+        internal readonly int Mug;
+        internal readonly int Sz;
+        internal readonly int Gap;
+        internal readonly double StripLeft;
+        internal readonly double YBase;
+
+        internal StatusStripLayout(int mug, int sz, int gap, double stripLeft, double yBase)
+        {
+            Mug = mug;
+            Sz = sz;
+            Gap = gap;
+            StripLeft = stripLeft;
+            YBase = yBase;
+        }
     }
 
     private HudLayoutConfig _layout;
@@ -110,7 +129,8 @@ public sealed class SlowToxIntoxicationHud : HudElement
         _lastHudTooltipVtml = null;
 
         ResetIntoxHudTransientState();
-        _intoxHudWasVisible = false;
+        _mainIntoxHudWasVisible = false;
+        _statusChromeWasVisible = false;
 
         if (capi.World is IClientWorldAccessor clientWorld && clientWorld.Player != null)
         {
@@ -257,6 +277,12 @@ public sealed class SlowToxIntoxicationHud : HudElement
 
     private void ReloadStatusIconTextures()
     {
+        if (_statusTextureIds.Length != SlowToxHudEffectKindMeta.KindCount)
+        {
+            throw new InvalidOperationException(
+                $"SlowToxHudEffectKind count ({SlowToxHudEffectKindMeta.KindCount}) must match status texture table length ({_statusTextureIds.Length}).");
+        }
+
         for (int i = 0; i < _statusTextureIds.Length; i++)
         {
             var kind = (SlowToxHudEffectKind)i;
@@ -278,19 +304,13 @@ public sealed class SlowToxIntoxicationHud : HudElement
         return string.Equals(side?.Trim(), "Left", StringComparison.OrdinalIgnoreCase);
     }
 
-    private void GetStatusStripBaseLayout(
-        ElementBounds root,
-        int activeCount,
-        out int mug,
-        out int sz,
-        out int gap,
-        out double stripLeft,
-        out double yBase)
+    private StatusStripLayout BuildStatusStripLayout(ElementBounds root, int activeCount)
     {
         _layout.EnsureDefaults();
-        mug = _layout.MugSize;
-        sz = _layout.StatusIconSize > 0 ? _layout.StatusIconSize : mug;
-        gap = _layout.StatusIconGapPx;
+        int mug = _layout.MugSize;
+        int sz = _layout.StatusIconSize > 0 ? _layout.StatusIconSize : mug;
+        int gap = _layout.StatusIconGapPx;
+        double stripLeft;
         if (IsStatusStripLeft(_layout.StatusStripSide) && activeCount > 0)
         {
             double span = activeCount * sz + Math.Max(0, activeCount - 1) * gap;
@@ -302,7 +322,20 @@ public sealed class SlowToxIntoxicationHud : HudElement
             stripLeft = root.renderX + anchorW + _layout.StatusStripOffsetX;
         }
 
-        yBase = StatusStripOriginYPx(root, mug, sz);
+        double yBase = StatusStripOriginYPx(root, mug, sz);
+        return new StatusStripLayout(mug, sz, gap, stripLeft, yBase);
+    }
+
+    private void GetIconScreen_LTWH(
+        ref StatusStripLayout strip,
+        int visibleIndex,
+        out double left,
+        out double top,
+        out int sz)
+    {
+        sz = strip.Sz;
+        left = strip.StripLeft + visibleIndex * (sz + strip.Gap);
+        top = strip.YBase - StatusIconsWaveVerticalOffsetPx(visibleIndex);
     }
 
     private bool TryPickStatusIcon(
@@ -317,7 +350,8 @@ public sealed class SlowToxIntoxicationHud : HudElement
             return false;
         }
 
-        GetStatusStripBaseLayout(root, _activeEffects.Count, out _, out int sz, out int gap, out double stripLeft, out double yBase);
+        StatusStripLayout strip = BuildStatusStripLayout(root, _activeEffects.Count);
+        bool anim = _layout.StatusIconAnimEnabled;
 
         for (int i = _activeEffects.Count - 1; i >= 0; i--)
         {
@@ -327,9 +361,25 @@ public sealed class SlowToxIntoxicationHud : HudElement
                 continue;
             }
 
-            double x = stripLeft + i * (sz + gap);
-            double yDraw = yBase - StatusIconsWaveVerticalOffsetPx(i);
-            if (mouseX >= x && mouseX < x + sz && mouseY >= yDraw && mouseY < yDraw + sz)
+            GetIconScreen_LTWH(ref strip, i, out double left, out double top, out int sz);
+            if (!anim)
+            {
+                if (mouseX >= left && mouseX < left + sz && mouseY >= top && mouseY < top + sz)
+                {
+                    pickedIndex = i;
+                    return true;
+                }
+
+                continue;
+            }
+
+            SlowToxHudEffectKind kind = _activeEffects[i];
+            _ = _kindAnim.TryGetValue(kind, out KindRuntimeAnim a);
+            float scale = CombineKindScale(a);
+            double cx = left + sz * 0.5;
+            double cy = top + sz * 0.5;
+            double half = sz * 0.5 * scale;
+            if (mouseX >= cx - half && mouseX < cx + half && mouseY >= cy - half && mouseY < cy + half)
             {
                 pickedIndex = i;
                 return true;
@@ -383,14 +433,14 @@ public sealed class SlowToxIntoxicationHud : HudElement
             richBounds);
     }
 
-    private void RenderHudTooltips(float deltaTime, ElementBounds root)
+    private void RenderHudTooltips(float deltaTime, ElementBounds root, bool mainHudVisible, bool statusChromeVisible)
     {
         int mx = capi.Input.MouseX;
         int my = capi.Input.MouseY;
         _layout.EnsureDefaults();
         int mug = _layout.MugSize;
 
-        if (TryPickJug(mx, my, root, mug))
+        if (mainHudVisible && TryPickJug(mx, my, root, mug))
         {
             string vtml = Lang.Get("slowtoxvisualized:tooltip-jug-fmt");
             const double jugGapBelowPx = 4;
@@ -403,7 +453,7 @@ public sealed class SlowToxIntoxicationHud : HudElement
             return;
         }
 
-        if (_activeEffects.Count == 0)
+        if (!statusChromeVisible || _activeEffects.Count == 0)
         {
             _lastHudTooltipVtml = null;
             return;
@@ -424,11 +474,10 @@ public sealed class SlowToxIntoxicationHud : HudElement
 
         SlowToxHudEffectKind kind = _activeEffects[pickedIndex];
         string statusVtml = SlowToxStatusTooltipContent.BuildVtml(kind, entity, capi, _layout);
-        GetStatusStripBaseLayout(root, _activeEffects.Count, out _, out int sz, out int gap, out double stripLeft, out double yBase);
-        double ix = stripLeft + pickedIndex * (sz + gap);
-        double yDraw = yBase - StatusIconsWaveVerticalOffsetPx(pickedIndex);
+        StatusStripLayout strip = BuildStatusStripLayout(root, _activeEffects.Count);
+        GetIconScreen_LTWH(ref strip, pickedIndex, out double left, out double top, out int sz);
         const double gapBelowPx = 4;
-        RenderRichTooltipAt(deltaTime, root, statusVtml, ix, yDraw + sz + gapBelowPx);
+        RenderRichTooltipAt(deltaTime, root, statusVtml, left, top + sz + gapBelowPx);
     }
 
     private void RenderRichTooltipAt(
@@ -597,11 +646,7 @@ public sealed class SlowToxIntoxicationHud : HudElement
             tint);
     }
 
-    private Dictionary<SlowToxHudEffectKind, SavedIconRect> CollectIconRects(
-        double stripLeft,
-        int sz,
-        int gap,
-        double yBase)
+    private Dictionary<SlowToxHudEffectKind, SavedIconRect> CollectIconRects(ref StatusStripLayout strip)
     {
         Dictionary<SlowToxHudEffectKind, SavedIconRect> rects = new();
         for (int i = 0; i < _activeEffects.Count; i++)
@@ -613,8 +658,7 @@ public sealed class SlowToxIntoxicationHud : HudElement
                 continue;
             }
 
-            double x = stripLeft + i * (sz + gap);
-            double yDraw = yBase - StatusIconsWaveVerticalOffsetPx(i);
+            GetIconScreen_LTWH(ref strip, i, out double x, out double yDraw, out int sz);
             rects[kind] = new SavedIconRect { Left = x, Top = yDraw, Size = sz };
         }
 
@@ -660,8 +704,8 @@ public sealed class SlowToxIntoxicationHud : HudElement
     private void UpdateStatusIconAnimations(float deltaTime, ElementBounds root)
     {
         FillScratchCurrentKinds();
-        GetStatusStripBaseLayout(root, _activeEffects.Count, out _, out int sz, out int gap, out double stripLeft, out double yBase);
-        Dictionary<SlowToxHudEffectKind, SavedIconRect> rects = CollectIconRects(stripLeft, sz, gap, yBase);
+        StatusStripLayout strip = BuildStatusStripLayout(root, _activeEffects.Count);
+        Dictionary<SlowToxHudEffectKind, SavedIconRect> rects = CollectIconRects(ref strip);
         Entity? entity = capi.World.Player?.Entity;
 
         if (!_layout.StatusIconAnimEnabled)
@@ -777,7 +821,7 @@ public sealed class SlowToxIntoxicationHud : HudElement
 
         _layout.EnsureDefaults();
 
-        GetStatusStripBaseLayout(root, _activeEffects.Count, out _, out int sz, out int gap, out double stripLeft, out double yBase);
+        StatusStripLayout strip = BuildStatusStripLayout(root, _activeEffects.Count);
         float z = _layout.ZStatusIcons;
 
         if (!_layout.StatusIconAnimEnabled)
@@ -792,8 +836,7 @@ public sealed class SlowToxIntoxicationHud : HudElement
                     continue;
                 }
 
-                double x = stripLeft + i * (sz + gap);
-                double yDraw = yBase - StatusIconsWaveVerticalOffsetPx(i);
+                GetIconScreen_LTWH(ref strip, i, out double x, out double yDraw, out int sz);
                 capi.Render.Render2DTexture(
                     texId,
                     (float)x,
@@ -817,8 +860,7 @@ public sealed class SlowToxIntoxicationHud : HudElement
                 continue;
             }
 
-            double x = stripLeft + i * (sz + gap);
-            double yDraw = yBase - StatusIconsWaveVerticalOffsetPx(i);
+            GetIconScreen_LTWH(ref strip, i, out double x, out double yDraw, out int sz);
             double cx = x + sz * 0.5;
             double cy = yDraw + sz * 0.5;
             _ = _kindAnim.TryGetValue(kind, out KindRuntimeAnim anim);
@@ -906,94 +948,116 @@ public sealed class SlowToxIntoxicationHud : HudElement
         float rawForHud = IntoxicationResolve.GetRaw(hudEntity, _layout);
         int displayPct = DisplayPercent(rawForHud);
 
-        if (!ShouldRenderIntoxicationHud(displayPct))
+        RefreshActiveStatusEffects();
+
+        bool showMainHud = ShouldRenderIntoxicationHud(displayPct);
+        bool showStatusChrome = _activeEffects.Count > 0 || _popoutAnims.Count > 0;
+
+        if (!showMainHud && !showStatusChrome)
         {
-            if (_intoxHudWasVisible)
+            if (_mainIntoxHudWasVisible || _statusChromeWasVisible)
             {
                 ResetIntoxHudTransientState();
-                _intoxHudWasVisible = false;
             }
 
+            _mainIntoxHudWasVisible = false;
+            _statusChromeWasVisible = false;
             _lastComposedDisplayPercent = displayPct;
             return;
         }
 
-        _intoxHudWasVisible = true;
+        _statusChromeWasVisible = showStatusChrome;
 
-        if (displayPct != _lastComposedDisplayPercent)
+        if (showMainHud)
         {
+            _mainIntoxHudWasVisible = true;
+            if (displayPct != _lastComposedDisplayPercent)
+            {
+                _lastComposedDisplayPercent = displayPct;
+                ComposeHud();
+            }
+        }
+        else
+        {
+            _mainIntoxHudWasVisible = false;
             _lastComposedDisplayPercent = displayPct;
-            ComposeHud();
         }
 
         ElementBounds root = SingleComposer.Bounds;
 
-        int mug = _layout.MugSize;
-        float zBeer = _layout.ZBeer;
-
-        if (_beerTex != null && _beerTex.TextureId != 0)
+        if (showMainHud)
         {
-            capi.Render.Render2DTexture(
-                _beerTex.TextureId,
-                (float)root.renderX,
-                (float)root.renderY,
-                mug,
-                mug,
-                zBeer,
-                WhiteTint);
-        }
+            int mug = _layout.MugSize;
+            float zBeer = _layout.ZBeer;
 
-        base.OnRenderGUI(deltaTime);
-
-        _statusIconsWaveTimeSec += deltaTime;
-
-        if (_gearSvg != null && _gearSvg.TextureId != 0)
-        {
-            float rawHud = IntoxicationResolve.GetRaw(capi.World.Player?.Entity, _layout);
-            Vec4f fillTint = RgbaToVec4f(IntoxicationPalette.FillRgba(rawHud));
-            Vec4f strokeTint = RgbaToVec4f(_layout.GearStrokeColor);
-
-            int gearDraw = _layout.GearDrawSize;
-            double inset = _layout.GearCornerInsetFactor;
-
-            double cx = root.renderX + mug - gearDraw * inset + _layout.GearOffsetX;
-            double cy = root.renderY + mug - gearDraw * inset + _layout.GearOffsetY;
-
-            _gearRotationDeg += deltaTime * _layout.GearRotateDegPerSec;
-
-            float rot = _gearRotationDeg;
-            float tcx = (float)cx;
-            float tcy = (float)cy;
-            float strokePx = (float)_layout.GearStrokeWidth;
-            float outer = gearDraw + 2f * strokePx;
-            float zStroke = _layout.ZGear - 1f;
-            float zFill = _layout.ZGear;
-            int texId = _gearSvg.TextureId;
-
-            IRenderAPI r = capi.Render;
-
-            void DrawGearQuad(float size, float z, Vec4f tint)
+            if (_beerTex != null && _beerTex.TextureId != 0)
             {
-                r.GlPushMatrix();
-                r.GlTranslate(tcx, tcy, 0f);
-                r.GlRotate(rot, 0f, 0f, 1f);
-                r.GlTranslate(-size / 2f, -size / 2f, 0f);
-                r.Render2DTexture(texId, 0f, 0f, size, size, z, tint);
-                r.GlPopMatrix();
+                capi.Render.Render2DTexture(
+                    _beerTex.TextureId,
+                    (float)root.renderX,
+                    (float)root.renderY,
+                    mug,
+                    mug,
+                    zBeer,
+                    WhiteTint);
             }
 
-            if (strokePx > 0f)
-            {
-                DrawGearQuad(outer, zStroke, strokeTint);
-            }
+            base.OnRenderGUI(deltaTime);
 
-            DrawGearQuad(gearDraw, zFill, fillTint);
+            if (_gearSvg != null && _gearSvg.TextureId != 0)
+            {
+                Vec4f fillTint = RgbaToVec4f(IntoxicationPalette.FillRgba(rawForHud));
+                Vec4f strokeTint = RgbaToVec4f(_layout.GearStrokeColor);
+
+                int gearDraw = _layout.GearDrawSize;
+                double inset = _layout.GearCornerInsetFactor;
+
+                double cx = root.renderX + mug - gearDraw * inset + _layout.GearOffsetX;
+                double cy = root.renderY + mug - gearDraw * inset + _layout.GearOffsetY;
+
+                _gearRotationDeg += deltaTime * _layout.GearRotateDegPerSec;
+
+                float rot = _gearRotationDeg;
+                float tcx = (float)cx;
+                float tcy = (float)cy;
+                float strokePx = (float)_layout.GearStrokeWidth;
+                float outer = gearDraw + 2f * strokePx;
+                float zStroke = _layout.ZGear - 1f;
+                float zFill = _layout.ZGear;
+                int texId = _gearSvg.TextureId;
+
+                IRenderAPI r = capi.Render;
+
+                void DrawGearQuad(float size, float z, Vec4f tint)
+                {
+                    r.GlPushMatrix();
+                    r.GlTranslate(tcx, tcy, 0f);
+                    r.GlRotate(rot, 0f, 0f, 1f);
+                    r.GlTranslate(-size / 2f, -size / 2f, 0f);
+                    r.Render2DTexture(texId, 0f, 0f, size, size, z, tint);
+                    r.GlPopMatrix();
+                }
+
+                if (strokePx > 0f)
+                {
+                    DrawGearQuad(outer, zStroke, strokeTint);
+                }
+
+                DrawGearQuad(gearDraw, zFill, fillTint);
+            }
         }
 
-        RefreshActiveStatusEffects();
-        UpdateStatusIconAnimations(deltaTime, root);
-        RenderActiveEffectIcons(root);
-        RenderHudTooltips(deltaTime, root);
+        if (showStatusChrome)
+        {
+            _statusIconsWaveTimeSec += deltaTime;
+            UpdateStatusIconAnimations(deltaTime, root);
+            RenderActiveEffectIcons(root);
+        }
+
+        if (showMainHud || showStatusChrome)
+        {
+            RenderHudTooltips(deltaTime, root, showMainHud, showStatusChrome);
+        }
     }
 
     public override double DrawOrder => 0.22;
