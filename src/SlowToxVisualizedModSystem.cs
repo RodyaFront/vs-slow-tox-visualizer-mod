@@ -8,7 +8,7 @@ public class SlowToxVisualizedModSystem : ModSystem
 {
     private ICoreClientAPI? _clientApi;
     private Action? _onLevelFinalize;
-    private IntoxicationMockHud? _intoxicationHud;
+    private SlowToxIntoxicationHud? _intoxicationHud;
 
     public override void StartPre(ICoreAPI api)
     {
@@ -20,7 +20,7 @@ public class SlowToxVisualizedModSystem : ModSystem
     {
         base.StartClientSide(api);
         _clientApi = api;
-        _intoxicationHud = new IntoxicationMockHud(api);
+        _intoxicationHud = new SlowToxIntoxicationHud(api);
 
         api.Input.RegisterHotKeyFirst(
             "slowtoxvisualized_reloadhudlayout",
