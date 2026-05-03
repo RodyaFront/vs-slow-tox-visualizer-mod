@@ -19,4 +19,4 @@
 ## Готово
 
 - [x] П.1: конвейер сборки — проект [`SlowToxVisualized/SlowToxVisualized.csproj`](SlowToxVisualized/SlowToxVisualized.csproj), выход `bin/.../Mods/slowtoxvisualized/`, копия в `%AppData%\VintagestoryData\Mods` (2026-05-03). Проверка в клиенте: вручную убедиться, что мод в списке и в логе есть `[Slow Tox Visualized] Mod loaded.`
-- [x] П.2: мок HUD — [`IntoxicationMockHud`](SlowToxVisualized/src/IntoxicationMockHud.cs): иконка PNG (`assets/.../intox_icon.png`), полоска **3.5 / 10**, позиция низ по центру (`EnumDialogArea.CenterBottom`). Проверка в игре вручную; при занятом файле DLL закройте клиент перед копией в `Mods`.
+- [x] П.2: HUD интоксикации — [`SlowToxIntoxicationHud`](SlowToxVisualized/src/SlowToxIntoxicationHud.cs): иконка PNG (`assets/.../intox_icon.png`), полоска **3.5 / 10**, позиция низ по центру (`EnumDialogArea.CenterBottom`). Проверка в игре вручную; при занятом файле DLL закройте клиент перед копией в `Mods`.

@@ -9,7 +9,7 @@ using Vintagestory.API.MathTools;
 
 namespace SlowToxVisualized;
 
-public sealed class IntoxicationMockHud : HudElement
+public sealed class SlowToxIntoxicationHud : HudElement
 {
     private static readonly AssetLocation BeerPath = new("slowtoxvisualized", "textures/icons/jug.png");
     private static readonly AssetLocation GearSvgPath = new("slowtoxvisualized", "textures/icons/gear.svg");
@@ -48,7 +48,10 @@ public sealed class IntoxicationMockHud : HudElement
     private const float StatusPulseDurationSec = 0.38f;
     private const float StatusPulseAmplitude = 0.11f;
     private const float StatusPopoutDurationSec = 0.24f;
-    private const float StatusPulseMetricEpsilon = 0.004f;
+    /// <summary>Regen/stability DPS use small absolute numbers (~0…0.02); plain absolute epsilon missed e.g. 0.01→0.011 (Δ=0.001).</summary>
+    private const float StatusPulseRelativeThreshold = 0.012f;
+
+    private const float StatusPulseAbsoluteFloor = 0.001f;
 
     private readonly Dictionary<SlowToxHudEffectKind, KindRuntimeAnim> _kindAnim = new();
     private readonly List<PopoutAnim> _popoutAnims = new();
@@ -57,6 +60,7 @@ public sealed class IntoxicationMockHud : HudElement
     private readonly Dictionary<SlowToxHudEffectKind, float> _prevPulseMetric = new();
     private readonly Dictionary<SlowToxHudEffectKind, SavedIconRect> _lastIconRect = new();
     private bool _statusAnimIntroSynced;
+    private bool _intoxHudWasVisible;
 
     private struct KindRuntimeAnim
     {
@@ -83,7 +87,7 @@ public sealed class IntoxicationMockHud : HudElement
 
     private HudLayoutConfig _layout;
 
-    public IntoxicationMockHud(ICoreClientAPI capi)
+    public SlowToxIntoxicationHud(ICoreClientAPI capi)
         : base(capi)
     {
         _layout = HudLayoutConfig.LoadOrCreate(capi);
@@ -105,13 +109,8 @@ public sealed class IntoxicationMockHud : HudElement
         _statusTooltipPanel = null;
         _lastHudTooltipVtml = null;
 
-        _kindAnim.Clear();
-        _popoutAnims.Clear();
-        _prevActiveKinds.Clear();
-        _scratchCurrentKinds.Clear();
-        _prevPulseMetric.Clear();
-        _lastIconRect.Clear();
-        _statusAnimIntroSynced = false;
+        ResetIntoxHudTransientState();
+        _intoxHudWasVisible = false;
 
         if (capi.World is IClientWorldAccessor clientWorld && clientWorld.Player != null)
         {
@@ -124,6 +123,24 @@ public sealed class IntoxicationMockHud : HudElement
     {
         int p = (int)Math.Round(rawIntoxication * 100f);
         return Math.Clamp(p, 0, 999);
+    }
+
+    /// <summary>Hide HUD when displayed percent would be 0 (same rounding as the big digit).</summary>
+    private static bool ShouldRenderIntoxicationHud(int displayPercent)
+    {
+        return displayPercent >= 1;
+    }
+
+    private void ResetIntoxHudTransientState()
+    {
+        _kindAnim.Clear();
+        _popoutAnims.Clear();
+        _prevActiveKinds.Clear();
+        _scratchCurrentKinds.Clear();
+        _prevPulseMetric.Clear();
+        _lastIconRect.Clear();
+        _statusAnimIntroSynced = false;
+        _lastHudTooltipVtml = null;
     }
 
     private static Vec4f RgbaToVec4f(double[] rgba)
@@ -166,7 +183,7 @@ public sealed class IntoxicationMockHud : HudElement
 
         CairoFont font = new CairoFont(fc);
 
-        GuiComposer composer = capi.Gui.CreateCompo("slowtoxvisualized-intoxmock", dialogBounds);
+        GuiComposer composer = capi.Gui.CreateCompo("slowtoxvisualized-intoxhud", dialogBounds);
 
         composer.BeginChildElements(innerBounds);
         GuiComposerHelpers.AddStaticText(
@@ -326,6 +343,25 @@ public sealed class IntoxicationMockHud : HudElement
     {
         return mouseX >= root.renderX && mouseX < root.renderX + mug
             && mouseY >= root.renderY && mouseY < root.renderY + mug;
+    }
+
+    private static bool ShouldTriggerPulseMetric(float prevM, float nowM)
+    {
+        float d = Math.Abs(nowM - prevM);
+        if (d < 1e-8f)
+        {
+            return false;
+        }
+
+        float scale = Math.Max(Math.Max(Math.Abs(prevM), Math.Abs(nowM)), 1e-9f);
+        float relative = d / scale;
+
+        if (relative >= StatusPulseRelativeThreshold)
+        {
+            return true;
+        }
+
+        return d >= StatusPulseAbsoluteFloor;
     }
 
     private void EnsureStatusTooltipElements(ElementBounds root)
@@ -698,7 +734,7 @@ public sealed class IntoxicationMockHud : HudElement
                 }
 
                 float nowM = SlowToxStatusTooltipContent.GetPulseMetric(kind, entity, capi, _layout);
-                if (Math.Abs(nowM - prevM) > StatusPulseMetricEpsilon && KindPopupSettled(kind))
+                if (ShouldTriggerPulseMetric(prevM, nowM) && KindPopupSettled(kind))
                 {
                     KindRuntimeAnim a = _kindAnim.TryGetValue(kind, out KindRuntimeAnim x) ? x : default;
                     a.Pulsing = true;
@@ -869,6 +905,21 @@ public sealed class IntoxicationMockHud : HudElement
         Entity? hudEntity = capi.World.Player?.Entity;
         float rawForHud = IntoxicationResolve.GetRaw(hudEntity, _layout);
         int displayPct = DisplayPercent(rawForHud);
+
+        if (!ShouldRenderIntoxicationHud(displayPct))
+        {
+            if (_intoxHudWasVisible)
+            {
+                ResetIntoxHudTransientState();
+                _intoxHudWasVisible = false;
+            }
+
+            _lastComposedDisplayPercent = displayPct;
+            return;
+        }
+
+        _intoxHudWasVisible = true;
+
         if (displayPct != _lastComposedDisplayPercent)
         {
             _lastComposedDisplayPercent = displayPct;
