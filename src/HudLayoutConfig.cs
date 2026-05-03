@@ -62,7 +62,7 @@ public class HudLayoutConfig
     public double GearStrokeWidth { get; set; } = 6;
     public double[] GearStrokeColor { get; set; } = { 0, 0, 0, 1 };
 
-    public bool UseMockIntoxicationOverride { get; set; } = true;
+    public bool UseMockIntoxicationOverride { get; set; } = false;
 
     public double MockIntoxicationRaw { get; set; } = 0.5;
 
@@ -99,7 +99,7 @@ public class HudLayoutConfig
         {
             loaded.EnsureDefaults();
             capi.Logger.Notification(
-                "[Slow Tox Visualized] HUD layout: {0}",
+                "[SlowTox Visualized] HUD layout: {0}",
                 Path.Combine(modConfigDir, LayoutConfigFileName));
             return loaded;
         }
@@ -109,12 +109,12 @@ public class HudLayoutConfig
         {
             loaded.EnsureDefaults();
             capi.Logger.Notification(
-                "[Slow Tox Visualized] Migrated layout from {0} -> {1}",
+                "[SlowTox Visualized] Migrated layout from {0} -> {1}",
                 LegacyLayoutConfigFileName,
                 LayoutConfigFileName);
             capi.StoreModConfig(loaded, LayoutConfigFileName);
             capi.Logger.Notification(
-                "[Slow Tox Visualized] HUD layout: {0}",
+                "[SlowTox Visualized] HUD layout: {0}",
                 Path.Combine(modConfigDir, LayoutConfigFileName));
             return loaded;
         }
@@ -122,7 +122,7 @@ public class HudLayoutConfig
         HudLayoutConfig defaults = CreateDefaults();
         capi.StoreModConfig(defaults, LayoutConfigFileName);
         capi.Logger.Notification(
-            "[Slow Tox Visualized] Created default HUD layout: {0} (F9 to reload after edits)",
+            "[SlowTox Visualized] Created default HUD layout: {0} (F9 to reload after edits)",
             Path.Combine(modConfigDir, LayoutConfigFileName));
         return defaults;
     }

@@ -135,7 +135,7 @@ public sealed class SlowToxIntoxicationHud : HudElement
         if (capi.World is IClientWorldAccessor clientWorld && clientWorld.Player != null)
         {
             clientWorld.Player.ShowChatNotification(
-                $"Slow Tox Visualized: layout reloaded (FontSize={_layout.FontSize}; status Δxy={_layout.StatusStripOffsetX},{_layout.StatusStripOffsetY}; anchor={_layout.StatusStripAnchorMode}; valign={_layout.StatusStripVerticalAlign}; statusSide={_layout.StatusStripSide}).");
+                $"SlowTox Visualized: layout reloaded (FontSize={_layout.FontSize}; status Δxy={_layout.StatusStripOffsetX},{_layout.StatusStripOffsetY}; anchor={_layout.StatusStripAnchorMode}; valign={_layout.StatusStripVerticalAlign}; statusSide={_layout.StatusStripSide}).");
         }
     }
 
@@ -236,6 +236,21 @@ public sealed class SlowToxIntoxicationHud : HudElement
         int raster = Math.Max(64, g * 4);
 
         _gearSvg?.Dispose();
+        _gearSvg = null;
+
+        if (capi.Assets.TryGet(GearSvgPath) == null)
+        {
+            if (!_warnedGearMissing)
+            {
+                _warnedGearMissing = true;
+                capi.Logger.Warning(
+                    "[SlowTox Visualized] Gear SVG asset missing at {0}. Copy the full mod folder (including assets/slowtoxvisualized/textures/icons/gear.svg), not only the DLL.",
+                    GearSvgPath);
+            }
+
+            return;
+        }
+
         _gearSvg = capi.Gui.LoadSvg(
             GearSvgPath,
             raster,
@@ -250,7 +265,7 @@ public sealed class SlowToxIntoxicationHud : HudElement
             {
                 _warnedGearMissing = true;
                 capi.Logger.Warning(
-                    "[Slow Tox Visualized] Gear SVG did not load (path {0}). Check mod assets.",
+                    "[SlowTox Visualized] Gear SVG failed to rasterize (path {0}). File is present; check SVG compatibility with the game client.",
                     GearSvgPath);
             }
 
