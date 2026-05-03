@@ -1,0 +1,10 @@
+{
+  "slowtoxvisualized:tooltip-jug-fmt": "<font color=\"#cfcfcf\">Your current blood alcohol level.</font>",
+  "slowtoxvisualized:tooltip-dr-fmt": "<font color=\"#cfcfcf\"><b>Damage reduction</b></font> You take {0:0.##} HP less damage.",
+  "slowtoxvisualized:tooltip-hp-fmt": "<font color=\"#cfcfcf\"><b>HP regeneration</b></font> {0:0.####} HP per second.",
+  "slowtoxvisualized:tooltip-temporal-fmt": "<font color=\"#cfcfcf\"><b>Temporal stability</b></font> +{0:0.#####} stability per second.",
+  "slowtoxvisualized:tooltip-melee-fmt": "<font color=\"#cfcfcf\"><b>Melee damage</b></font> +{0:0.#}% damage.",
+  "slowtoxvisualized:tooltip-mining-fmt": "<font color=\"#cfcfcf\"><b>Mining speed</b></font> +{0:0.#}% mining speed.",
+  "slowtoxvisualized:tooltip-slow-fmt": "<font color=\"#cfcfcf\"><b>Slow</b></font> −{0:0.#}% movement speed.",
+  "slowtoxvisualized:tooltip-poison-fmt": "<font color=\"#cfcfcf\"><b>Poison</b></font> You take {0:0.##} HP damage per second."
+}
