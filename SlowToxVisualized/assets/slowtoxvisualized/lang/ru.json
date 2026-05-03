@@ -1,0 +1,10 @@
+{
+  "slowtoxvisualized:tooltip-jug-fmt": "<font color=\"#cfcfcf\">Ваш текущий уровень алкоголя в теле</font>",
+  "slowtoxvisualized:tooltip-dr-fmt": "<font color=\"#cfcfcf\"><b>Снижение урона</b></font> Вы получаете на {0:0.##} HP меньше урона.",
+  "slowtoxvisualized:tooltip-hp-fmt": "<font color=\"#cfcfcf\"><b>Регенерация HP</b></font> {0:0.####} HP в секунду.",
+  "slowtoxvisualized:tooltip-temporal-fmt": "<font color=\"#cfcfcf\"><b>Временная стабильность</b></font> +{0:0.#####} стабильности в секунду.",
+  "slowtoxvisualized:tooltip-melee-fmt": "<font color=\"#cfcfcf\"><b>Урон ближнего боя</b></font> +{0:0.#}% урона.",
+  "slowtoxvisualized:tooltip-mining-fmt": "<font color=\"#cfcfcf\"><b>Скорость копания</b></font> +{0:0.#}% скорости копания.",
+  "slowtoxvisualized:tooltip-slow-fmt": "<font color=\"#cfcfcf\"><b>Замедление</b></font> −{0:0.#}% скорости передвижения.",
+  "slowtoxvisualized:tooltip-poison-fmt": "<font color=\"#cfcfcf\"><b>Отравление</b></font> Вы получаете {0:0.##} HP урона в секунду."
+}

@@ -1,0 +1,19 @@
+# Build outputs
+**/bin/
+**/obj/
+*.dll
+*.pdb
+*.deps.json
+
+# IDE
+.vs/
+*.user
+*.suo
+*.userosscache
+
+# Reference / upstream clones (not part of this mod)
+SlowTox-upstream/
+VintageStory_ImGui-upstream/
+
+# Optional local tooling
+mcps/

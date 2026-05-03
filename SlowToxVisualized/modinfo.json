@@ -1,0 +1,11 @@
+{
+  "type": "code",
+  "modid": "slowtoxvisualized",
+  "name": "Slow Tox Visualized",
+  "authors": ["Teotale"],
+  "description": "Visualization layer for intoxication (SlowTox). HUD palette and layout validated in-game.",
+  "version": "0.4.3",
+  "dependencies": {
+    "game": "*"
+  }
+}
