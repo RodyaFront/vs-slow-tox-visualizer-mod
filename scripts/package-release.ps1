@@ -28,6 +28,7 @@ $zipPath = Join-Path $releasesDir $zipName
 if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
 
 Write-Host "Packaging $zipPath ..."
-Compress-Archive -Path $buildOut -DestinationPath $zipPath -Force
+# Mod DB requires modinfo.json at zip root (not inside slowtoxvisualized/), so archive contents only.
+Compress-Archive -Path (Join-Path $buildOut "*") -DestinationPath $zipPath -Force
 
 Write-Host "Done. $zipPath ($((Get-Item $zipPath).Length / 1KB | ForEach-Object { [math]::Round($_, 1) }) KB)"
