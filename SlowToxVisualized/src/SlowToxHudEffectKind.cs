@@ -1,3 +1,5 @@
+using System;
+
 namespace SlowToxVisualized;
 
 public enum SlowToxHudEffectKind
@@ -9,4 +11,9 @@ public enum SlowToxHudEffectKind
     MiningSpeedBuff = 4,
     SlowDebuff = 5,
     PoisonDebuff = 6
+}
+
+internal static class SlowToxHudEffectKindMeta
+{
+    internal static readonly int KindCount = Enum.GetValues<SlowToxHudEffectKind>().Length;
 }

@@ -17,3 +17,6 @@ VintageStory_ImGui-upstream/
 
 # Optional local tooling
 mcps/
+
+# Release zip (regenerate: .\scripts\package-release.ps1)
+releases/*.zip

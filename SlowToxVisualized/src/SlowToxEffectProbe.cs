@@ -92,12 +92,21 @@ internal static class SlowToxEffectProbe
             intoxForLogic,
             composed);
 
-        if (GameMath.Max(meleeStat, strengthCalc) > Epsilon)
+        bool inStrengthIntoxBand =
+            intoxForLogic >= SlowToxHudDefaults.StrengthBonusMultiplierIntoxRangeBottom;
+        float meleeMetric = inStrengthIntoxBand
+            ? GameMath.Max(meleeStat, strengthCalc)
+            : strengthCalc;
+        float miningMetric = inStrengthIntoxBand
+            ? GameMath.Max(miningStat, strengthCalc)
+            : strengthCalc;
+
+        if (meleeMetric > Epsilon)
         {
             dest.Add(SlowToxHudEffectKind.MeleeDamageBuff);
         }
 
-        if (GameMath.Max(miningStat, strengthCalc) > Epsilon)
+        if (miningMetric > Epsilon)
         {
             dest.Add(SlowToxHudEffectKind.MiningSpeedBuff);
         }
