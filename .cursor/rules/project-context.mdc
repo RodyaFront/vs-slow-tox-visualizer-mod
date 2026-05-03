@@ -1,5 +1,5 @@
 ---
-description: Контекст Slow Tox Visualized — Vintage Story, пути, документация
+description: Контекст SlowTox Visualized — Vintage Story, пути, документация
 alwaysApply: true
 ---
 
@@ -19,13 +19,13 @@ alwaysApply: true
 
 После ответов — уже искать причину или править код/конфиг.
 
-# Проект Slow Tox Visualized
+# Проект SlowTox Visualized
 
 Разрабатываемый мод для **Vintage Story** на **C#**: основан на идеях **SlowTox**, с акцентом на визуализацию интоксикации.
 
 | | |
 |---|---|
-| **Отображаемое имя** | Slow Tox Visualized |
+| **Отображаемое имя** | SlowTox Visualized |
 | **`modid`** (технический id в `modinfo.json`, папка `assets/<modid>/`, префиксы ключей) | `slowtoxvisualized` |
 
 Базовый upstream для изучения кода: **`SlowTox-upstream/`**; при необходимости **`VintageStory_ImGui-upstream/`**. Целевая зависимость: мод **`slowtox`** (или форк), если не объединяете всё в одной сборке — уточнять в `modinfo.json` при появлении проекта.
@@ -51,7 +51,7 @@ alwaysApply: true
 
 Файл в общей папке **`ModConfig`** (не внутри подкаталога мода). Поля совпадают с классом **`HudLayoutConfig`** в коде.
 
-**Согласованные с пользователем дефолты в коде** (если JSON ещё не создан): `MockIntoxicationRaw` **0.5**, `TextOffsetX` **-2**, `TextY` **30**, `FontSize` **14**, `GearDrawSize` **64**, `GearCornerInsetFactor` **0.05**, `GearOffsetX` / `GearOffsetY` **-2**, `GearRotateDegPerSec` **45**, `GearStrokeWidth` **6**, полоска статусов — `StatusStripOffsetX` **4**, `StatusStripOffsetY` **2**, `StatusIconGapPx` **4**, цвета обводки — `TextStrokeColor` / `GearStrokeColor` в RGBA 0..1.
+**Согласованные с пользователем дефолты в коде** (если JSON ещё не создан): `UseMockIntoxicationOverride` **false** (продакшн); `MockIntoxicationRaw` **0.5** (только если mock включён), `TextOffsetX` **-2**, `TextY` **30**, `FontSize` **14**, `GearDrawSize` **64**, `GearCornerInsetFactor` **0.05**, `GearOffsetX` / `GearOffsetY` **-2**, `GearRotateDegPerSec` **45**, `GearStrokeWidth` **6**, полоска статусов — `StatusStripOffsetX` **4**, `StatusStripOffsetY` **2**, `StatusIconGapPx` **4**, цвета обводки — `TextStrokeColor` / `GearStrokeColor` в RGBA 0..1.
 
 Толщина обводки шестерни в игре — поле **`GearStrokeWidth`** (пиксели; при **0** код не рисует внешний «обводочный» слой). Перезагрузка конфига — **F9** (если не переназначен).
 

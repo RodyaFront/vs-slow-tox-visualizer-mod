@@ -1,10 +1,10 @@
 {
   "type": "code",
   "modid": "slowtoxvisualized",
-  "name": "Slow Tox Visualized",
+  "name": "SlowTox Visualized",
   "authors": ["Teotale"],
-  "description": "Client HUD for Slow Tox: intoxication bar, drunk-level palette, and a status strip for buffs and debuffs. Requires the Slow Tox mod.",
-  "version": "1.0.0",
+  "description": "Client HUD for SlowTox: intoxication bar, drunk-level palette, and a status strip for buffs and debuffs. Requires the SlowTox mod.",
+  "version": "1.0.2",
   "dependencies": {
     "game": "*",
     "slowtox": "*"

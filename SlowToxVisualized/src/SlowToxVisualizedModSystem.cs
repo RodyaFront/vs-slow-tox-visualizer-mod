@@ -13,7 +13,7 @@ public class SlowToxVisualizedModSystem : ModSystem
     public override void StartPre(ICoreAPI api)
     {
         base.StartPre(api);
-        api.Logger.Notification("[Slow Tox Visualized] Mod loaded.");
+        api.Logger.Notification("[SlowTox Visualized] Mod loaded.");
     }
 
     public override void StartClientSide(ICoreClientAPI api)
@@ -24,7 +24,7 @@ public class SlowToxVisualizedModSystem : ModSystem
 
         api.Input.RegisterHotKeyFirst(
             "slowtoxvisualized_reloadhudlayout",
-            $"Slow Tox Visualized: reload HUD layout ({HudLayoutConfig.LayoutConfigFileName})",
+            $"SlowTox Visualized: reload HUD layout ({HudLayoutConfig.LayoutConfigFileName})",
             GlKeys.F9,
             HotkeyType.HelpAndOverlays,
             false,
@@ -33,7 +33,7 @@ public class SlowToxVisualizedModSystem : ModSystem
         api.Input.SetHotKeyHandler("slowtoxvisualized_reloadhudlayout", _ =>
         {
             _intoxicationHud?.ReloadLayoutFromDisk();
-            api.Logger.Notification("[Slow Tox Visualized] HUD layout reload hotkey handled.");
+            api.Logger.Notification("[SlowTox Visualized] HUD layout reload hotkey handled.");
             return true;
         });
 
@@ -46,18 +46,18 @@ public class SlowToxVisualizedModSystem : ModSystem
 
             if (_intoxicationHud.TryOpen() != true)
             {
-                api.Logger.Warning("[Slow Tox Visualized] Intoxication HUD TryOpen failed after level finalize.");
+                api.Logger.Warning("[SlowTox Visualized] Intoxication HUD TryOpen failed after level finalize.");
                 return;
             }
 
-            api.Logger.Notification("[Slow Tox Visualized] Intoxication HUD TryOpen ok.");
+            api.Logger.Notification("[SlowTox Visualized] Intoxication HUD TryOpen ok.");
             api.Event.RegisterCallback(_ =>
             {
                 ElementBounds? b = _intoxicationHud?.SingleComposer?.Bounds;
                 if (b != null)
                 {
                     api.Logger.Notification(
-                        $"[Slow Tox Visualized] HUD bounds render=({b.renderX:F0},{b.renderY:F0}) outer={b.OuterWidthInt}x{b.OuterHeightInt}");
+                        $"[SlowTox Visualized] HUD bounds render=({b.renderX:F0},{b.renderY:F0}) outer={b.OuterWidthInt}x{b.OuterHeightInt}");
                 }
             }, 300);
         };

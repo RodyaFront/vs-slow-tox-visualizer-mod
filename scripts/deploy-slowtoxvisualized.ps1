@@ -1,4 +1,4 @@
-# Deploy Slow Tox Visualized: dotnet build Release + copy FULL mod folder into Vintage Story Mods.
+# Deploy SlowTox Visualized: dotnet build Release + copy FULL mod folder into Vintage Story Mods.
 # Copies bin/Release/Mods/slowtoxvisualized/* -> destination (flatten), never nests slowtoxvisualized/slowtoxvisualized.
 #
 # Destination:
