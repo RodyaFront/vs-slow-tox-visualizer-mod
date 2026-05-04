@@ -10,6 +10,7 @@
 *.user
 *.suo
 *.userosscache
+.vscode/settings.json
 
 # Reference / upstream clones (not part of this mod)
 SlowTox-upstream/
@@ -20,3 +21,6 @@ mcps/
 
 # Release zip (regenerate: .\scripts\package-release.ps1)
 releases/*.zip
+
+# Local planning notes
+TODO.md
