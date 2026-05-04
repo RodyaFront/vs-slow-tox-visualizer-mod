@@ -744,6 +744,21 @@ public sealed class SlowToxIntoxicationHud : HudElement
 
         if (!_statusAnimIntroSynced)
         {
+            _kindAnim.Clear();
+            float initialPopupElapsed = Math.Clamp(deltaTime, 0f, StatusPopupDurationSec);
+            if (initialPopupElapsed <= 0f)
+            {
+                initialPopupElapsed = 1f / 120f;
+            }
+
+            foreach (SlowToxHudEffectKind kind in _scratchCurrentKinds)
+            {
+                _kindAnim[kind] = new KindRuntimeAnim
+                {
+                    PopupElapsed = initialPopupElapsed
+                };
+            }
+
             CommitAnimSnapshot(_scratchCurrentKinds, rects, entity);
             _statusAnimIntroSynced = true;
             return;
