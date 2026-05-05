@@ -33,6 +33,8 @@ Copy-Item -Path $src -Destination $dst -Recurse -Force
 
 Либо один раз из корня репозитория запускать **[`scripts/deploy-slowtoxvisualized.ps1`](../scripts/deploy-slowtoxvisualized.ps1)** — он делает `dotnet build -c Release` и то же **плоское** копирование. Цель: если задана **`VS_MODS_TEST`**, используется `$env:VS_MODS_TEST\slowtoxvisualized`, иначе `%AppData%\Roaming\VintagestoryData\Mods\slowtoxvisualized`.
 
+Для мода **Player Status Strip** — **[`PlayerStatusStrip/scripts/deploy-playerstatusstrip.ps1`](../PlayerStatusStrip/scripts/deploy-playerstatusstrip.ps1)** (тот же флоу в `Mods\playerstatusstrip`, в конце выводится `version` из `modinfo.json`).
+
 После копирования имеет смысл проверить в списке модов клиента поле **версии** из `modinfo.json` и при смене языковых файлов — **полный перезапуск** клиента.
 
 Сборки модов в этом репозитории обычно ссылаются на DLL через переменную **`VINTAGE_STORY`** (см. `SlowTox-upstream/SlowTox/SlowTox.csproj`: `$(VINTAGE_STORY)/VintagestoryAPI.dll` и т.д.). Профили запуска в `Properties/launchSettings.json` ожидают тот же каталог как рабочую директорию и путь к `Vintagestory` / `VintagestoryServer`.
