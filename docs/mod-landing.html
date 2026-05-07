@@ -1,66 +1,60 @@
-<!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<style>
-*,*::before,*::after{box-sizing:border-box}
-body{-webkit-text-size-adjust:100%}
-img{max-width:100%;height:auto}
-.landing-inner p,.landing-inner li,.landing-inner td,.landing-inner a,.landing-inner code{overflow-wrap:anywhere;word-break:break-word}
-.landing-inner table.feature-row{width:100%;table-layout:fixed}
-.landing-inner table.feature-row td:last-child{min-width:0}
-.status-icons-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;margin:0 -2px}
-.status-icons-wrap table{min-width:min(100%,320px)}
-</style>
-</head>
-<body style="margin:0;padding:0;background:#01241E;color:#F8FBDE;font-family:Segoe UI,Roboto,Arial,sans-serif;font-size:15px;line-height:1.55;">
-<div style="width:100%;min-width:0;background:#01241E;color:#F8FBDE;">
-<div class="landing-inner" style="max-width:640px;margin:0 auto;padding:24px clamp(14px,4vw,18px) 32px;">
-<header style="padding-bottom:16px;">
-<h1 style="margin:0;font-size:clamp(1.125rem,4vw,1.375rem);font-weight:700;color:#E4F265;line-height:1.25;">SlowTox Visualized</h1>
-<p style="margin:4px 0 0;font-size:13px;color:#F8FBDE;opacity:.85;">Client HUD for SlowTox intoxication and buffs</p>
-</header>
-<p style="margin:0 0 18px;">Built for the <strong style="color:#E4F265;">Teotale</strong> Vintage Story server (<a href="https://www.teotale.com" style="color:#E4F265;text-decoration:none;border-bottom:1px solid rgba(228,242,101,.45);">www.teotale.com</a>). Shows blood-alcohol level, a color palette tied to how drunk you are, and a strip of active effects - without opening character stats.</p>
-<div style="background:rgba(228,242,101,.09);border-radius:12px;padding:14px 16px;margin-bottom:18px;border:1px solid rgba(228,242,101,.48);border-left:4px solid #E4F265;">
-<div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#E4F265;margin-bottom:8px;font-weight:700;">Important - SlowTox is required</div>
-<p style="margin:0;font-size:14px;line-height:1.55;color:#F8FBDE;">Without <a href="https://mods.vintagestory.at/slowtox" style="color:#E4F265;font-weight:600;text-decoration:none;border-bottom:1px solid rgba(228,242,101,.5);">SlowTox</a> (<code style="font-size:12px;background:rgba(1,36,30,.35);padding:1px 6px;border-radius:4px;color:#F8FBDE;">mods.vintagestory.at/slowtox</code>), SlowTox Visualized has no meaningful role: every status and tooltip is tied to the intoxication rules and stats from that mod. Install SlowTox first - this client HUD only surfaces what SlowTox already computes.</p>
+<p>&nbsp;</p>
+<div style="width:100%;background:#01241E;color:#F8FBDE;font-family:Segoe UI,Roboto,Arial,sans-serif;font-size:15px;line-height:1.55;">
+  <div style="max-width:700px;margin:0 auto;padding:24px 16px 32px;">
+    <h1 style="margin:0;font-size:28px;font-weight:700;color:#E4F265;line-height:1.2;">SlowTox Visualized</h1>
+    <p style="margin:6px 0 12px;font-size:14px;opacity:.92;">Clear intoxication and effect statuses for SlowTox.</p>
+
+    <div style="background:rgba(154,31,31,.28);border:1px solid rgba(255,140,140,.5);border-left:4px solid #ff8a8a;border-radius:10px;padding:10px 12px;margin:0 0 12px;">
+      <strong style="color:#ffd2d2;">Required dependencies:</strong>
+      <span> <a href="https://mods.vintagestory.at/slowtox" style="color:#E4F265;text-decoration:none;">SlowTox</a> + <a href="https://mods.vintagestory.at/playerstatusstrip" style="color:#E4F265;text-decoration:none;">Player Status HUD</a>. Without both, this mod will not work.</span>
+    </div>
+
+    <div style="background:#03332B;border:1px solid rgba(228,242,101,.18);border-radius:12px;padding:14px 16px;margin:0 0 12px;">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#E4F265;font-weight:700;margin:0 0 6px;">Why install it</div>
+      <ul style="margin:0;padding-left:18px;">
+        <li>Shows intoxication as a readable status icon (hidden at zero value).</li>
+        <li>Publishes active SlowTox effects as hoverable status icons with tooltips.</li>
+        <li>Keeps HUD clean by using shared rendering from Player Status HUD.</li>
+      </ul>
+    </div>
+
+    <div style="background:#03332B;border:1px solid rgba(228,242,101,.18);border-radius:12px;padding:14px 16px;margin:0 0 12px;">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#E4F265;font-weight:700;margin:0 0 6px;">At a glance</div>
+      <img src="https://ibb.co/236PWrGM" alt="In-game example screenshot for SlowTox Visualized" style="display:block;width:100%;max-width:100%;height:260px;border-radius:10px;border:1px solid rgba(228,242,101,.35);background:rgba(248,251,222,.04);object-fit:cover;" />
+      <p style="margin:8px 0 0;font-size:12px;opacity:.8;">In-game example screenshot.</p>
+    </div>
+
+    <div style="background:#03332B;border:1px solid rgba(228,242,101,.18);border-radius:12px;padding:14px 16px;margin:0 0 12px;">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#E4F265;font-weight:700;margin:0 0 8px;">FAQ</div>
+
+      <p style="margin:0 0 4px;color:#E4F265;font-weight:700;">Why is nothing visible after install?</p>
+      <p style="margin:0 0 10px;">Most often one required dependency is missing. Install/enable both SlowTox and <a href="https://mods.vintagestory.at/playerstatusstrip" style="color:#E4F265;text-decoration:none;">Player Status HUD</a>.</p>
+
+      <p style="margin:0 0 4px;color:#E4F265;font-weight:700;">Why does intoxication icon disappear?</p>
+      <p style="margin:0 0 10px;">It is shown only when intoxication is above zero. At zero it is hidden by design.</p>
+
+      <p style="margin:0 0 4px;color:#E4F265;font-weight:700;">Can I customize layout?</p>
+      <p style="margin:0 0 10px;">Yes, edit <span style="background:rgba(248,251,222,.12);padding:2px 6px;border-radius:4px;color:#F8FBDE;">slowtoxvisualized-hudlayout.json</span> in ModConfig and press F9 in-game.</p>
+
+      <p style="margin:0 0 4px;color:#E4F265;font-weight:700;">Does this replace Player Status HUD?</p>
+      <p style="margin:0;">No. SlowTox Visualized provides status data; Player Status HUD renders the strip.</p>
+    </div>
+
+    <div style="background:#03332B;border:1px solid rgba(228,242,101,.18);border-radius:12px;padding:14px 16px;margin:0 0 12px;">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#E4F265;font-weight:700;margin:0 0 6px;">Troubleshooting in 10 seconds</div>
+      <ul style="margin:0;padding-left:18px;">
+        <li>No icons: check 3 enabled mods (SlowTox + Player Status HUD + SlowTox Visualized).</li>
+        <li>Config not applied: verify ModConfig path and press F9.</li>
+        <li>Weird/old assets: re-copy latest mod files, then restart client.</li>
+      </ul>
+    </div>
+
+    <div style="background:linear-gradient(135deg,#1A4D41 0%,#0E2E27 100%);border:1px solid rgba(228,242,101,.42);border-radius:14px;padding:16px 18px;box-shadow:0 8px 20px rgba(0,0,0,.2);">
+      <p style="margin:0 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:#E4F265;font-weight:700;">Official server</p>
+      <p style="margin:0 0 8px;font-size:20px;line-height:1.2;color:#F8FBDE;font-weight:700;">Teotale Vintage Story Server</p>
+      <p style="margin:0 0 12px;opacity:.95;">SlowTox Visualized was built exclusively for the Teotale server ecosystem, where these status mechanics are part of the core gameplay experience.</p>
+      <p style="margin:0 0 12px;">Join the community, read server rules, and start your next long-term world at <a href="https://www.teotale.com" style="color:#E4F265;text-decoration:none;font-weight:700;border-bottom:1px solid rgba(228,242,101,.55);">www.teotale.com</a>.</p>
+      <div style="display:inline-block;background:rgba(228,242,101,.14);border:1px solid rgba(228,242,101,.45);padding:6px 10px;border-radius:999px;font-size:12px;color:#E4F265;font-weight:700;">Made for Teotale • Tested on Teotale • Play on Teotale</div>
+    </div>
+  </div>
 </div>
-<div style="background:#03332B;border-radius:12px;padding:16px 18px;margin-bottom:14px;border:1px solid rgba(228,242,101,.18);">
-<div style="font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#E4F265;margin-bottom:10px;font-weight:600;">Main HUD</div>
-<p style="margin:-2px 0 10px;font-size:13px;opacity:.85;line-height:1.45;">The mug and large number show your intoxication level; colours shift with how drunk you are (SlowTox).</p>
-<table role="presentation" class="feature-row" cellpadding="0" cellspacing="0" width="100%"><tr>
-<td width="56" style="vertical-align:top;padding-right:12px;width:56px;max-width:28%"><!-- Jug gallery: https://ibb.co/DHwhnLQJ --><img src="https://i.ibb.co/G4CyjFR6/jug.png" width="48" height="48" alt="Mug icon for intoxication" style="display:block;border-radius:8px;background:rgba(248,251,222,.06);max-width:100%;"/></td>
-<td style="vertical-align:top;"><strong style="color:#F8FBDE;">Mug and big number</strong><br/><span style="opacity:.92;font-size:14px;">Big percent readout with palette-driven fill and outline—readable in the corner of the screen.</span></td>
-</tr></table>
-<div style="margin-top:14px;">
-<div style="font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#E4F265;margin-bottom:10px;font-weight:600;">Example</div>
-<p style="margin:0 0 12px;font-size:14px;opacity:.92;line-height:1.55;">How it can look in-game at different intoxication levels (layout and colours depend on your settings).</p>
-<figure style="margin:0;">
-<img src="https://i.ibb.co/1tJ4By1K/exampleimg.png" alt="Vintage Story: SlowTox Visualized HUD at low, medium, and high intoxication" width="560" style="display:block;width:100%;max-width:560px;height:auto;border-radius:10px;border:1px solid rgba(228,242,101,.28);background:rgba(0,0,0,.2);"/>
-<figcaption style="margin:10px 0 0;font-size:12px;opacity:.78;line-height:1.45;">In-game composite: mug, percent, gear, and effect icons. After you change the layout file, press <strong style="color:#F8FBDE;font-weight:600;">F9</strong> (default) to reload—watch for the chat confirmation.</figcaption>
-</figure>
-</div>
-</div>
-<div style="background:#03332B;border-radius:12px;padding:16px 18px;margin-bottom:14px;border:1px solid rgba(228,242,101,.18);">
-<div style="font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#E4F265;margin-bottom:10px;font-weight:600;">Status strip</div>
-<p style="margin:0 0 12px;font-size:14px;opacity:.95;">A row of small icons for active SlowTox buffs and debuffs (defence, mining, poison, healing, slows, damage boosts, stability, weakness, and more). Hover each icon in-game for a quick tooltip.</p>
-<div class="status-icons-wrap"><table role="presentation" cellpadding="0" cellspacing="0"><tr>
-<td style="padding:2px;"><img src="https://i.ibb.co/cX31sgGR/durable.png" width="36" height="36" alt="Durability" style="display:block;border-radius:6px;background:rgba(248,251,222,.05);max-width:100%;"/></td>
-<td style="padding:2px;"><img src="https://i.ibb.co/PG4j4MR3/mining-speed.png" width="36" height="36" alt="Mining speed" style="display:block;border-radius:6px;background:rgba(248,251,222,.05);max-width:100%;"/></td>
-<td style="padding:2px;"><img src="https://i.ibb.co/bMbmr1dL/poison.png" width="36" height="36" alt="Poison" style="display:block;border-radius:6px;background:rgba(248,251,222,.05);max-width:100%;"/></td>
-<td style="padding:2px;"><img src="https://i.ibb.co/QGKgfd6/regeneration.png" width="36" height="36" alt="Healing" style="display:block;border-radius:6px;background:rgba(248,251,222,.05);max-width:100%;"/></td>
-<td style="padding:2px;"><img src="https://i.ibb.co/wNhYQSKh/slow.png" width="36" height="36" alt="Slow" style="display:block;border-radius:6px;background:rgba(248,251,222,.05);max-width:100%;"/></td>
-<td style="padding:2px;"><img src="https://i.ibb.co/1GnFJ2vv/strength.png" width="36" height="36" alt="Damage increase" style="display:block;border-radius:6px;background:rgba(248,251,222,.05);max-width:100%;"/></td>
-<td style="padding:2px;"><img src="https://i.ibb.co/mFHWMTpQ/temporal-recovery.png" width="36" height="36" alt="Temporal recovery" style="display:block;border-radius:6px;background:rgba(248,251,222,.05);max-width:100%;"/></td>
-<td style="padding:2px;"><img src="https://i.ibb.co/tFGzNk2/weak.png" width="36" height="36" alt="Weak" style="display:block;border-radius:6px;background:rgba(248,251,222,.05);max-width:100%;"/></td>
-</tr></table>
-</div>
-<div style="background:#03332B;border-radius:12px;padding:14px 18px;margin-bottom:14px;border:1px solid rgba(228,242,101,.18);font-size:14px;">
-<strong style="color:#E4F265;">Configuration</strong><br/>
-Optional: edit <code style="background:rgba(248,251,222,.12);padding:2px 6px;border-radius:4px;font-size:13px;color:#F8FBDE;">slowtoxvisualized-hudlayout.json</code> in your Vintage Story <strong style="color:#F8FBDE;">ModConfig</strong> folder (alongside your worlds). Save the file, then press <strong style="color:#F8FBDE;">F9</strong> in-game by default to reload—you’ll get a short chat message when it applies.
-</div>
-<p style="margin:0 0 16px;font-size:13px;opacity:.8;border-top:1px solid rgba(248,251,222,.15);padding-top:14px;">Requires the <strong style="color:#E4F265;">SlowTox</strong> mod. Supported game versions are listed on the mod download page.</p>
-<div style="margin-top:4px;padding:18px 16px;background:#03332B;border-radius:12px;border:1px solid rgba(228,242,101,.32);text-align:center;">
-<div style="font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:#E4F265;margin-bottom:10px;font-weight:700;">Play on Teotale</div>
-<p style="margin:0 0 12px;font-size:15px;line-height:1.55;color:#F8FBDE;">This mod was created for the Teotale server. The website is live: <a href="https://www.teotale.com" style="color:#E4F265;font-weight:600;text-decoration:none;border-bottom:1px solid rgba(228,242,101,.5);">www.teotale.com</a> - news, rules, connection details, and community links.</p>
-<p style="margin:0;font-size:14px;line-height:1.5;color:#F8FBDE;opacity:.95;">Teotale is our home for SlowTox, co-op survival, and long-term worlds - if the HUD helps you, consider rolling your next character with us at <strong style="color:#E4F265;">teotale.com</strong>.</p>
-</div>
-</div></div></body></html>

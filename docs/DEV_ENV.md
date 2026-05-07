@@ -35,6 +35,8 @@ Copy-Item -Path $src -Destination $dst -Recurse -Force
 
 Для мода **Player Status Strip** — **[`PlayerStatusStrip/scripts/deploy-playerstatusstrip.ps1`](../PlayerStatusStrip/scripts/deploy-playerstatusstrip.ps1)** (тот же флоу в `Mods\playerstatusstrip`, в конце выводится `version` из `modinfo.json`).
 
+После миграции `SlowToxVisualized` в provider-модель для `Player Status HUD` при проверке в игре деплойте **оба** мода (slowtoxvisualized + playerstatusstrip).
+
 После копирования имеет смысл проверить в списке модов клиента поле **версии** из `modinfo.json` и при смене языковых файлов — **полный перезапуск** клиента.
 
 Сборки модов в этом репозитории обычно ссылаются на DLL через переменную **`VINTAGE_STORY`** (см. `SlowTox-upstream/SlowTox/SlowTox.csproj`: `$(VINTAGE_STORY)/VintagestoryAPI.dll` и т.д.). Профили запуска в `Properties/launchSettings.json` ожидают тот же каталог как рабочую директорию и путь к `Vintagestory` / `VintagestoryServer`.
@@ -67,6 +69,7 @@ $env:VINTAGE_STORY = "D:\Games\Vintagestory"
 2. Если сборка вручную: скопировать **содержимое** `bin/Release/Mods/slowtoxvisualized/*` в каталог модов из таблицы выше (см. раздел «Пересборка и копирование» — обязательно **плоское** копирование, не вложенная папка).
 3. Запустить клиент Vintage Story с той же data-папкой, куда копировали моды.
 4. Убедиться, что мод в списке активен, при необходимости проверить клиентский лог на ошибки загрузки и ожидаемые сообщения.
+5. Для связки SlowToxVisualized + Player Status HUD: проверить, что есть нейтральный статус интоксикации (tooltip показывает текущее значение), и что остальные эффекты SlowTox отображаются в strip.
 
 ### Версия мода в игре
 

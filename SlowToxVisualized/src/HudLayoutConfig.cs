@@ -9,10 +9,10 @@ public class HudLayoutConfig
 {
     public const string LayoutConfigFileName = "slowtoxvisualized-hudlayout.json";
     private const string LegacyLayoutConfigFileName = "hudlayout.json";
-    public string DialogArea { get; set; } = "RightBottom";
+    public string DialogArea { get; set; } = "RightTop";
 
     public double DialogOffsetX { get; set; } = -8;
-    public double DialogOffsetY { get; set; } = -2;
+    public double DialogOffsetY { get; set; } = 8;
     public double DialogWidth { get; set; } = 32;
     public double DialogHeight { get; set; } = 54;
 
@@ -37,7 +37,7 @@ public class HudLayoutConfig
     public double StatusStripOffsetX { get; set; } = 4;
     public double StatusStripOffsetY { get; set; } = 2;
     public int StatusIconGapPx { get; set; } = 4;
-    public int StatusIconSize { get; set; } = 0;
+    public int StatusIconSize { get; set; } = 46;
     public string StatusStripAnchorMode { get; set; } = "Max";
     public string StatusStripVerticalAlign { get; set; } = "Top";
 
@@ -64,7 +64,7 @@ public class HudLayoutConfig
 
     public bool UseMockIntoxicationOverride { get; set; } = false;
 
-    public double MockIntoxicationRaw { get; set; } = 0.5;
+    public double MockIntoxicationRaw { get; set; } = 0.1;
 
     public static HudLayoutConfig CreateDefaults()
     {
@@ -189,6 +189,7 @@ public class HudLayoutConfig
             "CenterBottom" => EnumDialogArea.CenterBottom,
             "LeftBottom" => EnumDialogArea.LeftBottom,
             "RightBottom" => EnumDialogArea.RightBottom,
+            "RightTop" => EnumDialogArea.RightTop,
             "CenterTop" => EnumDialogArea.CenterTop,
             _ => EnumDialogArea.CenterBottom
         };

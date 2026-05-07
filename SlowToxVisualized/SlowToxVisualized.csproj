@@ -24,6 +24,10 @@
       <HintPath>$(VINTAGE_STORY)/Mods/VSSurvivalMod.dll</HintPath>
       <Private>false</Private>
     </Reference>
+    <Reference Include="PlayerStatusStrip">
+      <HintPath>..\PlayerStatusStrip\bin\Release\Mods\playerstatusstrip\PlayerStatusStrip.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

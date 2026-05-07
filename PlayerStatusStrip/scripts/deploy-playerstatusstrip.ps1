@@ -1,4 +1,4 @@
-# Deploy Player Status Strip: dotnet build Release + copy FULL mod folder into Vintage Story Mods.
+# Deploy Player Status HUD: dotnet build Release + copy FULL mod folder into Vintage Story Mods.
 # Copies bin/Release/Mods/playerstatusstrip/* -> destination (flatten), never nests playerstatusstrip/playerstatusstrip.
 #
 # Destination:

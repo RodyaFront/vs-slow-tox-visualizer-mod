@@ -1,55 +1,121 @@
-# Player Status Strip — API for modders
+# Player Status HUD — API for modders
 
 **Mod id:** `playerstatusstrip`  
 **Current `IStatusStripHudApi.ApiVersion`:** `1` (bump when breaking the contract).
 
+## Quick start
+
+1. Add a reference to `PlayerStatusStrip.dll` in your mod project.
+2. In client `ModSystem`, get `StatusApi` and register your provider.
+3. In provider `Collect()`, append `StatusDescriptor` entries every frame.
+4. On dispose/unload, unregister provider to avoid stale references.
+
+```csharp
+var baseSys = api.ModLoader.GetModSystem<PlayerStatusStrip.PlayerStatusStripModSystem>();
+IStatusStripHudApi? stripApi = baseSys?.StatusApi;
+if (stripApi == null) return;
+stripApi.RegisterProvider(myProvider);
+```
+
 ## What the base mod does
 
-- Renders a horizontal strip of status icons with pop-in, pulse, pop-out, and optional wave offset.
-- Merges entries from all registered **providers** each frame, sorts by `SortOrder` then `StableId`, and resolves duplicate `StableId` by **last registered provider wins** (order in the internal list is registration order).
-- Tooltips use **VTML** from each slot’s `StatusDescriptor`.
+- Renders a horizontal strip of status icons with enter/update/exit animation.
+- Merges entries from all providers each frame.
+- Sorts by `SortOrder`, then `StableId`.
+- Resolves duplicate `StableId` by last registered provider wins.
+- Uses VTML for tooltip rendering.
 
-## Registering a provider (client)
+## Provider contract
 
-1. In your mod’s **client** `ModSystem`, get the API from the base mod’s system (same app domain, your project references `PlayerStatusStrip.dll` and `VintagestoryAPI`):
+`IStatusStripProvider.Collect(ICoreClientAPI capi, float deltaTime, List<StatusDescriptor> dest)`
 
-   ```csharp
-   var baseSys = api.ModLoader.GetModSystem<PlayerStatusStrip.PlayerStatusStripModSystem>();
-   IStatusStripHudApi? api = baseSys?.StatusApi;
-   if (api == null) return;
-   api.RegisterProvider(myProvider);
-   ```
+- Append to `dest`; do not clear it.
+- Keep `StableId` stable across frames for smooth animation/hit-test continuity.
+- Return no entry when effect is absent.
 
-2. Implement `IStatusStripProvider`:
+### StatusDescriptor fields
 
-   - `void Collect(ICoreClientAPI capi, float deltaTime, List<StatusDescriptor> dest)`  
-     **Append** your slots to `dest` (the base mod clears its scratch list before calling you). Use `deltaTime` for time-based mock or smoothing if needed.
+| Field | Role |
+|---|---|
+| `StableId` | Stable namespaced id (`mymod:bleed`). |
+| `Icon` | Texture `AssetLocation` (your mod or shared `playerstatusstrip`). |
+| `SortOrder` | Lower goes further left in row. |
+| `TooltipVtml` | Tooltip body as VTML. |
+| `PulseMetric` | Optional value to trigger update pulse on significant change. |
+| `AffectKind` | `Neutral` (default), `Positive`, `Negative` animation semantics. |
 
-3. `StatusDescriptor` fields:
+## Typical usage scenarios
 
-   | Field | Role |
-   |--------|------|
-   | `StableId` | Stable between frames (drives animation state). Use a unique, namespaced id (e.g. `mymod:bleed`). |
-   | `Icon` | `AssetLocation` for a texture in **your** mod or in `playerstatusstrip` (for shared icons). |
-   | `SortOrder` | Lower = further **left** in the strip. |
-   | `TooltipVtml` | Tooltip body as VTML. |
-   | `PulseMetric` | Optional; when the value changes enough frame-to-frame, the strip triggers a pulse animation (see `PulseMetricTrigger` thresholds in source). |
-   | `AffectKind` | Optional semantic kind (`Neutral` default, `Positive`, `Negative`) used by UX animation profiles. |
+### 1) Minimal binary status
+Use one icon while condition is true, remove it otherwise.
 
-4. On unload or when your logic stops, call `UnregisterProvider(myProvider)` to avoid leaks.
+### 2) Progress-like status with pulse
+Expose normalized metric (for example `0..1`) via `PulseMetric` so updates are visible without changing icon id.
 
-## Config files (player data)
+### 3) Semantic feedback by effect polarity
+Set `AffectKind.Positive/Negative` to reuse configured profile behavior (shake/slide/scales) without custom renderer code.
 
-Paths are under the Vintage Story **data** folder, file names:
+### 4) Full gameplay mod integration (reference: SlowToxVisualized)
+Treat your mod as a pure data provider:
+- compute your gameplay effects in your own code;
+- map each active effect to a stable namespaced `StableId`;
+- publish one neutral status for your primary state (for example intoxication);
+- keep all UX rendering in Player Status HUD, including tooltip and animation execution.
 
-- **Layout:** `ModConfig/playerstatusstrip-hudlayout.json` — **where the invisible HUD anchor sits** on screen (`DialogArea` — any name of `EnumDialogArea` from the game API, e.g. `RightTop`, `RightBottom`; unknown strings fall back to `RightBottom`, `DialogOffsetX` / `DialogOffsetY`, `DialogWidth` / `DialogHeight`) and **how the status strip attaches** to that block (`StatusStripOffsetX` / `Y`, `StatusStripSide`, `StatusStripVerticalAlign`, `AnchorWidthPx`, `StatusIconSize`, `StatusIconGapPx`, wave and tooltip fields). **`StatusStripLockRowBaseline`**: omit or **`true`** to keep every icon on the same vertical baseline (ignores update-pulse vertical slide from `SlideDownPx` and ignores vertical wave offsets). Set **`false`** to allow that motion again. `StatusStripAnchorMode`: **`Reference`** (fixed width = `AnchorWidthPx`), **`Dialog`** (full composer width), **`Max`** (max of reference and composer). Legacy value **`Mug`** is accepted and behaves like **`Reference`** (no mug/jug is drawn in this mod). For **`RightTop` / `RightBottom` / `RightMiddle` / `RightFixed`** with **`StatusStripSide` `Left`**, the default geometry places the icon row flush to the **trailing** edge of the anchor (no extra empty band the width of `DialogWidth` to the right of the icons). Set **`StatusStripUseLegacyLeadingEdgeRow`: true** to restore the old “mug slot” gap. UX animation profiles live in `NeutralAnim`, `PositiveAnim`, `NegativeAnim` (`Enabled`, `EnterDurationSec`, `UpdateDurationSec`, `ExitDurationSec`, `ScaleAmplitude`, `ShakePx`, `SlideDownPx`). `Enabled` works with fallback: if requested profile is disabled, renderer falls back to `NeutralAnim`; if `NeutralAnim.Enabled` is also false, renderer uses baseline non-profile modifiers (no shake/slide profile offsets). Extra: `StatusStripAnchorHeightPx`, `StatusStripAnchorOuterWidthPx`, `StatusStripIconNudgeX` / `Y`, `HudDrawOrder`. Reload: **F8** (summary line in chat).
-- **Dev:** `ModConfig/playerstatusstrip-dev.json` — `DevMode` enables **client** mock tooling (`.stripmock` / `/stripmock`). **`UseMockStatuses`** defaults to **false**: no HUD icons from the base mod until you **`run <id>`** a scenario. Set **`UseMockStatuses`: true** only if you want the four placeholder icons while **no** scenario is running. With `DevMode` true, use **`list`**, **`run <id>`**, **`stop`**. The **integrated server** registers commands and relays a small packet to your client. A client-only chat intercept still handles a **plain chat line** that starts with `.stripmock` / `/stripmock` if it is not parsed as a command. **Dedicated server** must also have this mod installed; only players with `DevMode` in their client config get the client-side provider, but the server still needs the mod for the command to exist.
+## Config files
 
-## Versioning
+Paths are under Vintage Story data path `ModConfig/`.
 
-- Prefer depending on **`game`** only; depend on `playerstatusstrip` if you need a known minimum feature set.
-- Check `api.ApiVersion` before relying on new behavior.
+### Layout config
+`playerstatusstrip-hudlayout.json`
+
+- HUD anchor and placement: `DialogArea`, `DialogOffsetX/Y`, `DialogWidth/Height`.
+- Strip geometry: `StatusStripOffsetX/Y`, `StatusStripSide`, `StatusStripVerticalAlign`, `StatusIconSize`, `StatusIconGapPx`.
+- Animation/layout extras: `StatusStripAnchorMode`, `StatusStripUseLegacyLeadingEdgeRow`, `StatusStripLockRowBaseline`, `NeutralAnim/PositiveAnim/NegativeAnim`.
+- Reload with `F8`.
+
+`StatusStripLockRowBaseline` behavior:
+- omitted or `true`: shared Y baseline for all icons (no vertical slide/wave offset);
+- `false`: allows vertical motion from profile and wave settings.
+
+### Dev config
+`playerstatusstrip-dev.json`
+
+- `DevMode`: enables `.stripmock` and `/stripmock` tooling.
+- `UseMockStatuses`: defaults to `false`; when `true`, always shows four static mock statuses while no scenario is running.
+
+Production recommendation:
+- keep `DevMode=false`;
+- keep `UseMockStatuses=false`.
+
+## Mock scenarios and commands
+
+Available scenario ids:
+- `meal` — satiety/regen flow
+- `mining` — haste to fatigue
+- `combat` — damage and recovery
+- `weather` — wet/cold pressure
+- `recovery` — fatigue to comfort
+- `buzz` — rise/peak/fade chain
+
+Commands (with `DevMode=true`):
+- `/stripmock list`
+- `/stripmock run <id>`
+- `/stripmock stop`
+
+Equivalent dot prefix is supported (`.stripmock ...`).
+
+## Dedicated server note
+
+Dedicated server must also have this mod installed so command endpoints exist.  
+Client-side provider activation still depends on client config (`DevMode`).
+
+## Versioning and compatibility
+
+- Prefer depending on `game` unless you require specific strip API behavior.
+- Check `api.ApiVersion` before relying on newly added features.
 
 ## Build reference
 
-To compile against the base mod, add a **project or assembly reference** to `PlayerStatusStrip.dll` from `Mods/playerstatusstrip/` (or your build output). Do not reference server-only assemblies unless your mod needs them.
+Reference `PlayerStatusStrip.dll` from `Mods/playerstatusstrip/` (or your build output).  
+Do not reference server-only assemblies unless your mod needs them.

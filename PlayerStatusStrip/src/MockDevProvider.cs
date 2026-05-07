@@ -56,9 +56,17 @@ internal sealed class MockDevProvider : IStatusStripProvider
             return;
         }
 
-        _staticAccumSec += deltaTime;
+        MockStatusSampleIcons.Append(deltaTime, ref _staticAccumSec, dest);
+    }
+}
+
+internal static class MockStatusSampleIcons
+{
+    internal static void Append(float deltaTime, ref float accumSec, List<StatusDescriptor> dest)
+    {
+        accumSec += deltaTime;
         string mod = "playerstatusstrip";
-        float pulse = (float)(System.Math.Sin(_staticAccumSec * 2.0) * 0.5 + 0.5);
+        float pulse = (float)(System.Math.Sin(accumSec * 2.0) * 0.5 + 0.5);
 
         dest.Add(new StatusDescriptor(
             "mock:a",

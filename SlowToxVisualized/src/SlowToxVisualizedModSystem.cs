@@ -1,4 +1,5 @@
 using System;
+using PlayerStatusStrip;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 
@@ -7,8 +8,10 @@ namespace SlowToxVisualized;
 public class SlowToxVisualizedModSystem : ModSystem
 {
     private ICoreClientAPI? _clientApi;
-    private Action? _onLevelFinalize;
-    private SlowToxIntoxicationHud? _intoxicationHud;
+    private SlowToxStatusStripProvider? _statusProvider;
+    private IStatusStripHudApi? _statusApi;
+    private Action? _onLeftWorldSlowTox;
+    private Action? _onLevelFinalizeSlowTox;
 
     public override void StartPre(ICoreAPI api)
     {
@@ -20,63 +23,92 @@ public class SlowToxVisualizedModSystem : ModSystem
     {
         base.StartClientSide(api);
         _clientApi = api;
-        _intoxicationHud = new SlowToxIntoxicationHud(api);
 
-        api.Input.RegisterHotKeyFirst(
-            "slowtoxvisualized_reloadhudlayout",
-            $"SlowTox Visualized: reload HUD layout ({HudLayoutConfig.LayoutConfigFileName})",
-            GlKeys.F9,
-            HotkeyType.HelpAndOverlays,
-            false,
-            false,
-            false);
-        api.Input.SetHotKeyHandler("slowtoxvisualized_reloadhudlayout", _ =>
+        _onLeftWorldSlowTox = () => UnregisterStatusProvider();
+        api.Event.LeftWorld += _onLeftWorldSlowTox;
+
+        _onLevelFinalizeSlowTox = () => TryRegisterStatusProvider(api);
+        api.Event.LevelFinalize += _onLevelFinalizeSlowTox;
+
+        if (!TryRegisterStatusProvider(api))
         {
-            _intoxicationHud?.ReloadLayoutFromDisk();
-            api.Logger.Notification("[SlowTox Visualized] HUD layout reload hotkey handled.");
+            return;
+        }
+
+        api.Logger.Notification("[SlowTox Visualized] Registered status provider in Player Status HUD (legacy standalone HUD renderer disabled).");
+
+        const string reloadLayoutHotkey = "slowtoxvisualized_reloadlayout";
+        if (!api.Input.HotKeys.ContainsKey(reloadLayoutHotkey))
+        {
+            api.Input.RegisterHotKeyFirst(
+                reloadLayoutHotkey,
+                $"SlowTox Visualized: reload status data layout ({HudLayoutConfig.LayoutConfigFileName})",
+                GlKeys.F9,
+                HotkeyType.HelpAndOverlays,
+                false,
+                false,
+                false);
+        }
+
+        api.Input.SetHotKeyHandler(reloadLayoutHotkey, _ =>
+        {
+            _statusProvider?.ReloadLayout();
+            api.Logger.Notification("[SlowTox Visualized] Data layout reload hotkey handled.");
             return true;
         });
+    }
 
-        _onLevelFinalize = () =>
+    private bool TryRegisterStatusProvider(ICoreClientAPI api)
+    {
+        if (_statusProvider != null)
         {
-            if (_intoxicationHud == null)
-            {
-                return;
-            }
+            return true;
+        }
 
-            if (_intoxicationHud.TryOpen() != true)
-            {
-                api.Logger.Warning("[SlowTox Visualized] Intoxication HUD TryOpen failed after level finalize.");
-                return;
-            }
+        PlayerStatusStripModSystem? stripSystem = api.ModLoader.GetModSystem<PlayerStatusStripModSystem>();
+        _statusApi = stripSystem?.StatusApi;
+        if (_statusApi == null)
+        {
+            api.Logger.Error("[SlowTox Visualized] Player Status HUD API is unavailable. Ensure playerstatusstrip is installed and enabled.");
+            return false;
+        }
 
-            api.Logger.Notification("[SlowTox Visualized] Intoxication HUD TryOpen ok.");
-            api.Event.RegisterCallback(_ =>
-            {
-                ElementBounds? b = _intoxicationHud?.SingleComposer?.Bounds;
-                if (b != null)
-                {
-                    api.Logger.Notification(
-                        $"[SlowTox Visualized] HUD bounds render=({b.renderX:F0},{b.renderY:F0}) outer={b.OuterWidthInt}x{b.OuterHeightInt}");
-                }
-            }, 300);
-        };
-        api.Event.LevelFinalize += _onLevelFinalize;
+        _statusProvider = new SlowToxStatusStripProvider(api);
+        _statusApi.RegisterProvider(_statusProvider);
+        return true;
+    }
+
+    private void UnregisterStatusProvider()
+    {
+        if (_statusApi != null && _statusProvider != null)
+        {
+            _statusApi.UnregisterProvider(_statusProvider);
+        }
+
+        _statusProvider = null;
+        _statusApi = null;
     }
 
     public override void Dispose()
     {
-        if (_clientApi != null && _onLevelFinalize != null)
+        UnregisterStatusProvider();
+
+        if (_clientApi != null)
         {
-            _clientApi.Event.LevelFinalize -= _onLevelFinalize;
+            if (_onLeftWorldSlowTox != null)
+            {
+                _clientApi.Event.LeftWorld -= _onLeftWorldSlowTox;
+            }
+
+            if (_onLevelFinalizeSlowTox != null)
+            {
+                _clientApi.Event.LevelFinalize -= _onLevelFinalizeSlowTox;
+            }
         }
 
-        _onLevelFinalize = null;
+        _onLeftWorldSlowTox = null;
+        _onLevelFinalizeSlowTox = null;
         _clientApi = null;
-
-        _intoxicationHud?.TryClose();
-        _intoxicationHud?.Dispose();
-        _intoxicationHud = null;
         base.Dispose();
     }
 }

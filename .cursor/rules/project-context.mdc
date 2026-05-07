@@ -51,7 +51,7 @@ alwaysApply: true
 
 Файл в общей папке **`ModConfig`** (не внутри подкаталога мода). Поля совпадают с классом **`HudLayoutConfig`** в коде.
 
-**Согласованные с пользователем дефолты в коде** (если JSON ещё не создан): `UseMockIntoxicationOverride` **false** (продакшн); `MockIntoxicationRaw` **0.5** (только если mock включён), `TextOffsetX` **-2**, `TextY` **30**, `FontSize` **14**, `GearDrawSize` **64**, `GearCornerInsetFactor` **0.05**, `GearOffsetX` / `GearOffsetY` **-2**, `GearRotateDegPerSec` **45**, `GearStrokeWidth` **6**, полоска статусов — `StatusStripOffsetX` **4**, `StatusStripOffsetY` **2**, `StatusIconGapPx` **4**, цвета обводки — `TextStrokeColor` / `GearStrokeColor` в RGBA 0..1.
+**Согласованные с пользователем дефолты в коде** (если JSON ещё не создан): `UseMockIntoxicationOverride` **false** (продакшн); `MockIntoxicationRaw` **0.1** (только если mock включён), `TextOffsetX` **-2**, `TextY` **30**, `FontSize` **14**, `GearDrawSize` **64**, `GearCornerInsetFactor` **0.05**, `GearOffsetX` / `GearOffsetY` **-2**, `GearRotateDegPerSec` **45**, `GearStrokeWidth` **6**, полоска статусов — `StatusStripOffsetX` **4**, `StatusStripOffsetY` **2**, `StatusIconGapPx` **4**, цвета обводки — `TextStrokeColor` / `GearStrokeColor` в RGBA 0..1.
 
 Толщина обводки шестерни в игре — поле **`GearStrokeWidth`** (пиксели; при **0** код не рисует внешний «обводочный» слой). Перезагрузка конфига — **F9** (если не переназначен).
 

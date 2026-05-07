@@ -1,9 +1,9 @@
-# Player Status Strip
+# Player Status HUD
 
 Developer-focused status HUD library for Vintage Story.
 
 `modid`: `playerstatusstrip`  
-Current version: `0.1.23`
+Version/source-of-truth: `modinfo.json`
 
 ## What this mod provides
 
@@ -17,7 +17,7 @@ Current version: `0.1.23`
 
 - [API reference and integration guide](docs/PLAYER_STATUS_STRIP_API.md)
 - [Dev/testing guide and release checklist](docs/PLAYER_STATUS_STRIP_DEV_GUIDE.md)
-- [ModDB release draft (RU/EN)](docs/MODDB_RELEASE_v0.1.23.md)
+- [ModDB release draft template (RU/EN)](docs/MODDB_RELEASE.md)
 - [Landing page HTML (ModDB style)](docs/mod-landing.html)
 
 ## Key config files
@@ -30,8 +30,17 @@ Current version: `0.1.23`
 With `DevMode=true`:
 
 - `/stripmock list`
-- `/stripmock run <id>`
+- `/stripmock run [id]`
 - `/stripmock stop`
+
+Layout config chat commands (client-side):
+
+- `.striplayout help`
+- `.striplayout list` (all keys supported by `get`/`set`, with short descriptions)
+- `.striplayout show`
+- `.striplayout get [key]`
+- `.striplayout set [key] [value]`
+- `.striplayout reload`
 
 ## Build, test, deploy
 
