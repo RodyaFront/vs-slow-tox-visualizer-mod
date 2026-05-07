@@ -6,7 +6,7 @@
 
 ## 1.1.35
 
-- Рекомендуется **Player Status HUD 0.1.63+**: финальная схема хоткеев — `F8` для reload layout и `Ctrl+F8` для layout wizard; в мастере лейбл `Inset from corner` сокращён до `Inset`.
+- Рекомендуется **Player Status HUD 1.2.0+**: включает полный пакет улучшений после последнего публичного релиза `0.1.33` (edge-based layout, wizard presets, bottom-anchor fixes, hotkeys).
 
 ## 1.1.34
 
@@ -177,6 +177,15 @@
 ## Player Status HUD (`playerstatusstrip`)
 
 Источник версии: [`PlayerStatusStrip/modinfo.json`](../PlayerStatusStrip/modinfo.json).
+
+### 1.2.0
+
+- Пакетный релиз после последней опубликованной версии `0.1.33`: включает все изменения итераций `0.1.34 ... 0.1.63`.
+- Layout engine: миграция на edge-based позиционирование (`StatusStripScreenPlacement`) и устранение size-dependent смещений/«скрытой базы» для `*Bottom` якорей.
+- Wizard UX: пресеты inset/size/gap, корректное центрирование `CenterTop`, удалён `CenterBottom` из выбора (с fallback при чтении старых конфигов), лейбл `Inset`.
+- Tooltip behavior: для нижних якорей приоритет рендера сверху с безопасным авто-flip.
+- Runtime consistency: финальная схема хоткеев `F8` (reload layout) и `Ctrl+F8` (open/close wizard), плюс корректная регистрация модификаторов.
+- Документация и релизные материалы обновлены: markdown changelog, HTML changelog, релизные архивы.
 
 ### 0.1.63
 
