@@ -4,6 +4,10 @@
 
 **Player Status HUD** (`playerstatusstrip`): версия в [`PlayerStatusStrip/modinfo.json`](../PlayerStatusStrip/modinfo.json); краткая история в конце файла.
 
+## 1.1.35
+
+- Рекомендуется **Player Status HUD 0.1.63+**: финальная схема хоткеев — `F8` для reload layout и `Ctrl+F8` для layout wizard; в мастере лейбл `Inset from corner` сокращён до `Inset`.
+
 ## 1.1.34
 
 - Рекомендуется **Player Status HUD 0.1.60+**: для `CenterTop` центрирование ряда иконок исправлено на полноценное центрирование по контейнеру (`align-items: center`-поведение), вместо старта ряда из центральной точки.
@@ -173,6 +177,19 @@
 ## Player Status HUD (`playerstatusstrip`)
 
 Источник версии: [`PlayerStatusStrip/modinfo.json`](../PlayerStatusStrip/modinfo.json).
+
+### 0.1.63
+
+- Hotkey mapping tweak: reload layout возвращён на `F8`, wizard остаётся на `Ctrl+F8`.
+- Wizard UX copy: `Inset from corner` -> `Inset`.
+
+### 0.1.62
+
+- Hotkey modifiers fix: исправлен порядок bool-параметров `RegisterHotKeyFirst` для wizard hotkey (`alt, ctrl, shift`), поэтому биндинг теперь реально `Ctrl+F8` (а не `Alt+F8`).
+
+### 0.1.61
+
+- Hotkey fix: `playerstatusstrip_reloadlayout` переведён на отдельный key id и `F9`, чтобы не перехватывать `Ctrl+F8` у layout wizard.
 
 ### 0.1.60
 

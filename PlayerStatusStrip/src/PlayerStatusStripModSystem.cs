@@ -243,8 +243,8 @@ public class PlayerStatusStripModSystem : ModSystem
                 Lang.Get("playerstatusstrip:wizard-hotkey-desc"),
                 GlKeys.F8,
                 HotkeyType.HelpAndOverlays,
-                true,
                 false,
+                true,
                 false);
         }
 

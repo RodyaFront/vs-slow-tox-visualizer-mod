@@ -5,7 +5,7 @@
   "playerstatusstrip:wizard-section-layout": "Layout",
   "playerstatusstrip:wizard-section-appearance": "Appearance",
   "playerstatusstrip:wizard-label-corner": "Screen corner",
-  "playerstatusstrip:wizard-label-inset": "Inset from corner",
+  "playerstatusstrip:wizard-label-inset": "Inset",
   "playerstatusstrip:wizard-label-icon-preset": "Icon size",
   "playerstatusstrip:wizard-label-gap-preset": "Space between icons",
   "playerstatusstrip:wizard-preset-inset-tight": "Tight (4 px step)",
