@@ -6,115 +6,115 @@
 
 ## 1.1.35
 
-- Рекомендуется **Player Status HUD 1.2.0+**: включает полный пакет улучшений после последнего публичного релиза `0.1.33` (edge-based layout, wizard presets, bottom-anchor fixes, hotkeys).
+- Обновлён compatibility target: рекомендуется **Player Status HUD 1.2.0+**.
 
 ## 1.1.34
 
-- Рекомендуется **Player Status HUD 0.1.60+**: для `CenterTop` центрирование ряда иконок исправлено на полноценное центрирование по контейнеру (`align-items: center`-поведение), вместо старта ряда из центральной точки.
+- Compatibility sync с эволюцией `Player Status HUD` (без отдельных изменений логики `SlowToxVisualized`).
 
 ## 1.1.33
 
-- Рекомендуется **Player Status HUD 0.1.59+**: из мастера раскладки убран угол `CenterBottom` (некорректное центрирование в текущей геометрии); для существующих конфигов с `CenterBottom` в мастере применяется fallback на `CenterTop`.
+- Compatibility sync с эволюцией `Player Status HUD` (без отдельных изменений логики `SlowToxVisualized`).
 
 ## 1.1.32
 
-- Рекомендуется **Player Status HUD 0.1.58+**: для `*Bottom` якорей вертиковая база ряда теперь рассчитывается от нижней границы контейнера (`bottom-aligned row origin`), чтобы скрытая база не зависела от размера иконок (`32/42/64/78`).
+- Compatibility sync с эволюцией `Player Status HUD` (без отдельных изменений логики `SlowToxVisualized`).
 
 ## 1.1.31
 
-- Рекомендуется **Player Status HUD 0.1.57+**: в `*Bottom` сценариях тултип теперь предпочитает размещение сверху над иконкой (с авто-flip обратно вниз при нехватке места), чтобы уменьшить overlap с нижним HUD-рядом.
+- Compatibility sync с эволюцией `Player Status HUD` (без отдельных изменений логики `SlowToxVisualized`).
 
 ## 1.1.30
 
-- Рекомендуется **Player Status HUD 0.1.56+**: контейнер HUD теперь использует effective size `max(DialogWidth/DialogHeight, StatusIconSize)` при edge-якорении, чтобы позиция по краям была стабильной для разных размеров иконок (32/42/64/78) без скрытой базы и вылета за границы из-за несоответствия размеров контейнера и иконки.
+- Compatibility sync с эволюцией `Player Status HUD` (без отдельных изменений логики `SlowToxVisualized`).
 
 ## 1.1.29
 
-- Рекомендуется **Player Status HUD 0.1.55+**: итерация 1 рефакторинга позиционирования — ряд статусов для `Right*` всегда растёт влево (внутрь экрана), для `Left*` вправо; скрытые базовые смещения от `StatusStripOffsetX/Y` и вертикального выравнивания исключены из runtime-позиционирования ряда.
+- Compatibility sync с эволюцией `Player Status HUD` (без отдельных изменений логики `SlowToxVisualized`).
 
 ## 1.1.28
 
-- Рекомендуется **Player Status HUD 0.1.54+**: HUD переведён на edge-based позиционирование (от физических границ экрана в GUI-space), поэтому inset-пресеты 4/8/16/32 для всех `Left* / Center* / Right*` больше не зависят от встроенных margin-правил `EnumDialogArea`.
+- Compatibility sync с эволюцией `Player Status HUD` (без отдельных изменений логики `SlowToxVisualized`).
 
 ## 1.1.27
 
-- Рекомендуется **Player Status HUD 0.1.53+**: для якорей **LeftTop / LeftMiddle / LeftBottom** компенсация `LeftDialogMargin` перенесена в runtime-расчёт `DialogBounds`, поэтому `Save & apply` сохраняет inset как ожидаемый шаг (4/8/16/32), а фактический отступ от левого края в игре больше не держит постоянную «лишнюю» полосу.
+- Compatibility sync с эволюцией `Player Status HUD` (без отдельных изменений логики `SlowToxVisualized`).
 
 ## 1.1.26
 
-- Рекомендуется **Player Status HUD 0.1.52+**: пресеты inset для якорей **LeftTop / LeftMiddle / LeftBottom** учитывают **`GuiStyle.LeftDialogMargin`** при записи `DialogOffsetX`, чтобы визуальный отступ от левого края ближе соответствовал шагу **k** (после **Save & apply** значения в JSON могут сдвинуться).
+- Compatibility sync с эволюцией `Player Status HUD` (без отдельных изменений логики `SlowToxVisualized`).
 
 ## 1.1.25
 
-- Рекомендуется **Player Status HUD 0.1.51+**: мастер раскладки при **Save & apply** выставляет `StatusStripSide` по **Screen corner**: якорь **Right\*** → `Left` (полоска к центру экрана); якорь **Left\*** или **Center\*** → `Right`, чтобы ряд иконок не уходил за край экрана.
+- Compatibility sync с эволюцией `Player Status HUD` (без отдельных изменений логики `SlowToxVisualized`).
 
 ## 1.1.24
 
-- Рекомендуется **Player Status HUD 0.1.50+**: подписи пресетов размера иконок в мастере — **Small (32)**, **Medium (42)**, **Large (64)**, **Huge (78)**.
+- Compatibility sync с эволюцией `Player Status HUD` (без отдельных изменений логики `SlowToxVisualized`).
 
 ## 1.1.23
 
-- Рекомендуется **Player Status HUD 0.1.49+**: мастер — перенос в intro, больше воздуха перед секцией **Layout**; шаги inset **4 / 8 / 16 / 32** с учётом **знака по углу экрана**; размеры иконок **32 / 42 / 64 / 78**; для **верхних** якорей Y уменьшается на константу (**~10 px**), чтобы визуально ближе совпадать с горизонтальным отступом (см. `StripLayoutInsetPresets`).
+- Compatibility sync с эволюцией `Player Status HUD` (без отдельных изменений логики `SlowToxVisualized`).
 
 ## 1.1.22
 
-- Рекомендуется **Player Status HUD 0.1.48+**: мастер раскладки — вместо числовых полей **пресеты**: размер иконок **Small 24 / Medium 32 / Large 42 / Huge 64**, зазор **2–16 px** (Tight…Wide), отступ от угла **Tight / Standard / Relaxed / Generous** (пары `DialogOffsetX/Y` −4…−20 и 4…20); угол экрана по-прежнему списком. Точные значения по-прежнему в `playerstatusstrip-hudlayout.json` и через `.striplayout`.
+- Compatibility sync с эволюцией `Player Status HUD` (без отдельных изменений логики `SlowToxVisualized`).
 
 ## 1.1.21
 
-- Рекомендуется **Player Status HUD 0.1.47+**: в `wizard-footer-hint` символ **★** заменён на **\*** (ASCII), чтобы маркер перед Tip не рисовался «прямоугольником» из‑за отсутствия глифа в шрифте GUI.
+- Compatibility sync с эволюцией `Player Status HUD` (без отдельных изменений логики `SlowToxVisualized`).
 
 ## 1.1.20
 
-- Рекомендуется **Player Status HUD 0.1.46+**: мастер раскладки — **+40px** к ширине окна, больше места под переносы (intro / footer / длинные подписи), высота окна считается от контента, строка **Icon spacing** с увеличенной областью, правки `en.json` (короче лейбл, перенос в Tip).
+- Compatibility sync с эволюцией `Player Status HUD` (без отдельных изменений логики `SlowToxVisualized`).
 
 ## 1.1.19
 
-- Рекомендуется **Player Status HUD 0.1.45+**: мастер раскладки — окно **уже** (~половина прежней ширины, ~350px), поля и выпадающий список пересчитаны под узкую колонку; кнопки внизу на всю ширину контента.
+- Compatibility sync с эволюцией `Player Status HUD` (без отдельных изменений логики `SlowToxVisualized`).
 
 ## 1.1.18
 
-- Рекомендуется **Player Status HUD 0.1.44+**: мастер раскладки — подписи кнопок **Save & apply** / **Not now** с **центрированием** текста; строка про повторное открытие окна — **жирный золотистый** шрифт + маркер «★ Tip» в `wizard-footer-hint`, чтобы заметнее выделяться от основного текста.
+- Compatibility sync с эволюцией `Player Status HUD` (без отдельных изменений логики `SlowToxVisualized`).
 
 ## 1.1.17
 
-- Рекомендуется **Player Status HUD 0.1.43+**: заголовки секций мастера раскладки (**Layout** / **Appearance**) — **жирным шрифтом**, чтобы отличаться от обычных подписей полей.
+- Compatibility sync с эволюцией `Player Status HUD` (без отдельных изменений логики `SlowToxVisualized`).
 
 ## 1.1.16
 
-- Рекомендуется **Player Status HUD 0.1.42+**: мастер раскладки — секции **Layout** / **Appearance**, порядок полей (угол → позиция → размер → зазор), более спокойные подписи полей, **Save & apply** / **Not now** (Normal vs Small), обновлённые тексты intro/footer.
+- Compatibility sync с эволюцией `Player Status HUD` (без отдельных изменений логики `SlowToxVisualized`).
 
 ## 1.1.15
 
-- Рекомендуется **Player Status HUD 0.1.41+**: текст мастера раскладки без подсказки про стрелки/Shift в числовых полях (поведение клавиш сохраняется).
+- Compatibility sync с эволюцией `Player Status HUD` (без отдельных изменений логики `SlowToxVisualized`).
 
 ## 1.1.14
 
-- Рекомендуется **Player Status HUD 0.1.40+**: мастер раскладки больше не меняет **strip offset** (`StatusStripOffsetX/Y` по-прежнему в JSON и `.striplayout`).
+- Compatibility sync с эволюцией `Player Status HUD` (без отдельных изменений логики `SlowToxVisualized`).
 
 ## 1.1.13
 
-- Рекомендуется **Player Status HUD 0.1.39+**: мастер раскладки — шире окно и блоки текста, переносы в `wizard-intro` / `wizard-footer-hint` (без обрезки по краю).
+- Compatibility sync с эволюцией `Player Status HUD` (без отдельных изменений логики `SlowToxVisualized`).
 
 ## 1.1.12
 
-- Рекомендуется **Player Status HUD 0.1.38+**: в мастере раскладки в числовых полях **стрелки вверх/вниз** ±1, **Shift** + стрелки ±10.
+- Compatibility sync с эволюцией `Player Status HUD` (без отдельных изменений логики `SlowToxVisualized`).
 
 ## 1.1.11
 
-- Рекомендуется **Player Status HUD 0.1.37+**: в `ModConfig/playerstatusstrip-dev.json` при **`DevMode`: true** и **`AlwaysAutoLayoutWizard`: true** мастер раскладки открывается при каждом заходе в мир (игнор онбординга) — удобно для разработки без смены версии мода.
+- Compatibility sync с эволюцией `Player Status HUD` (без отдельных изменений логики `SlowToxVisualized`).
 
 ## 1.1.10
 
-- Рекомендуется **Player Status HUD 0.1.36+**: после **обновления версии** мода авто-мастер раскладки снова может показаться (сброс подавления относительно сохранённой версии в `playerstatusstrip-onboarding.json`).
+- Compatibility sync с эволюцией `Player Status HUD` (без отдельных изменений логики `SlowToxVisualized`).
 
 ## 1.1.9
 
-- Рекомендуется **Player Status HUD 0.1.35+**: мастер раскладки показывает **живое превью** (мок-иконки на полоске при изменении полей).
+- Compatibility sync с эволюцией `Player Status HUD` (без отдельных изменений логики `SlowToxVisualized`).
 
 ## 1.1.8
 
-- Рекомендуется **Player Status HUD 0.1.34+**: мастер раскладки при первом входе (флаг `ModConfig/playerstatusstrip-onboarding.json`), повторный вызов **Ctrl+F8** и `.striplayout wizard`.
+- Compatibility sync с эволюцией `Player Status HUD` (без отдельных изменений логики `SlowToxVisualized`).
 
 ## 1.1.7
 

@@ -1,19 +1,13 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<style>
-*,*::before,*::after{box-sizing:border-box}
-body{-webkit-text-size-adjust:100%}
-.landing-inner p,.landing-inner li,.landing-inner td,.landing-inner a,.landing-inner code,.landing-inner pre{overflow-wrap:anywhere;word-break:break-word}
-table{border-collapse:collapse}
-</style>
-</head>
-<body style="margin:0;padding:0;background:#01241E;color:#F8FBDE;font-family:Segoe UI,Roboto,Arial,sans-serif;font-size:15px;line-height:1.6;">
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/></head>
+<body style="margin:0;padding:0;background:#01241E;color:#F8FBDE;font-family:Segoe UI,Roboto,Arial,sans-serif;font-size:15px;line-height:1.6;-webkit-text-size-adjust:100%;">
 <div style="width:100%;background:#01241E;color:#F8FBDE;">
-<div class="landing-inner" style="max-width:720px;margin:0 auto;padding:24px clamp(14px,4vw,18px) 32px;">
+<div style="max-width:720px;margin:0 auto;padding:24px clamp(14px,4vw,18px) 32px;">
 
 <header style="padding-bottom:14px;border-bottom:1px solid rgba(228,242,101,.2);margin-bottom:16px;">
 <h1 style="margin:0;font-size:clamp(1.2rem,4vw,1.45rem);font-weight:700;color:#E4F265;line-height:1.25;">Player Status HUD</h1>
 <p style="margin:6px 0 0;font-size:13px;color:#F8FBDE;opacity:.88;">Developer-focused status HUD library for Vintage Story</p>
+<p style="margin:8px 0 0;font-size:12px;color:#E4F265;opacity:.95;font-weight:700;">Current public release: 1.2.0</p>
 </header>
 
 <p style="margin:0 0 16px;">Player Status HUD is a reusable HUD layer and API for mods that need player-facing status icons with tooltips and animation semantics. It is designed for integration first: provider-based data model, stable ids, deterministic merge behavior, and production-safe defaults.</p>
@@ -28,8 +22,8 @@ table{border-collapse:collapse}
 </div>
 
 <section style="background:#03332B;border-radius:12px;padding:16px 18px;margin-bottom:14px;border:1px solid rgba(228,242,101,.18);">
-<div style="font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#E4F265;margin-bottom:10px;font-weight:600;">Why use this library</div>
-<table role="presentation" width="100%" style="font-size:14px;">
+<h2 style="margin:0 0 10px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#E4F265;font-weight:600;">Why use this library</h2>
+<table role="presentation" width="100%" style="font-size:14px;border-collapse:collapse;">
 <tr><td style="padding:6px 0;vertical-align:top;width:38%;color:#E4F265;font-weight:600;">Stable runtime API</td><td style="padding:6px 0;">Register providers once and stream statuses per frame via <code style="background:rgba(248,251,222,.12);padding:1px 6px;border-radius:4px;color:#F8FBDE;">IStatusStripProvider</code>.</td></tr>
 <tr><td style="padding:6px 0;vertical-align:top;width:38%;color:#E4F265;font-weight:600;">Deterministic merge</td><td style="padding:6px 0;">Sorted by <code style="background:rgba(248,251,222,.12);padding:1px 6px;border-radius:4px;color:#F8FBDE;">SortOrder</code> + <code style="background:rgba(248,251,222,.12);padding:1px 6px;border-radius:4px;color:#F8FBDE;">StableId</code>; duplicate id policy is predictable (last provider wins).</td></tr>
 <tr><td style="padding:6px 0;vertical-align:top;width:38%;color:#E4F265;font-weight:600;">Semantic motion</td><td style="padding:6px 0;">Built-in <code style="background:rgba(248,251,222,.12);padding:1px 6px;border-radius:4px;color:#F8FBDE;">Neutral / Positive / Negative</code> affect kinds for meaningful animation feedback.</td></tr>
@@ -38,9 +32,9 @@ table{border-collapse:collapse}
 </section>
 
 <section style="background:#03332B;border-radius:12px;padding:16px 18px;margin-bottom:14px;border:1px solid rgba(228,242,101,.18);">
-<div style="font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#E4F265;margin-bottom:10px;font-weight:600;">Quick integration</div>
+<h2 style="margin:0 0 10px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#E4F265;font-weight:600;">Quick integration</h2>
 <p style="margin:0 0 10px;font-size:14px;">Minimal client-side bootstrap:</p>
-<pre style="margin:0;background:rgba(1,36,30,.38);border:1px solid rgba(228,242,101,.2);border-radius:8px;padding:10px 12px;font-size:12px;line-height:1.5;color:#F8FBDE;">var baseSys = api.ModLoader.GetModSystem&lt;PlayerStatusStrip.PlayerStatusStripModSystem&gt;();
+<pre style="margin:0;background:rgba(1,36,30,.38);border:1px solid rgba(228,242,101,.2);border-radius:8px;padding:10px 12px;font-size:12px;line-height:1.5;color:#F8FBDE;overflow-wrap:anywhere;word-break:break-word;">var baseSys = api.ModLoader.GetModSystem&lt;PlayerStatusStrip.PlayerStatusStripModSystem&gt;();
 IStatusStripHudApi? stripApi = baseSys?.StatusApi;
 if (stripApi == null) return;
 stripApi.RegisterProvider(myProvider);</pre>
@@ -48,7 +42,7 @@ stripApi.RegisterProvider(myProvider);</pre>
 </section>
 
 <section style="background:#03332B;border-radius:12px;padding:16px 18px;margin-bottom:14px;border:1px solid rgba(228,242,101,.18);">
-<div style="font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#E4F265;margin-bottom:10px;font-weight:600;">Configuration surfaces</div>
+<h2 style="margin:0 0 10px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#E4F265;font-weight:600;">Configuration surfaces</h2>
 <ul style="margin:0;padding-left:18px;">
 <li style="margin:0 0 8px;"><strong style="color:#F8FBDE;">Layout:</strong> <code style="background:rgba(248,251,222,.12);padding:1px 6px;border-radius:4px;color:#F8FBDE;">ModConfig/playerstatusstrip-hudlayout.json</code> — icon size/gap, anchor behavior, row baseline locking, profile settings, draw order.</li>
 <li style="margin:0 0 8px;"><strong style="color:#F8FBDE;">Dev:</strong> <code style="background:rgba(248,251,222,.12);padding:1px 6px;border-radius:4px;color:#F8FBDE;">ModConfig/playerstatusstrip-dev.json</code> — `DevMode`, `UseMockStatuses`.</li>
@@ -57,56 +51,31 @@ stripApi.RegisterProvider(myProvider);</pre>
 </section>
 
 <section style="background:#03332B;border-radius:12px;padding:16px 18px;margin-bottom:14px;border:1px solid rgba(228,242,101,.18);">
-<div style="font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#E4F265;margin-bottom:10px;font-weight:600;">Dev testing scenarios</div>
+<h2 style="margin:0 0 10px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#E4F265;font-weight:600;">Dev testing scenarios</h2>
 <p style="margin:0 0 10px;font-size:14px;">Scenario ids for regression and UX checks:</p>
 <p style="margin:0 0 10px;font-size:14px;"><code style="background:rgba(248,251,222,.12);padding:1px 6px;border-radius:4px;color:#F8FBDE;">meal</code> <code style="background:rgba(248,251,222,.12);padding:1px 6px;border-radius:4px;color:#F8FBDE;">mining</code> <code style="background:rgba(248,251,222,.12);padding:1px 6px;border-radius:4px;color:#F8FBDE;">combat</code> <code style="background:rgba(248,251,222,.12);padding:1px 6px;border-radius:4px;color:#F8FBDE;">weather</code> <code style="background:rgba(248,251,222,.12);padding:1px 6px;border-radius:4px;color:#F8FBDE;">recovery</code> <code style="background:rgba(248,251,222,.12);padding:1px 6px;border-radius:4px;color:#F8FBDE;">buzz</code></p>
 <p style="margin:0;font-size:14px;">Commands: <code style="background:rgba(248,251,222,.12);padding:1px 6px;border-radius:4px;color:#F8FBDE;">/stripmock list</code>, <code style="background:rgba(248,251,222,.12);padding:1px 6px;border-radius:4px;color:#F8FBDE;">/stripmock run &lt;id&gt;</code>, <code style="background:rgba(248,251,222,.12);padding:1px 6px;border-radius:4px;color:#F8FBDE;">/stripmock stop</code>.</p>
 </section>
 
 <section style="padding:16px 0;margin-bottom:14px;">
-<div style="font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#E4F265;margin-bottom:8px;font-weight:700;">Roadmap Board</div>
-<p style="margin:0 0 12px;font-size:14px;color:#F8FBDE;opacity:.92;">Action plan represented as a mini Kanban board:</p>
-<table role="presentation" width="100%" style="border-collapse:collapse;border-spacing:0;">
-<tr>
-<td style="width:33.33%;vertical-align:top;padding:0 8px 0 0;">
-<div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#E4F265;font-weight:700;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid rgba(228,242,101,.26);">In progress <span style="opacity:.78;">(1)</span></div>
-<div style="background:rgba(110,212,129,.14);border:1px solid rgba(110,212,129,.45);border-left:3px solid #6ED481;border-radius:8px;padding:10px 10px 9px;margin-bottom:8px;">
-<div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:#9AE6AD;font-weight:700;margin-bottom:6px;">In progress • UX</div>
-<div style="font-size:13px;line-height:1.45;color:#F8FBDE;">Refine left-anchor inset behavior so edge distance remains visually consistent.</div>
+<div style="background:#03332B;border-radius:12px;padding:14px 16px;border:1px solid rgba(228,242,101,.18);">
+<h2 style="margin:0 0 10px;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#E4F265;font-weight:700;">What integrators get</h2>
+<ul style="margin:0;padding-left:18px;">
+<li style="margin:0 0 8px;">A stable provider-based API for publishing status icons with tooltips and effect semantics.</li>
+<li style="margin:0 0 8px;">A configurable HUD surface that players can tune without changing your integration code.</li>
+<li style="margin:0 0 8px;">A built-in setup wizard for first-run layout selection (corner, inset, size, spacing).</li>
+<li style="margin:0 0 8px;">Fast in-game verification flow via <strong style="color:#E4F265;">F8</strong> (layout reload) and <strong style="color:#E4F265;">Ctrl+F8</strong> (wizard).</li>
+<li style="margin:0;">Production-safe defaults: no mock visuals unless explicitly enabled in dev config.</li>
+</ul>
 </div>
-</td>
-<td style="width:33.33%;vertical-align:top;padding:0 8px 0 0;">
-<div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#E4F265;font-weight:700;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid rgba(228,242,101,.26);">Planned <span style="opacity:.78;">(2)</span></div>
-<div style="background:rgba(122,162,255,.13);border:1px solid rgba(122,162,255,.42);border-left:3px solid #7AA2FF;border-radius:8px;padding:10px 10px 9px;margin-bottom:8px;">
-<div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:#A8C0FF;font-weight:700;margin-bottom:6px;">Planned • Onboarding</div>
-<div style="font-size:13px;line-height:1.45;color:#F8FBDE;">Add a <strong style="color:#E4F265;">Quick Setup Wizard</strong> for first launch corner, inset, icon size, and spacing selection.</div>
-</div>
-<div style="background:rgba(122,162,255,.13);border:1px solid rgba(122,162,255,.42);border-left:3px solid #7AA2FF;border-radius:8px;padding:10px 10px 9px;margin-bottom:8px;">
-<div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:#A8C0FF;font-weight:700;margin-bottom:6px;">Planned • Flow</div>
-<div style="font-size:13px;line-height:1.45;color:#F8FBDE;">Keep the flow non-intrusive with clear <code style="background:rgba(248,251,222,.12);padding:1px 6px;border-radius:4px;color:#F8FBDE;">Save &amp; Apply</code> and <code style="background:rgba(248,251,222,.12);padding:1px 6px;border-radius:4px;color:#F8FBDE;">Not Now</code> actions.</div>
-</div>
-</td>
-<td style="width:33.33%;vertical-align:top;padding:0;">
-<div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#E4F265;font-weight:700;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid rgba(228,242,101,.26);">Validation <span style="opacity:.78;">(2)</span></div>
-<div style="background:rgba(187,154,255,.14);border:1px solid rgba(187,154,255,.45);border-left:3px solid #BB9AFF;border-radius:8px;padding:10px 10px 9px;margin-bottom:8px;">
-<div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:#D5C2FF;font-weight:700;margin-bottom:6px;">Validation • Config</div>
-<div style="font-size:13px;line-height:1.45;color:#F8FBDE;">Verify preset choices map cleanly to final JSON offsets.</div>
-</div>
-<div style="background:rgba(187,154,255,.14);border:1px solid rgba(187,154,255,.45);border-left:3px solid #BB9AFF;border-radius:8px;padding:10px 10px 9px;margin-bottom:8px;">
-<div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:#D5C2FF;font-weight:700;margin-bottom:6px;">Validation • Gameplay</div>
-<div style="font-size:13px;line-height:1.45;color:#F8FBDE;">Confirm the resulting HUD layout in live gameplay UI.</div>
-</div>
-</td>
-</tr>
-</table>
 </section>
 
 <section style="background:#03332B;border-radius:12px;padding:16px 18px;margin-bottom:14px;border:1px solid rgba(228,242,101,.18);">
-<div style="font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#E4F265;margin-bottom:10px;font-weight:600;">Documentation index</div>
+<h2 style="margin:0 0 10px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#E4F265;font-weight:600;">Documentation index</h2>
 <ul style="margin:0;padding-left:18px;">
 <li style="margin:0 0 8px;"><strong style="color:#F8FBDE;">API:</strong> <code style="background:rgba(248,251,222,.12);padding:1px 6px;border-radius:4px;color:#F8FBDE;">PlayerStatusStrip/docs/PLAYER_STATUS_STRIP_API.md</code></li>
 <li style="margin:0 0 8px;"><strong style="color:#F8FBDE;">Dev guide:</strong> <code style="background:rgba(248,251,222,.12);padding:1px 6px;border-radius:4px;color:#F8FBDE;">PlayerStatusStrip/docs/PLAYER_STATUS_STRIP_DEV_GUIDE.md</code></li>
-<li style="margin:0;"><strong style="color:#F8FBDE;">Release package:</strong> use current package from the <code style="background:rgba(248,251,222,.12);padding:1px 6px;border-radius:4px;color:#F8FBDE;">release/</code> folder (see README/ModDB draft).</li>
+<li style="margin:0;"><strong style="color:#F8FBDE;">Integration quick links:</strong> start with <code style="background:rgba(248,251,222,.12);padding:1px 6px;border-radius:4px;color:#F8FBDE;">PLAYER_STATUS_STRIP_API.md</code>, then use <code style="background:rgba(248,251,222,.12);padding:1px 6px;border-radius:4px;color:#F8FBDE;">.striplayout show</code> + <code style="background:rgba(248,251,222,.12);padding:1px 6px;border-radius:4px;color:#F8FBDE;">Ctrl+F8</code> to validate your provider in-game.</li>
 </ul>
 </section>
 
