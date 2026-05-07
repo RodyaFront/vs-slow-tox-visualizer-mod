@@ -12,7 +12,7 @@ The user turned this skill on so the agent **finishes the loop**: after edits, *
 
 ## Single source of truth
 
-1. Read **[`docs/DEV_ENV.md`](../../../docs/DEV_ENV.md)** for this machine: `VINTAGE_STORY`, `VS_MODS_TEST`, log paths.
+1. Read **[`SlowToxVisualized/docs/DEV_ENV.md`](../../../SlowToxVisualized/docs/DEV_ENV.md)** for this machine: `VINTAGE_STORY`, `VS_MODS_TEST`, log paths.
 2. If `VINTAGE_STORY` is missing in the shell, set it for the session to the path from that doc (or from `.vscode/settings.json` terminal env).
 
 ## Rules (do not skip)

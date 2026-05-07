@@ -2,7 +2,7 @@
 # Copies bin/Release/Mods/slowtoxvisualized/* -> destination (flatten), never nests slowtoxvisualized/slowtoxvisualized.
 #
 # Destination:
-#   $env:VS_MODS_TEST\slowtoxvisualized   if VS_MODS_TEST is set (see docs/DEV_ENV.md),
+#   $env:VS_MODS_TEST\slowtoxvisualized   if VS_MODS_TEST is set (see SlowToxVisualized/docs/DEV_ENV.md),
 #   else %AppData%\Roaming\VintagestoryData\Mods\slowtoxvisualized
 #
 # Usage (from repo root):

@@ -2,7 +2,7 @@
 # Copies bin/Release/Mods/playerstatusstrip/* -> destination (flatten), never nests playerstatusstrip/playerstatusstrip.
 #
 # Destination:
-#   $env:VS_MODS_TEST\playerstatusstrip   if VS_MODS_TEST is set (see repo docs/DEV_ENV.md),
+#   $env:VS_MODS_TEST\playerstatusstrip   if VS_MODS_TEST is set (see SlowToxVisualized/docs/DEV_ENV.md),
 #   else %AppData%\Roaming\VintagestoryData\Mods\playerstatusstrip
 #
 # Usage (from repository root):

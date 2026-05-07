@@ -1,8 +1,8 @@
 # История версий SlowTox Visualized
 
-**Текущая версия** задаётся в [`SlowToxVisualized/modinfo.json`](../SlowToxVisualized/modinfo.json) (поле `version`). Ниже — кратко что менялось по релизам.
+**Текущая версия** задаётся в [`SlowToxVisualized/modinfo.json`](../modinfo.json) (поле `version`). Ниже — кратко что менялось по релизам.
 
-**Player Status HUD** (`playerstatusstrip`): версия в [`PlayerStatusStrip/modinfo.json`](../PlayerStatusStrip/modinfo.json); краткая история в конце файла.
+**Player Status HUD** (`playerstatusstrip`): версия в [`PlayerStatusStrip/modinfo.json`](../../PlayerStatusStrip/modinfo.json); краткая история в конце файла.
 
 ## 1.1.35
 
@@ -118,15 +118,15 @@
 
 ## 1.1.7
 
-- Дефолты [`HudLayoutConfig`](../SlowToxVisualized/src/HudLayoutConfig.cs) для новых JSON приведены к текущей раскладке: `DialogOffsetY` **8**, `MockIntoxicationRaw` **0.1** (для мока). **Player Status HUD 0.1.33+** (тот же `DialogOffsetY` у полоски).
+- Дефолты [`HudLayoutConfig`](../src/HudLayoutConfig.cs) для новых JSON приведены к текущей раскладке: `DialogOffsetY` **8**, `MockIntoxicationRaw` **0.1** (для мока). **Player Status HUD 0.1.33+** (тот же `DialogOffsetY` у полоски).
 
 ## 1.1.6
 
-- Дефолт `DialogArea`: **RightTop** (правый верх) для новых `slowtoxvisualized-hudlayout.json`. В [`HudLayoutConfig.ParseDialogArea`](../SlowToxVisualized/src/HudLayoutConfig.cs) добавлен разбор `RightTop` (раньше неизвестное значение уезжало в `CenterBottom`). **Player Status HUD 0.1.32+**.
+- Дефолт `DialogArea`: **RightTop** (правый верх) для новых `slowtoxvisualized-hudlayout.json`. В [`HudLayoutConfig.ParseDialogArea`](../src/HudLayoutConfig.cs) добавлен разбор `RightTop` (раньше неизвестное значение уезжало в `CenterBottom`). **Player Status HUD 0.1.32+**.
 
 ## 1.1.5
 
-- Дефолт `StatusIconSize` в [`HudLayoutConfig`](../SlowToxVisualized/src/HudLayoutConfig.cs): **46** px (новые `slowtoxvisualized-hudlayout.json`; уже созданный JSON не перезаписывается). Для согласованной полоски статусов — **Player Status HUD 0.1.31+**.
+- Дефолт `StatusIconSize` в [`HudLayoutConfig`](../src/HudLayoutConfig.cs): **46** px (новые `slowtoxvisualized-hudlayout.json`; уже созданный JSON не перезаписывается). Для согласованной полоски статусов — **Player Status HUD 0.1.31+**.
 
 ## 1.1.4
 
@@ -170,13 +170,13 @@
 - Тултипы статусов: числовые строки из той же математики, что и иконки; VTML в `lang/en.json` и `lang/ru.json` без лишнего `\n` между заголовком и текстом (единый поток, как у регенерации).
 - Выравнивание текста и фона: `ElementBounds` для richtext в **GUI-единицах** (`/ RuntimeEnv.GUIScale`), чтобы текст не «уплывал» относительно подложки.
 - Панель тултипа + `GuiElementRichtext`, `StatusTooltipMaxWidth` / `StatusTooltipZ` в конфиге HUD.
-- Деплой: скрипт [`scripts/deploy-slowtoxvisualized.ps1`](../scripts/deploy-slowtoxvisualized.ps1), описание в [`DEV_ENV.md`](DEV_ENV.md).
+- Деплой: скрипт [`scripts/deploy-slowtoxvisualized.ps1`](../../scripts/deploy-slowtoxvisualized.ps1), описание в [`DEV_ENV.md`](DEV_ENV.md).
 
 ---
 
 ## Player Status HUD (`playerstatusstrip`)
 
-Источник версии: [`PlayerStatusStrip/modinfo.json`](../PlayerStatusStrip/modinfo.json).
+Источник версии: [`PlayerStatusStrip/modinfo.json`](../../PlayerStatusStrip/modinfo.json).
 
 ### 1.2.0
 
@@ -294,7 +294,7 @@
 
 ### 0.1.37
 
-- Dev: в [`StatusStripDevConfig`](../PlayerStatusStrip/src/StatusStripDevConfig.cs) поле **`AlwaysAutoLayoutWizard`** (учитывается только вместе с **`DevMode`**) — авто-открытие мастера при каждом `LevelFinalize`, без учёта `SuppressAutoLayoutWizard`.
+- Dev: в [`StatusStripDevConfig`](../../PlayerStatusStrip/src/StatusStripDevConfig.cs) поле **`AlwaysAutoLayoutWizard`** (учитывается только вместе с **`DevMode`**) — авто-открытие мастера при каждом `LevelFinalize`, без учёта `SuppressAutoLayoutWizard`.
 
 ### 0.1.36
 
@@ -320,7 +320,7 @@
 
 ### 0.1.31
 
-- Дефолт `StatusIconSize` в [`StatusStripLayoutConfig`](../PlayerStatusStrip/src/StatusStripLayoutConfig.cs): **46** px для новых `playerstatusstrip-hudlayout.json` (`0` по-прежнему означает авто из раскладки, если явно задать в файле).
+- Дефолт `StatusIconSize` в [`StatusStripLayoutConfig`](../../PlayerStatusStrip/src/StatusStripLayoutConfig.cs): **46** px для новых `playerstatusstrip-hudlayout.json` (`0` по-прежнему означает авто из раскладки, если явно задать в файле).
 
 ### 0.1.30
 
