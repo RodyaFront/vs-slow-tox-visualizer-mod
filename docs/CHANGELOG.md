@@ -2,6 +2,152 @@
 
 **Текущая версия** задаётся в [`SlowToxVisualized/modinfo.json`](../SlowToxVisualized/modinfo.json) (поле `version`). Ниже — кратко что менялось по релизам.
 
+**Player Status HUD** (`playerstatusstrip`): версия в [`PlayerStatusStrip/modinfo.json`](../PlayerStatusStrip/modinfo.json); краткая история в конце файла.
+
+## 1.1.34
+
+- Рекомендуется **Player Status HUD 0.1.60+**: для `CenterTop` центрирование ряда иконок исправлено на полноценное центрирование по контейнеру (`align-items: center`-поведение), вместо старта ряда из центральной точки.
+
+## 1.1.33
+
+- Рекомендуется **Player Status HUD 0.1.59+**: из мастера раскладки убран угол `CenterBottom` (некорректное центрирование в текущей геометрии); для существующих конфигов с `CenterBottom` в мастере применяется fallback на `CenterTop`.
+
+## 1.1.32
+
+- Рекомендуется **Player Status HUD 0.1.58+**: для `*Bottom` якорей вертиковая база ряда теперь рассчитывается от нижней границы контейнера (`bottom-aligned row origin`), чтобы скрытая база не зависела от размера иконок (`32/42/64/78`).
+
+## 1.1.31
+
+- Рекомендуется **Player Status HUD 0.1.57+**: в `*Bottom` сценариях тултип теперь предпочитает размещение сверху над иконкой (с авто-flip обратно вниз при нехватке места), чтобы уменьшить overlap с нижним HUD-рядом.
+
+## 1.1.30
+
+- Рекомендуется **Player Status HUD 0.1.56+**: контейнер HUD теперь использует effective size `max(DialogWidth/DialogHeight, StatusIconSize)` при edge-якорении, чтобы позиция по краям была стабильной для разных размеров иконок (32/42/64/78) без скрытой базы и вылета за границы из-за несоответствия размеров контейнера и иконки.
+
+## 1.1.29
+
+- Рекомендуется **Player Status HUD 0.1.55+**: итерация 1 рефакторинга позиционирования — ряд статусов для `Right*` всегда растёт влево (внутрь экрана), для `Left*` вправо; скрытые базовые смещения от `StatusStripOffsetX/Y` и вертикального выравнивания исключены из runtime-позиционирования ряда.
+
+## 1.1.28
+
+- Рекомендуется **Player Status HUD 0.1.54+**: HUD переведён на edge-based позиционирование (от физических границ экрана в GUI-space), поэтому inset-пресеты 4/8/16/32 для всех `Left* / Center* / Right*` больше не зависят от встроенных margin-правил `EnumDialogArea`.
+
+## 1.1.27
+
+- Рекомендуется **Player Status HUD 0.1.53+**: для якорей **LeftTop / LeftMiddle / LeftBottom** компенсация `LeftDialogMargin` перенесена в runtime-расчёт `DialogBounds`, поэтому `Save & apply` сохраняет inset как ожидаемый шаг (4/8/16/32), а фактический отступ от левого края в игре больше не держит постоянную «лишнюю» полосу.
+
+## 1.1.26
+
+- Рекомендуется **Player Status HUD 0.1.52+**: пресеты inset для якорей **LeftTop / LeftMiddle / LeftBottom** учитывают **`GuiStyle.LeftDialogMargin`** при записи `DialogOffsetX`, чтобы визуальный отступ от левого края ближе соответствовал шагу **k** (после **Save & apply** значения в JSON могут сдвинуться).
+
+## 1.1.25
+
+- Рекомендуется **Player Status HUD 0.1.51+**: мастер раскладки при **Save & apply** выставляет `StatusStripSide` по **Screen corner**: якорь **Right\*** → `Left` (полоска к центру экрана); якорь **Left\*** или **Center\*** → `Right`, чтобы ряд иконок не уходил за край экрана.
+
+## 1.1.24
+
+- Рекомендуется **Player Status HUD 0.1.50+**: подписи пресетов размера иконок в мастере — **Small (32)**, **Medium (42)**, **Large (64)**, **Huge (78)**.
+
+## 1.1.23
+
+- Рекомендуется **Player Status HUD 0.1.49+**: мастер — перенос в intro, больше воздуха перед секцией **Layout**; шаги inset **4 / 8 / 16 / 32** с учётом **знака по углу экрана**; размеры иконок **32 / 42 / 64 / 78**; для **верхних** якорей Y уменьшается на константу (**~10 px**), чтобы визуально ближе совпадать с горизонтальным отступом (см. `StripLayoutInsetPresets`).
+
+## 1.1.22
+
+- Рекомендуется **Player Status HUD 0.1.48+**: мастер раскладки — вместо числовых полей **пресеты**: размер иконок **Small 24 / Medium 32 / Large 42 / Huge 64**, зазор **2–16 px** (Tight…Wide), отступ от угла **Tight / Standard / Relaxed / Generous** (пары `DialogOffsetX/Y` −4…−20 и 4…20); угол экрана по-прежнему списком. Точные значения по-прежнему в `playerstatusstrip-hudlayout.json` и через `.striplayout`.
+
+## 1.1.21
+
+- Рекомендуется **Player Status HUD 0.1.47+**: в `wizard-footer-hint` символ **★** заменён на **\*** (ASCII), чтобы маркер перед Tip не рисовался «прямоугольником» из‑за отсутствия глифа в шрифте GUI.
+
+## 1.1.20
+
+- Рекомендуется **Player Status HUD 0.1.46+**: мастер раскладки — **+40px** к ширине окна, больше места под переносы (intro / footer / длинные подписи), высота окна считается от контента, строка **Icon spacing** с увеличенной областью, правки `en.json` (короче лейбл, перенос в Tip).
+
+## 1.1.19
+
+- Рекомендуется **Player Status HUD 0.1.45+**: мастер раскладки — окно **уже** (~половина прежней ширины, ~350px), поля и выпадающий список пересчитаны под узкую колонку; кнопки внизу на всю ширину контента.
+
+## 1.1.18
+
+- Рекомендуется **Player Status HUD 0.1.44+**: мастер раскладки — подписи кнопок **Save & apply** / **Not now** с **центрированием** текста; строка про повторное открытие окна — **жирный золотистый** шрифт + маркер «★ Tip» в `wizard-footer-hint`, чтобы заметнее выделяться от основного текста.
+
+## 1.1.17
+
+- Рекомендуется **Player Status HUD 0.1.43+**: заголовки секций мастера раскладки (**Layout** / **Appearance**) — **жирным шрифтом**, чтобы отличаться от обычных подписей полей.
+
+## 1.1.16
+
+- Рекомендуется **Player Status HUD 0.1.42+**: мастер раскладки — секции **Layout** / **Appearance**, порядок полей (угол → позиция → размер → зазор), более спокойные подписи полей, **Save & apply** / **Not now** (Normal vs Small), обновлённые тексты intro/footer.
+
+## 1.1.15
+
+- Рекомендуется **Player Status HUD 0.1.41+**: текст мастера раскладки без подсказки про стрелки/Shift в числовых полях (поведение клавиш сохраняется).
+
+## 1.1.14
+
+- Рекомендуется **Player Status HUD 0.1.40+**: мастер раскладки больше не меняет **strip offset** (`StatusStripOffsetX/Y` по-прежнему в JSON и `.striplayout`).
+
+## 1.1.13
+
+- Рекомендуется **Player Status HUD 0.1.39+**: мастер раскладки — шире окно и блоки текста, переносы в `wizard-intro` / `wizard-footer-hint` (без обрезки по краю).
+
+## 1.1.12
+
+- Рекомендуется **Player Status HUD 0.1.38+**: в мастере раскладки в числовых полях **стрелки вверх/вниз** ±1, **Shift** + стрелки ±10.
+
+## 1.1.11
+
+- Рекомендуется **Player Status HUD 0.1.37+**: в `ModConfig/playerstatusstrip-dev.json` при **`DevMode`: true** и **`AlwaysAutoLayoutWizard`: true** мастер раскладки открывается при каждом заходе в мир (игнор онбординга) — удобно для разработки без смены версии мода.
+
+## 1.1.10
+
+- Рекомендуется **Player Status HUD 0.1.36+**: после **обновления версии** мода авто-мастер раскладки снова может показаться (сброс подавления относительно сохранённой версии в `playerstatusstrip-onboarding.json`).
+
+## 1.1.9
+
+- Рекомендуется **Player Status HUD 0.1.35+**: мастер раскладки показывает **живое превью** (мок-иконки на полоске при изменении полей).
+
+## 1.1.8
+
+- Рекомендуется **Player Status HUD 0.1.34+**: мастер раскладки при первом входе (флаг `ModConfig/playerstatusstrip-onboarding.json`), повторный вызов **Ctrl+F8** и `.striplayout wizard`.
+
+## 1.1.7
+
+- Дефолты [`HudLayoutConfig`](../SlowToxVisualized/src/HudLayoutConfig.cs) для новых JSON приведены к текущей раскладке: `DialogOffsetY` **8**, `MockIntoxicationRaw` **0.1** (для мока). **Player Status HUD 0.1.33+** (тот же `DialogOffsetY` у полоски).
+
+## 1.1.6
+
+- Дефолт `DialogArea`: **RightTop** (правый верх) для новых `slowtoxvisualized-hudlayout.json`. В [`HudLayoutConfig.ParseDialogArea`](../SlowToxVisualized/src/HudLayoutConfig.cs) добавлен разбор `RightTop` (раньше неизвестное значение уезжало в `CenterBottom`). **Player Status HUD 0.1.32+**.
+
+## 1.1.5
+
+- Дефолт `StatusIconSize` в [`HudLayoutConfig`](../SlowToxVisualized/src/HudLayoutConfig.cs): **46** px (новые `slowtoxvisualized-hudlayout.json`; уже созданный JSON не перезаписывается). Для согласованной полоски статусов — **Player Status HUD 0.1.31+**.
+
+## 1.1.4
+
+- Патч-релиз для публикации: повторно проверено STR (вход в мир → главное меню → снова в мир), статусы и хоткей F9 работают. Рекомендуется **Player Status HUD 0.1.30+** (F8, жизненный цикл HUD, `.striplayout list` без поломки чата); минимум для фикса повторного входа — **0.1.28**.
+
+## 1.1.3
+
+- Исправлен провал `StartClientSide` при повторном входе в мир после выхода в меню: хоткей F9 регистрируется только если его ещё нет в клиентском `HotKeys` (повторный `RegisterHotKeyFirst` давал исключение и ломал весь мод до перезапуска клиента). Нужна сборка **Player Status HUD** с тем же исправлением для F8.
+
+## 1.1.2
+
+- Исправлено исчезновение полоски статусов после выхода в главное меню и повторного входа в мир/на сервер: сброс HUD и провайдера при `LeftWorld`, повторное открытие HUD и регистрация провайдера при `LevelFinalize` (нужна актуальная сборка **Player Status HUD**).
+
+## 1.1.1
+
+- Fixed icon sourcing after migration: SlowToxVisualized statuses now use production icon paths from `slowtoxvisualized` assets, not `Player Status HUD` mock assets.
+- Intoxication neutral status is now shown only when intoxication level is greater than `0`.
+- Documentation clarified that `playerstatusstrip` `mock_*` icons are strictly dev/mock-only and must not be used for production status visuals.
+
+## 1.1.0
+
+- **Migration:** SlowToxVisualized now integrates with **Player Status HUD** (`playerstatusstrip`) as a status provider instead of rendering its own standalone HUD layer.
+- Intoxication is now a regular neutral status in the shared strip; its tooltip shows the current intoxication level.
+- Added hard dependency on `playerstatusstrip` in `SlowToxVisualized/modinfo.json`.
+
 ## 1.0.2
 
 - Единое написание **SlowTox** (зависимость) в `modinfo.json`, лендинге и префиксах логов **SlowTox Visualized**.
@@ -21,3 +167,143 @@
 - Выравнивание текста и фона: `ElementBounds` для richtext в **GUI-единицах** (`/ RuntimeEnv.GUIScale`), чтобы текст не «уплывал» относительно подложки.
 - Панель тултипа + `GuiElementRichtext`, `StatusTooltipMaxWidth` / `StatusTooltipZ` в конфиге HUD.
 - Деплой: скрипт [`scripts/deploy-slowtoxvisualized.ps1`](../scripts/deploy-slowtoxvisualized.ps1), описание в [`DEV_ENV.md`](DEV_ENV.md).
+
+---
+
+## Player Status HUD (`playerstatusstrip`)
+
+Источник версии: [`PlayerStatusStrip/modinfo.json`](../PlayerStatusStrip/modinfo.json).
+
+### 0.1.60
+
+- Center alignment fix: для center-якорей `StripLayoutWizardStripSide` теперь использует runtime side `Center`, а `StatusStripLayoutMath` центрирует всю полосу статусов по ширине контейнера.
+
+### 0.1.59
+
+- Wizard layout corners: `CenterBottom` удалён из списка `Screen corner`; добавлен совместимый fallback `CenterBottom -> CenterTop` при чтении текущего `DialogArea` в мастере.
+
+### 0.1.58
+
+- Bottom-anchor baseline fix: в `StatusStripLayoutMath` добавлен явный runtime-режим вертикального выравнивания (`top/center/bottom`) на основе `DialogArea`; для `*Bottom` ряд иконок прижат к нижней линии контейнера (без size-dependent slack).
+
+### 0.1.57
+
+- Tooltip placement: для нижних якорей (`*Bottom`) добавлен приоритет рендера тултипа сверху иконки + fallback-flip по свободному месту во вьюпорте.
+
+### 0.1.56
+
+- `StatusStripHudElement.ResolveDialogBounds()` теперь якорит `hud-container` по effective container size (минимум = `StatusIconSize`), поэтому размер иконки влияет только на геометрию ряда, а не на edge-позицию контейнера.
+
+### 0.1.55
+
+- Iteration 1: `StatusStripLayoutMath` и `StatusStripHudElement.BuildStripLayout()` переведены на inward-flow модель от краёв (`Right*` → влево, `Left*` → вправо) с runtime-канонизацией `StatusStripSide` по `DialogArea`; базовые `StatusStripOffsetX/Y` и vertical-align больше не добавляют «скрытую базу» для ряда иконок.
+
+### 0.1.54
+
+- Добавлен `StatusStripScreenPlacement`: `ComposeHud()` теперь ставит HUD в абсолютные экранные координаты (GUI-space) по `DialogArea + DialogOffsetX/Y`, без опоры на внутренние margin-ы `ElementBounds.Fixed(EnumDialogArea, ...)`.
+
+### 0.1.53
+
+- Left* inset fix: компенсация `LeftDialogMargin` перенесена из пресетов в `StatusStripLayoutConfig.DialogBounds()`, чтобы `DialogOffsetX` в конфиге оставался «чистым» шагом inset, а итоговая позиция в игре учитывала margin ровно один раз.
+
+### 0.1.52
+
+- `StripLayoutInsetPresets`: для **Left\*** якорей `DialogOffsetX` = **k − LeftDialogMargin** (с зажимом), чтобы inset не суммировался с базовым левым margin диалогов движка.
+
+### 0.1.51
+
+- Мастер: `StripLayoutWizardStripSide.ForDialogArea` — для якорей Left/Center задаётся `StatusStripSide: Right`, для Right — `Left`; см. `StripLayoutWizardDialog.TryBuildConfig`.
+
+### 0.1.50
+
+- `en.json`: пресеты размера иконок в мастере — Small / Medium / Large / Huge для 32 / 42 / 64 / 78 px.
+
+### 0.1.49
+
+- Мастер: пресеты inset 4/8/16/32, иконки 32/42/64/78; `StripLayoutInsetPresets` — смещения по коду угла; подправка Y для верхних якорей; верстка intro / отступ перед Layout.
+
+### 0.1.48
+
+- Мастер раскладки: пресеты вместо `NumberInput` для размера иконок, зазора и смещения от угла; новые ключи `en.json` (`wizard-preset-*`, `wizard-label-inset` и т.д.).
+
+### 0.1.47
+
+- `en.json`: `wizard-footer-hint` — вместо Unicode **★** используется **\*** (совместимость с шрифтом диалогов).
+
+### 0.1.46
+
+- Мастер раскладки: ширина **390** px (было 350); зарезервированы высоты под intro/footer и двухстрочную подпись к полю зазора; окно по высоте под сумму блоков + нижний отступ.
+
+### 0.1.45
+
+- Мастер раскладки: размер окна ~**350×470** GUI px (раньше ~700×648); подписи, поля и выпадающий список подогнаны под узкий диалог.
+
+### 0.1.44
+
+- Мастер раскладки: кнопки — шрифт кнопки с `WithOrientation(EnumTextOrientation.Center)`; нижняя подсказка (`wizard-footer-hint`) — `FontWeight.Bold` + тёплый цвет через `CairoFont.WithColor`; текст в `en.json` с префиксом «★ Tip — …».
+
+### 0.1.43
+
+- Мастер раскладки: заголовки секций **Layout** / **Appearance** — **жирный** шрифт (`FontWeight.Bold`), чтобы визуально отделять их от подписей полей.
+
+### 0.1.42
+
+- Мастер раскладки: секции **Layout** / **Appearance**; порядок полей угол экрана → позиция → размер иконок → зазор; подписи полей мелким шрифтом; кнопки **Save & apply** (`EnumButtonStyle.Normal`) и **Not now** (`Small`); переписаны `wizard-intro`, `wizard-footer-hint`, ключ `wizard-not-now`.
+
+### 0.1.41
+
+- Мастер раскладки: из подсказки внизу окна убрано упоминание стрелок/Shift для числовых полей.
+
+### 0.1.40
+
+- Мастер раскладки: убраны поля **Strip offset**; при **Apply** значения `StatusStripOffsetX` / `StatusStripOffsetY` берутся из уже загруженного конфига (не сбрасываются).
+
+### 0.1.39
+
+- Мастер раскладки: увеличены размер окна и области для `AddStaticTextAutoBoxSize` (ширина = ширина диалога минус отступы); в `en.json` добавлены явные переводы строк для вводного и нижнего текста.
+
+### 0.1.38
+
+- Мастер раскладки: в сфокусированном числовом поле **Up/Down** меняют значение на ±1, **Shift+Up/Down** на ±10; превью обновляется как при вводе.
+
+### 0.1.37
+
+- Dev: в [`StatusStripDevConfig`](../PlayerStatusStrip/src/StatusStripDevConfig.cs) поле **`AlwaysAutoLayoutWizard`** (учитывается только вместе с **`DevMode`**) — авто-открытие мастера при каждом `LevelFinalize`, без учёта `SuppressAutoLayoutWizard`.
+
+### 0.1.36
+
+- Онбординг мастера: при смене **версии мода** (из списка модов игры) сбрасывается `SuppressAutoLayoutWizard`, если ранее игрок уже закрывал мастер для **старой** версии — авто-показ снова возможен после каждой обновы. В `playerstatusstrip-onboarding.json` хранится `WizardDismissedForModVersion`.
+
+### 0.1.35
+
+- Мастер раскладки: при открытом окне на полоску добавляются **те же четыре мок-иконки**, что в dev-режиме; раскладка **обновляется при изменении** якоря, размера, смещений и зазора (`ApplyLayoutPreview`). После **Skip** / закрытия без **Apply** — тихий откат к конфигу с диска; после **Apply** — без дублирующего длинного чата F8 (остаётся краткое уведомление мастера).
+
+### 0.1.34
+
+- Мастер раскладки (GUI): пресет якоря (`DialogArea`), размер иконок, смещения HUD/полоски, зазор; **Apply** пишет `playerstatusstrip-hudlayout.json` и перезагружает HUD; **Skip** / закрытие без принудительного сохранения раскладки, но выставляет `SuppressAutoLayoutWizard` в `playerstatusstrip-onboarding.json`, чтобы авто-показ больше не мешал.
+- Авто-показ мастера один раз (если флаг не подавлен), ~650 ms после успешного открытия HUD.
+- Хоткей **Ctrl+F8** (регистрация только если слот свободен) и команда `.striplayout wizard` / `setup` для повторного открытия; при выходе из мира мастер закрывается без подавления онбординга (если игрок не завершил шаг — авто снова возможен в следующей сессии).
+
+### 0.1.33
+
+- Дефолт `DialogOffsetY`: **8** для новых `playerstatusstrip-hudlayout.json` (согласовано с правым верхним якорем).
+
+### 0.1.32
+
+- Дефолт `DialogArea`: **RightTop** (правый верх) для новых `playerstatusstrip-hudlayout.json`.
+
+### 0.1.31
+
+- Дефолт `StatusIconSize` в [`StatusStripLayoutConfig`](../PlayerStatusStrip/src/StatusStripLayoutConfig.cs): **46** px для новых `playerstatusstrip-hudlayout.json` (`0` по-прежнему означает авто из раскладки, если явно задать в файле).
+
+### 0.1.30
+
+- Тексты для `ShowChatNotification` (`.striplayout` / `.stripmock`, список ключей): без сырых `<`/`>` в разметке чата (Vtml), чтобы не ломать UI чата и не сыпать ошибками парсера в лог.
+
+### 0.1.29
+
+- Команда `.striplayout list` (и `/striplayout list`): вывод в чат всех полей раскладки, которые можно менять через `get`/`set`, с кратким описанием; блоки `NeutralAnim` / `PositiveAnim` / `NegativeAnim` по-прежнему только через `playerstatusstrip-hudlayout.json`.
+
+### 0.1.28
+
+- Исправление повторной регистрации хоткея F8 при повторном входе в мир; жизненный цикл HUD (`LeftWorld` / `LevelFinalize`) в связке со SlowTox Visualized 1.1.2+.

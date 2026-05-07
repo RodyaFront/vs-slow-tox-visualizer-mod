@@ -139,7 +139,7 @@ public sealed class StatusStripHudElement : HudElement
         ComposeHud();
     }
 
-    internal void ReloadLayoutFromDisk()
+    internal void ReloadLayoutFromDisk(bool showLayoutSummaryChat = true)
     {
         _layout = StatusStripLayoutConfig.Reload(capi);
         ComposeHud();
@@ -147,14 +147,14 @@ public sealed class StatusStripHudElement : HudElement
 
         if (TryOpen() != true)
         {
-            capi.Logger.Warning("[Player Status Strip] HUD TryOpen failed after layout reload (F8).");
+            capi.Logger.Warning("[Player Status HUD] HUD TryOpen failed after layout reload (F8).");
         }
 
-        if (capi.World is IClientWorldAccessor w && w.Player != null)
+        if (showLayoutSummaryChat && capi.World is IClientWorldAccessor w && w.Player != null)
         {
             _layout.EnsureDefaults();
             w.Player.ShowChatNotification(
-                $"Player Status Strip: layout reloaded ({StatusStripLayoutConfig.LayoutConfigFileName}). " +
+                $"Player Status HUD: layout reloaded ({StatusStripLayoutConfig.LayoutConfigFileName}). " +
                 $"HUD {_layout.DialogArea} off=({_layout.DialogOffsetX:F0},{_layout.DialogOffsetY:F0}) size=({_layout.DialogWidth:F0}x{_layout.DialogHeight:F0}); " +
                 $"strip off=({_layout.StatusStripOffsetX:F0},{_layout.StatusStripOffsetY:F0}) side={_layout.StatusStripSide} anchor={_layout.StatusStripAnchorMode} valign={_layout.StatusStripVerticalAlign}; " +
                 $"anchorPx={_layout.AnchorWidthPx} anchorH={(_layout.StatusStripAnchorHeightPx > 0 ? _layout.StatusStripAnchorHeightPx.ToString() : "same")} outerW={(_layout.StatusStripAnchorOuterWidthPx > 0 ? _layout.StatusStripAnchorOuterWidthPx.ToString() : "bounds")}; " +
@@ -164,13 +164,54 @@ public sealed class StatusStripHudElement : HudElement
         }
     }
 
+    internal void ApplyLayoutPreview(StatusStripLayoutConfig layout)
+    {
+        _layout = layout;
+        _layout.EnsureDefaults();
+        ComposeHud();
+        ResetStripTransientState();
+
+        if (TryOpen() != true)
+        {
+            capi.Logger.Warning("[Player Status HUD] HUD TryOpen failed after layout preview.");
+        }
+    }
+
     private void ComposeHud()
     {
         GuiComposer? previous = SingleComposer;
-        ElementBounds dialogBounds = _layout.DialogBounds();
+        ElementBounds dialogBounds = ResolveDialogBounds();
         GuiComposer composer = capi.Gui.CreateCompo("playerstatusstrip-hud", dialogBounds);
         SingleComposer = composer.Compose();
         previous?.Dispose();
+    }
+
+    private ElementBounds ResolveDialogBounds()
+    {
+        (double effW, double effH) = EffectiveContainerSize();
+        if (StatusStripScreenPlacement.TryResolveBounds(
+                _layout.DialogArea,
+                _layout.DialogOffsetX,
+                _layout.DialogOffsetY,
+                effW,
+                effH,
+                capi.Render.FrameWidth,
+                capi.Render.FrameHeight,
+                RuntimeEnv.GUIScale,
+                out (double X, double Y, double Width, double Height) b))
+        {
+            return ElementBounds.Fixed(b.X, b.Y, b.Width, b.Height);
+        }
+
+        return _layout.DialogBounds();
+    }
+
+    private (double Width, double Height) EffectiveContainerSize()
+    {
+        double icon = Math.Max(1, _layout.StatusIconSize);
+        double w = Math.Max(_layout.DialogWidth, icon);
+        double h = Math.Max(_layout.DialogHeight, icon);
+        return (w, h);
     }
 
     private void ResetStripTransientState()
@@ -196,22 +237,46 @@ public sealed class StatusStripHudElement : HudElement
     {
         _layout.EnsureDefaults();
         int anchor = _layout.AnchorWidthPx;
+        string runtimeSide = StripLayoutWizardStripSide.ForDialogArea(_layout.DialogArea);
+        string runtimeVAlign = VerticalAlignForDialogArea(_layout.DialogArea);
         return StatusStripLayoutMath.Compute(
             root.renderX,
             root.renderY,
             root.OuterWidth,
+            root.OuterHeight,
             anchor,
             _layout.StatusIconSize,
             _layout.StatusIconGapPx,
-            _layout.StatusStripSide,
-            _layout.StatusStripOffsetX,
-            _layout.StatusStripOffsetY,
+            runtimeSide,
+            0,
+            0,
             _layout.StatusStripAnchorMode,
-            _layout.StatusStripVerticalAlign,
+            runtimeVAlign,
             activeCount,
             _layout.StatusStripAnchorHeightPx,
             _layout.StatusStripAnchorOuterWidthPx,
-            _layout.UseTrailingEdgeStatusStripAlign());
+            true);
+    }
+
+    private static string VerticalAlignForDialogArea(string? dialogArea)
+    {
+        if (string.IsNullOrWhiteSpace(dialogArea))
+        {
+            return "top";
+        }
+
+        string a = dialogArea.Trim();
+        if (a.EndsWith("Bottom", StringComparison.OrdinalIgnoreCase))
+        {
+            return "bottom";
+        }
+
+        if (a.EndsWith("Middle", StringComparison.OrdinalIgnoreCase))
+        {
+            return "center";
+        }
+
+        return "top";
     }
 
     private StatusStripLayoutConfig.StatusAnimProfileConfig ProfileConfigFor(StatusAffectKind kind)
@@ -438,18 +503,18 @@ public sealed class StatusStripHudElement : HudElement
         string statusVtml = _active[pickedIndex].TooltipVtml;
         StripLayoutNumbers strip = BuildStripLayout(root, _active.Count);
         GetIconScreen_LTWH(ref strip, pickedIndex, out double left, out double top, out int sz);
-        const double gapBelowPx = 4;
-        double tipLeft = left;
-        double tipTop = top + sz + gapBelowPx;
-        RenderRichTooltipAt(deltaTime, root, statusVtml, tipLeft, tipTop);
+        bool preferAbove = IsBottomHudAnchor();
+        RenderRichTooltipAt(deltaTime, root, statusVtml, left, top, sz, preferAbove);
     }
 
     private void RenderRichTooltipAt(
         float deltaTime,
         ElementBounds root,
         string vtml,
-        double desiredLeftScreenX,
-        double desiredTopScreenY)
+        double iconLeftScreenX,
+        double iconTopScreenY,
+        int iconSize,
+        bool preferAbove)
     {
         EnsureStatusTooltipElements(root);
         if (_statusTooltipRich == null || _statusTooltipPanel == null)
@@ -496,10 +561,24 @@ public sealed class StatusStripHudElement : HudElement
             return;
         }
 
-        double screenX = desiredLeftScreenX;
-        double screenY = desiredTopScreenY;
+        const double gapPx = 4;
+        double belowY = iconTopScreenY + iconSize + gapPx;
+        double aboveY = iconTopScreenY - gapPx - bh;
+        double screenX = iconLeftScreenX;
+        double screenY = preferAbove ? aboveY : belowY;
         double totalW = bw;
         double totalH = bh;
+
+        // Flip side when preferred placement does not fit in current viewport.
+        if (preferAbove && screenY < 0)
+        {
+            screenY = belowY;
+        }
+        else if (!preferAbove && screenY + totalH > capi.Render.FrameHeight)
+        {
+            screenY = aboveY;
+        }
+
         if (screenX + totalW > capi.Render.FrameWidth)
         {
             screenX = capi.Render.FrameWidth - totalW;
@@ -544,6 +623,13 @@ public sealed class StatusStripHudElement : HudElement
         _statusTooltipRich.Bounds = tb;
         _statusTooltipRich.zPos = zTxt;
         _statusTooltipRich.RenderInteractiveElements(deltaTime);
+    }
+
+    private bool IsBottomHudAnchor()
+    {
+        string? area = _layout.DialogArea;
+        return !string.IsNullOrWhiteSpace(area)
+            && area.Trim().EndsWith("Bottom", StringComparison.OrdinalIgnoreCase);
     }
 
     private Dictionary<string, SavedIconRect> CollectIconRects(ref StripLayoutNumbers strip)

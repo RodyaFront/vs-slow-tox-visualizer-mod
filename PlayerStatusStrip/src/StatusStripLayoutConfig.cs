@@ -26,11 +26,11 @@ public class StatusStripLayoutConfig
 
     public const string LayoutConfigFileName = "playerstatusstrip-hudlayout.json";
 
-    public string DialogArea { get; set; } = "RightBottom";
+    public string DialogArea { get; set; } = "RightTop";
 
     public double DialogOffsetX { get; set; } = -8;
 
-    public double DialogOffsetY { get; set; } = -2;
+    public double DialogOffsetY { get; set; } = 8;
 
     public double DialogWidth { get; set; } = 32;
 
@@ -64,7 +64,7 @@ public class StatusStripLayoutConfig
 
     public int StatusIconGapPx { get; set; } = 4;
 
-    public int StatusIconSize { get; set; } = 0;
+    public int StatusIconSize { get; set; } = 46;
 
     public string StatusStripAnchorMode { get; set; } = "Max";
 
@@ -220,7 +220,7 @@ public class StatusStripLayoutConfig
         {
             loaded.EnsureDefaults();
             capi.Logger.Notification(
-                "[Player Status Strip] HUD layout: {0}",
+                "[Player Status HUD] HUD layout: {0}",
                 Path.Combine(modConfigDir, LayoutConfigFileName));
             return loaded;
         }
@@ -229,7 +229,7 @@ public class StatusStripLayoutConfig
         defaults.EnsureDefaults();
         capi.StoreModConfig(defaults, LayoutConfigFileName);
         capi.Logger.Notification(
-            "[Player Status Strip] Created default HUD layout: {0} (reload hotkey after edits)",
+            "[Player Status HUD] Created default HUD layout: {0} (reload hotkey after edits)",
             Path.Combine(modConfigDir, LayoutConfigFileName));
         return defaults;
     }
