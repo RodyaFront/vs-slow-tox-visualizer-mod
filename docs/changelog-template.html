@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { -webkit-text-size-adjust: 100%; margin: 0; padding: 0; }
+    img { max-width: 100%; height: auto; }
+    a { color: #E4F265; text-decoration: none; border-bottom: 1px solid rgba(228,242,101,.45); }
+    a:hover, a:focus { border-bottom-color: rgba(228,242,101,.8); }
+    .release-inner p,
+    .release-inner li,
+    .release-inner td,
+    .release-inner a,
+    .release-inner code { overflow-wrap: anywhere; word-break: break-word; }
+  </style>
+</head>
+<body style="background:#01241E;color:#F8FBDE;font-family:Segoe UI,Roboto,Arial,sans-serif;font-size:15px;line-height:1.55;">
+  <div style="width:100%;background:#01241E;color:#F8FBDE;">
+    <div class="release-inner" style="max-width:700px;margin:0 auto;padding:24px clamp(14px,4vw,18px) 32px;">
+
+      <header style="padding-bottom:14px;">
+        <h1 style="margin:0;font-size:clamp(1.125rem,3.6vw,1.45rem);font-weight:700;color:#E4F265;line-height:1.25;">
+          [MOD_NAME] - [VERSION]
+        </h1>
+        <p style="margin:6px 0 0;font-size:13px;opacity:.85;">
+          Release date: [YYYY-MM-DD]
+        </p>
+      </header>
+
+      <p style="margin:0 0 16px;">
+        [SHORT_RELEASE_SUMMARY]
+      </p>
+
+      <div style="background:rgba(228,242,101,.09);border-radius:12px;padding:14px 16px;margin-bottom:16px;border:1px solid rgba(228,242,101,.48);border-left:4px solid #E4F265;">
+        <h2 style="margin:0 0 8px;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#E4F265;font-weight:700;">
+          Highlights
+        </h2>
+        <ul style="margin:0;padding-left:18px;">
+          <li>[HIGHLIGHT_1]</li>
+          <li>[HIGHLIGHT_2]</li>
+          <li>[HIGHLIGHT_3]</li>
+        </ul>
+      </div>
+
+      <section style="background:#03332B;border-radius:12px;padding:16px 18px;margin-bottom:14px;border:1px solid rgba(228,242,101,.18);">
+        <h2 style="margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#E4F265;font-weight:600;">
+          Added / Improved
+        </h2>
+        <ul style="margin:0;padding-left:18px;">
+          <li>[IMPROVEMENT_1]</li>
+          <li>[IMPROVEMENT_2]</li>
+          <li>[IMPROVEMENT_3]</li>
+        </ul>
+      </section>
+
+      <section style="background:#03332B;border-radius:12px;padding:16px 18px;margin-bottom:14px;border:1px solid rgba(228,242,101,.18);">
+        <h2 style="margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#E4F265;font-weight:600;">
+          Fixes
+        </h2>
+        <ul style="margin:0;padding-left:18px;">
+          <li>[FIX_1]</li>
+          <li>[FIX_2]</li>
+          <li>[FIX_3]</li>
+        </ul>
+      </section>
+
+      <section style="background:#03332B;border-radius:12px;padding:14px 18px;margin-bottom:14px;border:1px solid rgba(228,242,101,.18);font-size:14px;">
+        <h2 style="margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#E4F265;font-weight:600;">Compatibility</h2>
+        <span>[GAME_VERSION_RANGE]</span><br />
+        <span>Dependency: <strong style="color:#F8FBDE;">[DEPENDENCY_NAME_OR_NONE]</strong></span>
+      </section>
+
+      <section style="background:#03332B;border-radius:12px;padding:14px 18px;margin-bottom:14px;border:1px solid rgba(228,242,101,.18);font-size:14px;">
+        <h2 style="margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#E4F265;font-weight:600;">Install / Update Notes</h2>
+        <ul style="margin:8px 0 0;padding-left:18px;">
+          <li>[INSTALL_NOTE_1]</li>
+          <li>[INSTALL_NOTE_2]</li>
+        </ul>
+      </section>
+
+      <p style="margin:0;font-size:13px;opacity:.8;border-top:1px solid rgba(248,251,222,.15);padding-top:14px;">
+        [OPTIONAL_FOOTER_NOTE]
+      </p>
+    </div>
+  </div>
+</body>
+</html>
