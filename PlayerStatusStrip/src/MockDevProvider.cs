@@ -62,18 +62,25 @@ internal sealed class MockDevProvider : IStatusStripProvider
 
 internal static class MockStatusSampleIcons
 {
-    internal static void Append(float deltaTime, ref float accumSec, List<StatusDescriptor> dest)
+    internal static void Append(
+        float deltaTime,
+        ref float accumSec,
+        List<StatusDescriptor> dest,
+        bool includePulseMetrics = true)
     {
         accumSec += deltaTime;
         string mod = "playerstatusstrip";
         float pulse = (float)(System.Math.Sin(accumSec * 2.0) * 0.5 + 0.5);
+        float? pulseA = includePulseMetrics ? pulse : null;
+        float? pulseB = includePulseMetrics ? pulse * 0.9f : null;
+        float? pulseD = includePulseMetrics ? 0.01f : null;
 
         dest.Add(new StatusDescriptor(
             "mock:a",
             new AssetLocation(mod, "textures/icons/mock_a.png"),
             10,
             Lang.Get("playerstatusstrip:mock-tooltip-a"),
-            pulse,
+            pulseA,
             StatusAffectKind.Neutral));
 
         dest.Add(new StatusDescriptor(
@@ -81,7 +88,7 @@ internal static class MockStatusSampleIcons
             new AssetLocation(mod, "textures/icons/mock_b.png"),
             20,
             Lang.Get("playerstatusstrip:mock-tooltip-b"),
-            pulse * 0.9f,
+            pulseB,
             StatusAffectKind.Positive));
 
         dest.Add(new StatusDescriptor(
@@ -97,7 +104,7 @@ internal static class MockStatusSampleIcons
             new AssetLocation(mod, "textures/icons/mock_d.png"),
             40,
             Lang.Get("playerstatusstrip:mock-tooltip-d"),
-            0.01f,
+            pulseD,
             StatusAffectKind.Negative));
     }
 }

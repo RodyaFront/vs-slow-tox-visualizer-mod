@@ -9,6 +9,6 @@ internal sealed class StripLayoutWizardPreviewProvider : IStatusStripProvider
 
     public void Collect(ICoreClientAPI capi, float deltaTime, List<StatusDescriptor> dest)
     {
-        MockStatusSampleIcons.Append(deltaTime, ref _accumSec, dest);
+        MockStatusSampleIcons.Append(deltaTime, ref _accumSec, dest, includePulseMetrics: false);
     }
 }
