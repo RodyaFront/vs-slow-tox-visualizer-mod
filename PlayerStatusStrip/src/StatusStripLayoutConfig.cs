@@ -84,8 +84,8 @@ public class StatusStripLayoutConfig
     public bool StatusIconsWaveEnabled { get; set; } = false;
 
     /// <summary>
-    /// Omitted or null: lock the row baseline (default). Explicit <c>false</c>: allow update-pulse vertical slide
-    /// (<see cref="StatusAnimProfileConfig.SlideDownPx"/>) and per-slot wave Y when <see cref="StatusIconsWaveEnabled"/> is on.
+    /// Omitted or <c>true</c>: lock shared row baseline (default). Explicit <c>false</c>: positive/neutral update pulses may use profile vertical slide; per-slot wave when <see cref="StatusIconsWaveEnabled"/> is on.
+    /// Negative status update feedback uses profile <c>ShakePx</c> (horizontal shake). <c>SlideDownPx</c> on <see cref="NegativeAnim"/> is unused (kept for JSON compatibility).
     /// </summary>
     public bool? StatusStripLockRowBaseline { get; set; }
 
@@ -125,7 +125,7 @@ public class StatusStripLayoutConfig
         ExitDurationSec = 0.20,
         ScaleAmplitude = 0.10,
         ShakePx = 6,
-        SlideDownPx = 5
+        SlideDownPx = 0
     };
 
     public void EnsureDefaults()

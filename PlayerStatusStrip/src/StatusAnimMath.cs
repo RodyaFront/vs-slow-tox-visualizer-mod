@@ -95,6 +95,18 @@ internal static class StatusAnimMath
         return shakePx * envelope * (float)Math.Sin(t * Math.PI * 8f);
     }
 
+    internal static float UpdateHorizontalShakeOffset(float updateProgress01, float shakePx)
+    {
+        if (shakePx <= 1e-4f)
+        {
+            return 0f;
+        }
+
+        float t = Math.Clamp(updateProgress01, 0f, 1f);
+        float envelope = (float)Math.Sin(Math.PI * t);
+        return shakePx * envelope * (float)Math.Sin(t * Math.PI * 12f);
+    }
+
     internal static float UpdateVerticalOffset(StatusAffectKind kind, float progress01, float slideDownPx)
     {
         if (slideDownPx <= 1e-4f)

@@ -321,15 +321,25 @@ public sealed class StatusStripHudElement : HudElement
         float updateProgress = Math.Clamp(anim.UpdateElapsed / p.UpdateDurationSec, 0f, 1f);
 
         float scale = StatusAnimMath.EnterScale(p.EffectiveKind, enterProgress);
-        if (anim.Updating)
+        if (anim.Updating && p.EffectiveKind != StatusAffectKind.Negative)
         {
             scale *= StatusAnimMath.ComputePulseScale(updateProgress, p.ScaleAmplitude);
         }
 
         float dx = StatusAnimMath.HorizontalShakeOffset(p.EffectiveKind, enterProgress, p.ShakePx);
-        float dy = _layout.LockRowBaseline
-            ? 0f
-            : StatusAnimMath.UpdateVerticalOffset(p.EffectiveKind, updateProgress, p.SlideDownPx);
+
+        float dy = 0f;
+        if (anim.Updating)
+        {
+            if (p.EffectiveKind == StatusAffectKind.Negative)
+            {
+                dx += StatusAnimMath.UpdateHorizontalShakeOffset(updateProgress, p.ShakePx);
+            }
+            else if (!_layout.LockRowBaseline)
+            {
+                dy = StatusAnimMath.UpdateVerticalOffset(p.EffectiveKind, updateProgress, p.SlideDownPx);
+            }
+        }
         return new AnimatedIconPose(scale, dx, dy, 1f);
     }
 
@@ -824,10 +834,13 @@ public sealed class StatusStripHudElement : HudElement
             if (PulseMetricTrigger.ShouldPulse(prevM, nowM) && KindPopupSettled(d.StableId))
             {
                 KindRuntimeAnim a = _kindAnim.TryGetValue(d.StableId, out KindRuntimeAnim x) ? x : default;
-                a.AffectKind = d.AffectKind;
-                a.Updating = true;
-                a.UpdateElapsed = 0f;
-                _kindAnim[d.StableId] = a;
+                if (!a.Updating)
+                {
+                    a.AffectKind = d.AffectKind;
+                    a.Updating = true;
+                    a.UpdateElapsed = 0f;
+                    _kindAnim[d.StableId] = a;
+                }
             }
         }
 

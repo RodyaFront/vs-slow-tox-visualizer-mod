@@ -54,10 +54,19 @@ public sealed class StatusAnimMathTests
     }
 
     [Fact]
-    public void NegativeUpdateSlideDown_IsPositive()
+    public void NegativeUpdateShake_IsNonZeroMidPulse()
     {
-        float dy = StatusAnimMath.UpdateVerticalOffset(StatusAffectKind.Negative, 0.1f, 5f);
-        Assert.True(dy > 0f);
+        float dx = StatusAnimMath.UpdateHorizontalShakeOffset(0.5f, 6f);
+        Assert.NotEqual(0f, dx);
+    }
+
+    [Fact]
+    public void NegativeUpdateShake_StartsAndEndsNearZero()
+    {
+        float start = StatusAnimMath.UpdateHorizontalShakeOffset(0f, 6f);
+        float end = StatusAnimMath.UpdateHorizontalShakeOffset(1f, 6f);
+        Assert.True(Math.Abs(start) < 1e-4f);
+        Assert.True(Math.Abs(end) < 1e-4f);
     }
 
     [Fact]
@@ -66,7 +75,6 @@ public sealed class StatusAnimMathTests
         float dy = StatusAnimMath.UpdateVerticalOffset(StatusAffectKind.Positive, 0.1f, 5f);
         Assert.True(dy < 0f);
     }
-
     [Fact]
     public void ExitAlpha_DecreasesToZero()
     {
