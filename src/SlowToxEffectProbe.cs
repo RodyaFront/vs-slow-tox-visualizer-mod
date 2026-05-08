@@ -126,9 +126,8 @@ internal static class SlowToxEffectProbe
 
         if (intoxForLogic >= SlowToxHudDefaults.OverintoxicationThreshold)
         {
-            float dmg = (0.1f + 0.4f * (intoxForLogic - SlowToxHudDefaults.OverintoxicationThreshold))
-                * overMult;
-            if (dmg >= 0.1f - 1e-4f)
+            float damagePerTick = SlowToxHudDefaults.PoisonDamagePerTick(intoxForLogic, overMult);
+            if (damagePerTick >= SlowToxHudDefaults.PoisonDamageBasePerTick - SlowToxHudDefaults.PoisonPresenceEpsilon)
             {
                 dest.Add(SlowToxHudEffectKind.PoisonDebuff);
             }
@@ -171,6 +170,10 @@ internal static class SlowToxEffectProbe
 internal static class SlowToxHudDefaults
 {
     internal const float OverintoxicationThreshold = 1.2f;
+    internal const float PoisonDamageBasePerTick = 0.1f;
+    internal const float PoisonDamageScalePerTick = 0.4f;
+    internal const float PoisonTickPeriodSec = 6f;
+    internal const float PoisonPresenceEpsilon = 1e-4f;
 
     internal const float HealthRegenIntoxRangeBottom = 0.0f;
     internal const float HealthRegenIntoxRangeTop = 0.6f;
@@ -191,4 +194,15 @@ internal static class SlowToxHudDefaults
     internal const float StabilityRegenIntoxRangeBottom = 0.0f;
     internal const float StabilityRegenIntoxRangeTop = 0.6f;
     internal const float StabilityRegenRateMax = 0.00125f;
+
+    internal static float PoisonDamagePerTick(float intoxicationRaw, float overintoxicationDamageMult)
+    {
+        return (PoisonDamageBasePerTick + PoisonDamageScalePerTick * (intoxicationRaw - OverintoxicationThreshold))
+            * overintoxicationDamageMult;
+    }
+
+    internal static float PoisonDamagePerSecond(float intoxicationRaw, float overintoxicationDamageMult)
+    {
+        return PoisonDamagePerTick(intoxicationRaw, overintoxicationDamageMult) / PoisonTickPeriodSec;
+    }
 }

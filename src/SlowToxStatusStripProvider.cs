@@ -9,18 +9,6 @@ namespace SlowToxVisualized;
 
 internal sealed class SlowToxStatusStripProvider : IStatusStripProvider
 {
-    // IMPORTANT:
-    // Player Status HUD "mock_*" icons are dev-only assets for SSH scenarios and must not be used
-    // as production visuals for SlowTox statuses.
-    private static readonly AssetLocation IntoxIcon = new("slowtoxvisualized", "textures/icons/jug.png");
-    private static readonly AssetLocation IconDurability = new("slowtoxvisualized", "textures/icons/durable.png");
-    private static readonly AssetLocation IconHp = new("slowtoxvisualized", "textures/icons/regeneration.png");
-    private static readonly AssetLocation IconTemporalRecovery = new("slowtoxvisualized", "textures/icons/temporal_recovery.png");
-    private static readonly AssetLocation IconMelee = new("slowtoxvisualized", "textures/icons/strength.png");
-    private static readonly AssetLocation IconMining = new("slowtoxvisualized", "textures/icons/mining_speed.png");
-    private static readonly AssetLocation IconSlow = new("slowtoxvisualized", "textures/icons/slow.png");
-    private static readonly AssetLocation IconPoison = new("slowtoxvisualized", "textures/icons/poison.png");
-
     private readonly ICoreClientAPI _capi;
     private readonly HudLayoutConfig _layout;
     private readonly List<SlowToxHudEffectKind> _activeEffects = new(SlowToxHudEffectKindMeta.KindCount);
@@ -55,7 +43,7 @@ internal sealed class SlowToxStatusStripProvider : IStatusStripProvider
                 raw * 100f);
             dest.Add(new StatusDescriptor(
                 "slowtoxvisualized:intoxication",
-                IntoxIcon,
+                SlowToxHudEffectIcons.Intoxication,
                 0,
                 intoxTooltip,
                 raw,
@@ -92,17 +80,7 @@ internal sealed class SlowToxStatusStripProvider : IStatusStripProvider
 
     private static AssetLocation IconFor(SlowToxHudEffectKind kind)
     {
-        return kind switch
-        {
-            SlowToxHudEffectKind.DamageReductionBuff => IconDurability,
-            SlowToxHudEffectKind.HealthRegenBuff => IconHp,
-            SlowToxHudEffectKind.TemporalRecoveryBuff => IconTemporalRecovery,
-            SlowToxHudEffectKind.MeleeDamageBuff => IconMelee,
-            SlowToxHudEffectKind.MiningSpeedBuff => IconMining,
-            SlowToxHudEffectKind.SlowDebuff => IconSlow,
-            SlowToxHudEffectKind.PoisonDebuff => IconPoison,
-            _ => IntoxIcon
-        };
+        return SlowToxHudEffectIcons.Resolve(kind, SlowToxHudEffectIcons.Intoxication);
     }
 
     private static int SortOrderFor(SlowToxHudEffectKind kind)
