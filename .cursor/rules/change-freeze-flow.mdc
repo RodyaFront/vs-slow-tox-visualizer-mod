@@ -1,0 +1,42 @@
+---
+description: Enforce commit and changelog freeze flow for new work
+alwaysApply: true
+---
+
+# Change Freeze Flow (Commit + Changelog)
+
+Use this workflow whenever the user asks to fix/implement new functionality and then "finalize" the result.
+
+## Required sequence
+
+1. **Create or use a feature branch first**
+   - Never commit functional work directly to `main`.
+   - Branch name must describe the implemented behavior (for example: `feat/status-wizard-sections`, `fix/tooltip-i18n`).
+
+2. **Verify public release baseline first (manual ModDB check)**
+   - Confirm the latest public release version on ModDB for the affected mod.
+   - Capture release URL, release date, and short summary of that release changelog.
+   - Use this verified baseline as context before proposing a new release version or changelog block.
+
+3. **Document before final git freeze**
+   - Update the relevant `CHANGELOG.md` entry with user-visible changes and rationale.
+   - Generate or refresh release HTML changelog pages when the release flow requires it.
+   - Keep markdown changelog as the source of truth.
+
+4. **Freeze and publish**
+   - Commit only task-related files.
+   - Push branch to remote.
+   - Report to the user exactly what was fixed and frozen.
+
+## Mandatory report after push
+
+- Branch name and commit hash.
+- Files/groups of changes included in commit.
+- Which `CHANGELOG.md` sections were updated.
+- If HTML changelog was generated, state whether it was committed or intentionally ignored by git rules.
+
+## Stop conditions
+
+- If branch intent is unclear, ask for naming confirmation before commit.
+- If latest ModDB public release/version is not verified in the current session, do not finalize release-related commit/push.
+- If changelog is missing or stale for user-visible changes, do not finalize commit/push yet.
