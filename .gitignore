@@ -21,6 +21,12 @@ mcps/
 
 # Release zip (regenerate: .\scripts\package-release.ps1)
 releases/*.zip
+PlayerStatusStrip/release/
+SlowToxVisualized/release/
+
+# Generated HTML changelog pages (keep only markdown changelog in git)
+PlayerStatusStrip/docs/changelog-*.html
+SlowToxVisualized/docs/changelog-*.html
 
 # Local planning notes
 TODO.md

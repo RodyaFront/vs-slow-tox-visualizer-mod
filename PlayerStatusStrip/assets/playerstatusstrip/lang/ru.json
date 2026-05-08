@@ -1,6 +1,6 @@
 {
   "playerstatusstrip:wizard-hotkey-desc": "Player Status HUD: мастер раскладки",
-  "playerstatusstrip:wizard-title": "Раскладка полоски статусов",
+  "playerstatusstrip:wizard-title": "Настройки полоски статусов",
   "playerstatusstrip:wizard-intro": "Иконки статусов следуют этим настройкам.\n\nСмотри образцы на экране —\nони обновляются, пока открыто это окно.\n\nВыбери пресеты: угол, отступ,\nразмер иконок и расстояние между ними.",
   "playerstatusstrip:wizard-section-layout": "Раскладка",
   "playerstatusstrip:wizard-section-appearance": "Внешний вид",

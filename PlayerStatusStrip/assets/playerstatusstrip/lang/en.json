@@ -1,6 +1,6 @@
 {
   "playerstatusstrip:wizard-hotkey-desc": "Player Status HUD: layout wizard",
-  "playerstatusstrip:wizard-title": "Status strip layout",
+  "playerstatusstrip:wizard-title": "Status strip settings",
   "playerstatusstrip:wizard-intro": "The status icons follow these settings.\n\nWatch the on-screen sample icons —\nthey update while this window is open.\n\nChoose presets: corner, inset, icon size,\nand spacing.",
   "playerstatusstrip:wizard-section-layout": "Layout",
   "playerstatusstrip:wizard-section-appearance": "Appearance",

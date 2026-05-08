@@ -1,7 +1,7 @@
 {
   "playerstatusstrip:wizard-hotkey-desc": "Player Status HUD: майстер розкладки",
-  "playerstatusstrip:wizard-title": "Розкладка смуги статусів",
-  "playerstatusstrip:wizard-intro": "Піктограми статусів підпорядковуються цим налаштуванням.\n\nДивись зразки на екрані —\nвони оновлюються, поки відкрито це вікно.\n\nОбери пресети: кут, відступ,\nрозмір піктограм і відстань між ними.",
+  "playerstatusstrip:wizard-title": "Налаштування смуги статусів",
+  "playerstatusstrip:wizard-intro": "Піктограми статусів\nпідпорядковуються цим налаштуванням.\n\nДивись зразки на екрані —\nвони оновлюються, поки відкрито це вікно.\n\nОбери пресети: кут, відступ,\nрозмір піктограм і відстань між ними.",
   "playerstatusstrip:wizard-section-layout": "Розкладка",
   "playerstatusstrip:wizard-section-appearance": "Вигляд",
   "playerstatusstrip:wizard-label-corner": "Кут екрана",

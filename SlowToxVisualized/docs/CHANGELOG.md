@@ -4,6 +4,28 @@
 
 **Player Status HUD** (`playerstatusstrip`): версия в [`PlayerStatusStrip/modinfo.json`](../../PlayerStatusStrip/modinfo.json); краткая история в конце файла.
 
+## 1.1.9
+
+- Публичный patch-релиз после ModDB baseline `1.1.8`.
+- Включён фикс синхронизации анимации иконок статусов на первом кадре.
+- Добавлена clean-code консолидация расчётов эффектов и тултипов:
+  - вынесен общий реестр иконок (`SlowToxHudEffectIcons`),
+  - унифицирована математика poison через `SlowToxHudDefaults` (`PoisonDamagePerTick` / `PoisonDamagePerSecond`),
+  - убрано дублирование в `SlowToxStatusTooltipContent`.
+- Повышена стабильность сборки в IDE: добавлен fallback-путь к DLL Vintage Story в `SlowToxVisualized.csproj`, если `VINTAGE_STORY` не подхвачен.
+- Сохранены улучшенные диагностические предупреждения по `gear.svg` и консистентный нейминг `SlowTox`.
+- i18n: добавлена `uk`-локализация tooltip-строк для эффектов SlowTox в status strip (`slowtoxvisualized/lang/uk.json`).
+
+## 1.1.37
+
+- Clean-code проход по `SlowToxVisualized/src` без изменения игровой логики: вынесен общий реестр иконок эффектов (`SlowToxHudEffectIcons`), убрано дублирование маппинга `effect kind -> icon` между HUD и provider.
+- Формула poison и связанные константы собраны в `SlowToxHudDefaults` (`PoisonDamagePerTick` / `PoisonDamagePerSecond`), чтобы и probe, и tooltip использовали один источник правды.
+- В `SlowToxIntoxicationHud` вынесены повторяющиеся константы для tooltip-компоновки (`TooltipComposeHeightPx`, `TooltipGapBelowPx`) и ранний `EnsureDefaults()` в `ComposeHud`.
+
+## 1.1.36
+
+- Исправлен спам предупреждений `Translation string format exception` в `client-main.log` при активных статусах интоксикации: тултипы теперь форматируются через `Lang.Get(key, args)` без промежуточного вызова `Lang.Get(key)` с пустыми аргументами.
+
 ## 1.1.35
 
 - Обновлён compatibility target: рекомендуется **Player Status HUD 1.2.0+**.

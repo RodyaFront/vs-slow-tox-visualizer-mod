@@ -1,0 +1,10 @@
+{
+  "slowtoxvisualized:tooltip-jug-fmt": "<font color=\"#cfcfcf\">Ваш поточний рівень алкоголю в організмі.</font>",
+  "slowtoxvisualized:tooltip-dr-fmt": "<font color=\"#cfcfcf\"><b>Зниження шкоди</b></font> Ви отримуєте на {0:0.##} HP менше шкоди.",
+  "slowtoxvisualized:tooltip-hp-fmt": "<font color=\"#cfcfcf\"><b>Регенерація HP</b></font> {0:0.####} HP за секунду.",
+  "slowtoxvisualized:tooltip-temporal-fmt": "<font color=\"#cfcfcf\"><b>Темпоральна стабільність</b></font> +{0:0.#####} стабільності за секунду.",
+  "slowtoxvisualized:tooltip-melee-fmt": "<font color=\"#cfcfcf\"><b>Шкода ближнього бою</b></font> +{0:0.#}% шкоди.",
+  "slowtoxvisualized:tooltip-mining-fmt": "<font color=\"#cfcfcf\"><b>Швидкість копання</b></font> +{0:0.#}% швидкості копання.",
+  "slowtoxvisualized:tooltip-slow-fmt": "<font color=\"#cfcfcf\"><b>Сповільнення</b></font> −{0:0.#}% швидкості руху.",
+  "slowtoxvisualized:tooltip-poison-fmt": "<font color=\"#cfcfcf\"><b>Отруєння</b></font> Ви отримуєте {0:0.##} HP шкоди за секунду."
+}

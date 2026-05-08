@@ -1,0 +1,25 @@
+---
+description: Version gate for public SlowToxVisualized releases
+alwaysApply: true
+---
+
+# Public Release Version Gate
+
+Перед любым релизным bump для `SlowToxVisualized` сначала подтверждай базовую публичную версию.
+
+## Обязательный порядок
+
+1. Сначала определить `current_public_version` (версия, уже опубликованная для пользователей).
+2. Затем явно предложить `target_version` и причину bump (patch/minor).
+3. Только после подтверждения пользователя менять:
+   - `SlowToxVisualized/modinfo.json` (`version`)
+   - `SlowToxVisualized/docs/CHANGELOG.md` (верхний релизный блок)
+   - имя релизного архива.
+
+## Stop condition
+
+Если `modinfo.json` в репозитории не совпадает с `current_public_version` или источник публичной версии не подтвержден, **не выполнять bump версии и не собирать релизный архив** до уточнения у пользователя.
+
+## Release naming consistency
+
+`modinfo.version`, верхний блок `CHANGELOG`, и имя архива (`slowtoxvisualized-vX.Y.Z-moddb.zip`) должны совпадать.
