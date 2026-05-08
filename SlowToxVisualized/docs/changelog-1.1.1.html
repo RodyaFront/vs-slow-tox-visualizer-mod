@@ -1,0 +1,56 @@
+<p>&nbsp;</p>
+<div style="width:100%;background:#01241E;color:#F8FBDE;font-family:Segoe UI,Roboto,Arial,sans-serif;font-size:15px;line-height:1.55;">
+  <div style="max-width:700px;margin:0 auto;padding:24px 16px 32px;">
+    <h1 style="margin:0;font-size:26px;font-weight:700;color:#E4F265;line-height:1.25;">SlowTox Visualized - 1.1.1</h1>
+    <p style="margin:6px 0 12px;font-size:13px;opacity:.85;">Release date: 2026-05-06</p>
+
+    <div style="background:rgba(154,31,31,.28);border:1px solid rgba(255,140,140,.5);border-left:4px solid #ff8a8a;border-radius:10px;padding:10px 12px;margin:0 0 12px;">
+      <strong style="color:#ffd2d2;">Important:</strong>
+      <span> this version now requires an additional library: <a href="https://mods.vintagestory.at/playerstatusstrip" style="color:#E4F265;text-decoration:none;">Player Status HUD</a> (alongside SlowTox). Without it, SlowTox Visualized will not work.</span>
+    </div>
+
+    <p style="margin:0 0 14px;">Stability and release-quality update for the Status HUD provider integration: icon sourcing is now strictly production-safe, and intoxication visibility is cleaner.</p>
+
+    <div style="background:rgba(228,242,101,.09);border-radius:12px;padding:14px 16px;margin-bottom:12px;border:1px solid rgba(228,242,101,.48);border-left:4px solid #E4F265;">
+      <p style="margin:0 0 8px;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#E4F265;font-weight:700;">Highlights</p>
+      <ul style="margin:0;padding-left:18px;">
+        <li>Status icons are now resolved only from SlowTox Visualized production assets.</li>
+        <li>Neutral intoxication status no longer appears when value is zero.</li>
+        <li>Release docs now explicitly separate production icons from dev/mock assets.</li>
+      </ul>
+    </div>
+
+    <div style="background:#03332B;border-radius:12px;padding:14px 16px;margin-bottom:12px;border:1px solid rgba(228,242,101,.18);">
+      <p style="margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#E4F265;font-weight:600;">Added / Improved</p>
+      <ul style="margin:0;padding-left:18px;">
+        <li>Updated landing page copy to match current provider-based architecture.</li>
+        <li>Clarified runtime behavior for intoxication status visibility in user-facing docs.</li>
+        <li>Prepared standalone HTML changelog for ModDB release publishing flow.</li>
+      </ul>
+    </div>
+
+    <div style="background:#03332B;border-radius:12px;padding:14px 16px;margin-bottom:12px;border:1px solid rgba(228,242,101,.18);">
+      <p style="margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#E4F265;font-weight:600;">Fixes</p>
+      <ul style="margin:0;padding-left:18px;">
+        <li>Fixed icon mapping to avoid accidental usage of Player Status HUD mock icon paths.</li>
+        <li>Prevented empty intoxication status slot at zero intoxication values.</li>
+        <li>Reduced release ambiguity by documenting production-vs-mock icon ownership.</li>
+      </ul>
+    </div>
+
+    <div style="background:#03332B;border-radius:12px;padding:14px 16px;margin-bottom:12px;border:1px solid rgba(228,242,101,.18);font-size:14px;">
+      <p style="margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#E4F265;font-weight:600;">Compatibility</p>
+      <p style="margin:0;">Vintage Story + SlowTox supported versions: see mod page metadata.<br />Dependencies: <strong style="color:#F8FBDE;">slowtox, playerstatusstrip</strong></p>
+    </div>
+
+    <div style="background:#03332B;border-radius:12px;padding:14px 16px;margin-bottom:12px;border:1px solid rgba(228,242,101,.18);font-size:14px;">
+      <p style="margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#E4F265;font-weight:600;">Install / Update Notes</p>
+      <ul style="margin:0;padding-left:18px;">
+        <li>Install/update both dependencies before launching world tests.</li>
+        <li>After replacing files, press <strong style="color:#F8FBDE;">F9</strong> in-game to reload layout config.</li>
+      </ul>
+    </div>
+
+    <p style="margin:0;font-size:13px;opacity:.8;border-top:1px solid rgba(248,251,222,.15);padding-top:12px;">SlowTox Visualized now acts as a focused gameplay status provider while Player Status HUD stays the shared rendering layer.</p>
+  </div>
+</div>

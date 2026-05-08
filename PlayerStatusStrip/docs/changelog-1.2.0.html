@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { -webkit-text-size-adjust: 100%; margin: 0; padding: 0; }
+    .release-inner p, .release-inner li, .release-inner td, .release-inner code { overflow-wrap: anywhere; word-break: break-word; }
+  </style>
+</head>
+<body style="background:#01241E;color:#F8FBDE;font-family:Segoe UI,Roboto,Arial,sans-serif;font-size:15px;line-height:1.55;">
+  <div style="width:100%;background:#01241E;color:#F8FBDE;">
+    <div class="release-inner" style="max-width:700px;margin:0 auto;padding:24px clamp(14px,4vw,18px) 32px;">
+      <header style="padding-bottom:14px;">
+        <h1 style="margin:0;font-size:clamp(1.125rem,3.6vw,1.45rem);font-weight:700;color:#E4F265;line-height:1.25;">
+          Player Status HUD - 1.2.0
+        </h1>
+        <p style="margin:6px 0 0;font-size:13px;opacity:.85;">Release date: 2026-05-07</p>
+      </header>
+
+      <p style="margin:0 0 14px;">
+        This release consolidates all changes delivered after the last published ModDB version <strong>0.1.33</strong>.
+      </p>
+
+      <div style="background:rgba(228,242,101,.09);border-radius:12px;padding:14px 16px;margin-bottom:16px;border:1px solid rgba(228,242,101,.48);border-left:4px solid #E4F265;">
+        <h2 style="margin:0 0 8px;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#E4F265;font-weight:700;">Highlights (0.1.34 - 1.2.0)</h2>
+        <ul style="margin:0;padding-left:18px;">
+          <li style="margin:0 0 8px;"><strong>Edge-based HUD positioning:</strong> migrated strip placement away from implicit dialog margins; inset behavior now matches screen edges across anchors.</li>
+          <li style="margin:0 0 8px;"><strong>Bottom-anchor stability:</strong> removed size-dependent hidden base; row baseline logic now handles top/center/bottom explicitly.</li>
+          <li style="margin:0 0 8px;"><strong>Wizard upgrades:</strong> presets for corner/inset/icon size/gap, better center behavior, and <code>CenterBottom</code> removed from active choices (with fallback for old configs).</li>
+          <li style="margin:0 0 8px;"><strong>Tooltip placement:</strong> bottom-anchored rows prefer rendering tooltip above icons with automatic fallback when needed.</li>
+          <li style="margin:0 0 8px;"><strong>Hotkeys finalized:</strong> <code>F8</code> reloads layout, <code>Ctrl+F8</code> opens/closes wizard; modifier registration fixed.</li>
+          <li style="margin:0;"><strong>UX polish:</strong> wizard label shortened from <code>Inset from corner</code> to <code>Inset</code>.</li>
+        </ul>
+      </div>
+
+      <section style="background:#03332B;border-radius:12px;padding:14px 18px;margin-bottom:14px;border:1px solid rgba(228,242,101,.18);font-size:14px;">
+        <h2 style="margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#E4F265;font-weight:600;">Install / Update Notes</h2>
+        <ul style="margin:8px 0 0;padding-left:18px;">
+          <li style="margin:0 0 8px;">Replace mod contents with this package using flat copy into <code>Mods/playerstatusstrip/</code>.</li>
+          <li style="margin:0 0 8px;">Confirm version <strong style="color:#F8FBDE;">1.2.0</strong> in the in-game mod list.</li>
+          <li style="margin:0;">If language files changed, do a full client restart before verification.</li>
+        </ul>
+      </section>
+
+      <p style="margin:0;font-size:13px;opacity:.8;border-top:1px solid rgba(248,251,222,.15);padding-top:14px;">
+        Full history: <code>docs/CHANGELOG.md</code> (Player Status HUD section).
+      </p>
+    </div>
+  </div>
+</body>
+</html>

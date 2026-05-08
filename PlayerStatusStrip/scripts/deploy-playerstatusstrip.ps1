@@ -1,29 +1,29 @@
-# Deploy SlowTox Visualized: dotnet build Release + copy FULL mod folder into Vintage Story Mods.
-# Copies bin/Release/Mods/slowtoxvisualized/* -> destination (flatten), never nests slowtoxvisualized/slowtoxvisualized.
+# Deploy Player Status HUD: dotnet build Release + copy FULL mod folder into Vintage Story Mods.
+# Copies bin/Release/Mods/playerstatusstrip/* -> destination (flatten), never nests playerstatusstrip/playerstatusstrip.
 #
 # Destination:
-#   $env:VS_MODS_TEST\slowtoxvisualized   if VS_MODS_TEST is set (see SlowToxVisualized/docs/DEV_ENV.md),
-#   else %AppData%\Roaming\VintagestoryData\Mods\slowtoxvisualized
+#   $env:VS_MODS_TEST\playerstatusstrip   if VS_MODS_TEST is set (see SlowToxVisualized/docs/DEV_ENV.md),
+#   else %AppData%\Roaming\VintagestoryData\Mods\playerstatusstrip
 #
-# Usage (from repo root):
-#   .\scripts\deploy-slowtoxvisualized.ps1
+# Usage (from repository root):
+#   .\PlayerStatusStrip\scripts\deploy-playerstatusstrip.ps1
+# Or from this folder: .\deploy-playerstatusstrip.ps1 (set location to mod root via $PSScriptRoot)
 # Requires: VINTAGE_STORY for dotnet build (same as .csproj).
 
 $ErrorActionPreference = "Stop"
 
-$repoRoot = Split-Path $PSScriptRoot -Parent
-$projectDir = Join-Path $repoRoot "SlowToxVisualized"
-$csproj = Join-Path $projectDir "SlowToxVisualized.csproj"
-$buildOut = Join-Path $projectDir "bin\Release\Mods\slowtoxvisualized"
+$modRoot = Split-Path $PSScriptRoot -Parent
+$csproj = Join-Path $modRoot "PlayerStatusStrip.csproj"
+$buildOut = Join-Path $modRoot "bin\Release\Mods\playerstatusstrip"
 
 if (-not (Test-Path $csproj)) {
     Write-Error "Project not found: $csproj"
 }
 
 $dstRoot = if ($env:VS_MODS_TEST -and $env:VS_MODS_TEST.Trim().Length -gt 0) {
-    Join-Path $env:VS_MODS_TEST.TrimEnd('\', '/') "slowtoxvisualized"
+    Join-Path $env:VS_MODS_TEST.TrimEnd('\', '/') "playerstatusstrip"
 } else {
-    Join-Path $env:APPDATA "VintagestoryData\Mods\slowtoxvisualized"
+    Join-Path $env:APPDATA "VintagestoryData\Mods\playerstatusstrip"
 }
 
 Write-Host "Building Release..."

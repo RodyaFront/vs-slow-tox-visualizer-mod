@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { -webkit-text-size-adjust: 100%; margin: 0; padding: 0; }
+    a { color: #E4F265; text-decoration: none; border-bottom: 1px solid rgba(228,242,101,.45); }
+    a:hover, a:focus { border-bottom-color: rgba(228,242,101,.8); }
+    .release-inner p, .release-inner li, .release-inner td, .release-inner a, .release-inner code { overflow-wrap: anywhere; word-break: break-word; }
+  </style>
+</head>
+<body style="background:#01241E;color:#F8FBDE;font-family:Segoe UI,Roboto,Arial,sans-serif;font-size:15px;line-height:1.55;">
+  <div style="width:100%;background:#01241E;color:#F8FBDE;">
+    <div class="release-inner" style="max-width:700px;margin:0 auto;padding:24px clamp(14px,4vw,18px) 32px;">
+
+      <header style="padding-bottom:14px;">
+        <h1 style="margin:0;font-size:clamp(1.125rem,3.6vw,1.45rem);font-weight:700;color:#E4F265;line-height:1.25;">
+          Player Status HUD - 0.1.33
+        </h1>
+        <p style="margin:6px 0 0;font-size:13px;opacity:.85;">Release date: 2026-05-08</p>
+      </header>
+
+      <p style="margin:0 0 16px;">
+        <strong>Release focus:</strong> safe chat output for layout commands, tuned defaults for new players (icon size, top-right HUD, vertical offset). Baseline stability remains <strong>0.1.28+</strong> (F8 hotkey guard, <code>LeftWorld</code> / <code>LevelFinalize</code> HUD lifecycle). For <code>.striplayout list</code> and the full 0.1.28&ndash;0.1.29 story, use the mod&rsquo;s <strong>0.1.29</strong> ModDB changelog or <code>docs/changelog-0.1.29.html</code> in the repository.
+      </p>
+
+      <div style="background:rgba(228,242,101,.09);border-radius:12px;padding:14px 16px;margin-bottom:16px;border:1px solid rgba(228,242,101,.48);border-left:4px solid #E4F265;">
+        <h2 style="margin:0 0 8px;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#E4F265;font-weight:700;">Changes since 0.1.29 (0.1.30 &ndash; 0.1.33)</h2>
+        <ul style="margin:0;padding-left:18px;">
+          <li><strong>0.1.30:</strong> <code>ShowChatNotification</code> strings for <code>.striplayout</code>, <code>.stripmock</code>, and key list output avoid raw <code>&lt;</code> / <code>&gt;</code> so Vintage Story Vtml no longer breaks the chat UI.</li>
+          <li><strong>0.1.31:</strong> default <code>StatusIconSize</code> <strong>46</strong> px for new <code>playerstatusstrip-hudlayout.json</code> (<code>0</code> still means auto if set explicitly).</li>
+          <li><strong>0.1.32:</strong> default <code>DialogArea</code> <strong>RightTop</strong> for new configs.</li>
+          <li><strong>0.1.33:</strong> default <code>DialogOffsetY</code> <strong>8</strong> (matches curated top-right layout with SlowTox Visualized <strong>1.1.7</strong> defaults).</li>
+        </ul>
+      </div>
+
+      <section style="background:#03332B;border-radius:12px;padding:16px 18px;margin-bottom:14px;border:1px solid rgba(228,242,101,.18);">
+        <h2 style="margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#E4F265;font-weight:600;">Layout chat (reminder)</h2>
+        <p style="margin:0 0 8px;font-size:14px;">Client chat: <code>.striplayout</code> / <code>/striplayout</code> &mdash; <code>help</code>, <code>list</code>, <code>show</code>, <code>get [key]</code>, <code>set [key] [value]</code>, <code>reload</code>. Persists <code>playerstatusstrip-hudlayout.json</code>.</p>
+        <ul style="margin:0;padding-left:18px;">
+          <li><code>.striplayout list</code></li>
+          <li><code>.striplayout get StatusIconSize</code></li>
+          <li><code>/striplayout set StatusStripOffsetX 6</code></li>
+        </ul>
+      </section>
+
+      <section style="background:#03332B;border-radius:12px;padding:14px 18px;margin-bottom:14px;border:1px solid rgba(228,242,101,.18);font-size:14px;">
+        <h2 style="margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#E4F265;font-weight:600;">Compatibility</h2>
+        <span>Game version: as declared in mod metadata.</span><br />
+        <span>Dependency: <strong style="color:#F8FBDE;">game: *</strong></span>
+      </section>
+
+      <section style="background:#03332B;border-radius:12px;padding:14px 18px;margin-bottom:14px;border:1px solid rgba(228,242,101,.18);font-size:14px;">
+        <h2 style="margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#E4F265;font-weight:600;">Install / Update Notes</h2>
+        <ul style="margin:8px 0 0;padding-left:18px;">
+          <li>Replace existing mod folder contents with this package (flat copy into <code>Mods/playerstatusstrip/</code>).</li>
+          <li>Confirm version <strong style="color:#F8FBDE;">0.1.33</strong> in the mod list; pair with <strong style="color:#F8FBDE;">SlowTox Visualized 1.1.7</strong> if you use that provider.</li>
+        </ul>
+      </section>
+
+      <p style="margin:0;font-size:13px;opacity:.8;border-top:1px solid rgba(248,251,222,.15);padding-top:14px;">
+        Markdown: <code>docs/CHANGELOG.md</code> (Player Status HUD section).
+      </p>
+    </div>
+  </div>
+</body>
+</html>

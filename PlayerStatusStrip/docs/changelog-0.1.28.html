@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { -webkit-text-size-adjust: 100%; margin: 0; padding: 0; }
+    a { color: #E4F265; text-decoration: none; border-bottom: 1px solid rgba(228,242,101,.45); }
+    a:hover, a:focus { border-bottom-color: rgba(228,242,101,.8); }
+    .release-inner p, .release-inner li, .release-inner td, .release-inner a, .release-inner code { overflow-wrap: anywhere; word-break: break-word; }
+  </style>
+</head>
+<body style="background:#01241E;color:#F8FBDE;font-family:Segoe UI,Roboto,Arial,sans-serif;font-size:15px;line-height:1.55;">
+  <div style="width:100%;background:#01241E;color:#F8FBDE;">
+    <div class="release-inner" style="max-width:700px;margin:0 auto;padding:24px clamp(14px,4vw,18px) 32px;">
+
+      <header style="padding-bottom:14px;">
+        <h1 style="margin:0;font-size:clamp(1.125rem,3.6vw,1.45rem);font-weight:700;color:#E4F265;line-height:1.25;">
+          Player Status HUD - 0.1.28
+        </h1>
+        <p style="margin:6px 0 0;font-size:13px;opacity:.85;">Release date: 2026-05-07</p>
+      </header>
+
+      <p style="margin:0 0 16px;">
+        Stability release verified in-game: status strip stays visible after leaving to the main menu and loading a world again. Includes hotkey registration guard and HUD lifecycle fixes from recent patches.
+      </p>
+
+      <div style="background:rgba(228,242,101,.09);border-radius:12px;padding:14px 16px;margin-bottom:16px;border:1px solid rgba(228,242,101,.48);border-left:4px solid #E4F265;">
+        <h2 style="margin:0 0 8px;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#E4F265;font-weight:700;">Highlights</h2>
+        <ul style="margin:0;padding-left:18px;">
+          <li><strong>Hotkey F8:</strong> <code>RegisterHotKeyFirst</code> runs only if <code>playerstatusstrip_reloadlayout</code> is not already in <code>Input.HotKeys</code> — prevents <code>StartClientSide</code> from crashing on the second world session.</li>
+          <li><strong>HUD lifecycle:</strong> strip element is disposed on <code>LeftWorld</code> and recreated or reopened on <code>LevelFinalize</code> so the overlay matches a fresh game session.</li>
+          <li>Earlier features retained: server boot creates <code>playerstatusstrip-dev.json</code>; client chat <code>.striplayout</code> / <code>/striplayout</code> edits <code>playerstatusstrip-hudlayout.json</code>.</li>
+        </ul>
+      </div>
+
+      <section style="background:#03332B;border-radius:12px;padding:16px 18px;margin-bottom:14px;border:1px solid rgba(228,242,101,.18);">
+        <h2 style="margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#E4F265;font-weight:600;">Fixes</h2>
+        <ul style="margin:0;padding-left:18px;">
+          <li>Fixed duplicate hotkey exception after return-to-menu → re-enter world (mod system no longer fails to start).</li>
+          <li>Fixed empty status strip until full client restart when HUD state was stale across sessions.</li>
+        </ul>
+      </section>
+
+      <section style="background:#03332B;border-radius:12px;padding:14px 18px;margin-bottom:14px;border:1px solid rgba(228,242,101,.18);font-size:14px;">
+        <h2 style="margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#E4F265;font-weight:600;">Compatibility</h2>
+        <span>Game version: as declared in mod metadata.</span><br />
+        <span>Dependency: <strong style="color:#F8FBDE;">game: *</strong></span>
+      </section>
+
+      <section style="background:#03332B;border-radius:12px;padding:14px 18px;margin-bottom:14px;border:1px solid rgba(228,242,101,.18);font-size:14px;">
+        <h2 style="margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#E4F265;font-weight:600;">Install / Update Notes</h2>
+        <ul style="margin:8px 0 0;padding-left:18px;">
+          <li>Replace existing mod folder contents with this package (flat copy into <code>Mods/playerstatusstrip/</code>).</li>
+          <li>Confirm version <strong style="color:#F8FBDE;">0.1.28</strong> in the mod list; pair with <strong style="color:#F8FBDE;">SlowTox Visualized 1.1.4</strong> if you use that provider.</li>
+        </ul>
+      </section>
+
+      <p style="margin:0;font-size:13px;opacity:.8;border-top:1px solid rgba(248,251,222,.15);padding-top:14px;">
+        If anything still fails after update, check <code>client-main.log</code> for <code>Failed to start system PlayerStatusStrip</code> or duplicate hotkey errors.
+      </p>
+    </div>
+  </div>
+</body>
+</html>
