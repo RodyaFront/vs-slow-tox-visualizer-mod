@@ -117,7 +117,7 @@ public sealed class StatusStripHudElement : HudElement
         }
     }
 
-    private static void TopAlignedSpriteRect(
+    private static void CenterAnchoredScaledSpriteRect(
         double cellLeft,
         double cellTop,
         int cellSize,
@@ -127,8 +127,9 @@ public sealed class StatusStripHudElement : HudElement
         out double spriteSide)
     {
         spriteSide = cellSize * pose.Scale;
-        spriteLeft = cellLeft + pose.Dx + (cellSize - spriteSide) * 0.5;
-        spriteTop = cellTop + pose.Dy;
+        double inset = (cellSize - spriteSide) * 0.5;
+        spriteLeft = cellLeft + pose.Dx + inset;
+        spriteTop = cellTop + pose.Dy + inset;
     }
 
     internal StatusStripHudElement(ICoreClientAPI capi, StatusStripHudApi api)
@@ -452,7 +453,7 @@ public sealed class StatusStripHudElement : HudElement
             string id = _active[i].StableId;
             _ = _kindAnim.TryGetValue(id, out KindRuntimeAnim a);
             AnimatedIconPose pose = ResolveActivePose(_active[i].AffectKind, a);
-            TopAlignedSpriteRect(left, top, sz, pose, out double sl, out double st, out double side);
+            CenterAnchoredScaledSpriteRect(left, top, sz, pose, out double sl, out double st, out double side);
             if (mouseX >= sl && mouseX < sl + side && mouseY >= st && mouseY < st + side)
             {
                 pickedIndex = i;
@@ -855,7 +856,7 @@ public sealed class StatusStripHudElement : HudElement
         CommitAnimSnapshot(_scratchCurrentIds, rects);
     }
 
-    private void DrawStatusIconTopAligned(
+    private void DrawStatusIconScaledCenterAnchored(
         int texId,
         double cellLeft,
         double cellTop,
@@ -863,7 +864,7 @@ public sealed class StatusStripHudElement : HudElement
         in AnimatedIconPose pose,
         float z)
     {
-        TopAlignedSpriteRect(cellLeft, cellTop, cellSize, pose, out double sl, out double st, out double side);
+        CenterAnchoredScaledSpriteRect(cellLeft, cellTop, cellSize, pose, out double sl, out double st, out double side);
         Vec4f tint = pose.Alpha >= 0.999f ? WhiteTint : new Vec4f(1f, 1f, 1f, pose.Alpha);
         capi.Render.Render2DTexture(texId, (float)sl, (float)st, (float)side, (float)side, z, tint);
     }
@@ -916,7 +917,7 @@ public sealed class StatusStripHudElement : HudElement
             GetIconScreen_LTWH(ref strip, i, out double x, out double yDraw, out int sz);
             _ = _kindAnim.TryGetValue(d.StableId, out KindRuntimeAnim anim);
             AnimatedIconPose pose = ResolveActivePose(d.AffectKind, anim);
-            DrawStatusIconTopAligned(texId, x, yDraw, sz, pose, z);
+            DrawStatusIconScaledCenterAnchored(texId, x, yDraw, sz, pose, z);
         }
 
         float zPop = z + 2f;
@@ -937,7 +938,7 @@ public sealed class StatusStripHudElement : HudElement
 
             double cellLeft = p.CenterX - p.BaselineSize * 0.5;
             double cellTop = p.CenterY - p.BaselineSize * 0.5;
-            DrawStatusIconTopAligned(texId, cellLeft, cellTop, p.BaselineSize, pose, zPop);
+            DrawStatusIconScaledCenterAnchored(texId, cellLeft, cellTop, p.BaselineSize, pose, zPop);
         }
     }
 
