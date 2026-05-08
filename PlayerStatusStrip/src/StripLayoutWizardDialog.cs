@@ -38,6 +38,7 @@ public sealed class StripLayoutWizardDialog : GuiDialog
         _hud = hud;
         _hudApi = hudApi;
         _hudApi.RegisterProvider(_previewProvider);
+        _hudApi.SetPreviewExclusiveProvider(_previewProvider);
         StatusStripLayoutConfig baseline = StatusStripLayoutConfig.Reload(capi);
         baseline.EnsureDefaults();
         _areaCodes = new[]
@@ -367,6 +368,7 @@ public sealed class StripLayoutWizardDialog : GuiDialog
         bool ok = base.TryClose();
         if (ok)
         {
+            _hudApi.SetPreviewExclusiveProvider(null);
             _hudApi.UnregisterProvider(_previewProvider);
             if (!_layoutAppliedFromWizard)
             {

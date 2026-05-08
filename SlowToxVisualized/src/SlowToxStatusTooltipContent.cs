@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
@@ -18,111 +17,30 @@ internal static class SlowToxStatusTooltipContent
     internal const string LangFmtSlow = "slowtoxvisualized:tooltip-slow-fmt";
     internal const string LangFmtPoison = "slowtoxvisualized:tooltip-poison-fmt";
 
+    private readonly struct EffectContext
+    {
+        internal readonly float Intox;
+        internal readonly bool Composed;
+        internal readonly float BenefitMult;
+        internal readonly float OverMult;
+
+        internal EffectContext(float intox, bool composed, float benefitMult, float overMult)
+        {
+            Intox = intox;
+            Composed = composed;
+            BenefitMult = benefitMult;
+            OverMult = overMult;
+        }
+    }
+
     internal static string BuildVtml(
         SlowToxHudEffectKind kind,
         Entity entity,
         ICoreClientAPI capi,
         HudLayoutConfig layout)
     {
-        IFormatProvider inv = CultureInfo.InvariantCulture;
-        float intox = SlowToxEffectProbe.ResolveIntoxicationForLogic(entity, layout);
-        bool composed = SlowToxEffectProbe.HasComposedTrait(entity, capi);
-        float benefitMult = entity.Stats.GetBlended("slowtox:benefitMult");
-        float overMult = entity.Stats.GetBlended("slowtox:overintoxicationDamageMult");
-
-        switch (kind)
-        {
-            case SlowToxHudEffectKind.DamageReductionBuff:
-            {
-                float dr = SlowToxEffectMath.CalculateBenefit(
-                    benefitMult,
-                    SlowToxHudDefaults.DamageReductionMax,
-                    SlowToxHudDefaults.DamageReductionIntoxRangeBottom,
-                    SlowToxHudDefaults.DamageReductionIntoxRangeTop,
-                    intox,
-                    composed);
-                return string.Format(inv, Lang.Get(LangFmtDr), dr);
-            }
-
-            case SlowToxHudEffectKind.HealthRegenBuff:
-            {
-                float hpPerSec = SlowToxEffectMath.CalculateBenefit(
-                    benefitMult,
-                    SlowToxHudDefaults.HealthRegenRateMax,
-                    SlowToxHudDefaults.HealthRegenIntoxRangeBottom,
-                    SlowToxHudDefaults.HealthRegenIntoxRangeTop,
-                    intox,
-                    composed);
-                return string.Format(inv, Lang.Get(LangFmtHp), hpPerSec);
-            }
-
-            case SlowToxHudEffectKind.TemporalRecoveryBuff:
-            {
-                float stabPerSec = SlowToxEffectMath.CalculateBenefit(
-                    benefitMult,
-                    SlowToxHudDefaults.StabilityRegenRateMax,
-                    SlowToxHudDefaults.StabilityRegenIntoxRangeBottom,
-                    SlowToxHudDefaults.StabilityRegenIntoxRangeTop,
-                    intox,
-                    composed);
-                return string.Format(inv, Lang.Get(LangFmtTemporal), stabPerSec);
-            }
-
-            case SlowToxHudEffectKind.MeleeDamageBuff:
-            {
-                float meleeStat = SlowToxEffectProbe.ReadKeyedStat(entity, "meleeWeaponsDamage", "intoxicated");
-                float strengthCalc = SlowToxEffectMath.CalculateBenefit(
-                    benefitMult,
-                    SlowToxHudDefaults.StrengthBonusMultiplierMax,
-                    SlowToxHudDefaults.StrengthBonusMultiplierIntoxRangeBottom,
-                    SlowToxHudDefaults.StrengthBonusMultiplierIntoxRangeTop,
-                    intox,
-                    composed);
-                float melee = GameMath.Max(meleeStat, strengthCalc);
-                float pct = melee * 100f;
-                return string.Format(inv, Lang.Get(LangFmtMelee), pct);
-            }
-
-            case SlowToxHudEffectKind.MiningSpeedBuff:
-            {
-                float miningStat = SlowToxEffectProbe.ReadKeyedStat(entity, "miningSpeedMul", "intoxicated");
-                float strengthCalc = SlowToxEffectMath.CalculateBenefit(
-                    benefitMult,
-                    SlowToxHudDefaults.StrengthBonusMultiplierMax,
-                    SlowToxHudDefaults.StrengthBonusMultiplierIntoxRangeBottom,
-                    SlowToxHudDefaults.StrengthBonusMultiplierIntoxRangeTop,
-                    intox,
-                    composed);
-                float mining = GameMath.Max(miningStat, strengthCalc);
-                float pct = mining * 100f;
-                return string.Format(inv, Lang.Get(LangFmtMining), pct);
-            }
-
-            case SlowToxHudEffectKind.SlowDebuff:
-            {
-                float? walk = SlowToxEffectProbe.ReadKeyedStatNullable(entity, "walkspeed", "intoxicated");
-                float penaltyFromStat = walk.HasValue ? GameMath.Max(0f, -walk.Value) : 0f;
-                float penaltyCalc = SlowToxEffectMath.CalculatePenalty(
-                    SlowToxHudDefaults.WalkSpeedPenaltyMax,
-                    SlowToxHudDefaults.WalkSpeedPenaltyIntoxBeginApply,
-                    SlowToxHudDefaults.WalkSpeedPenaltyIntoxFullApply,
-                    intox);
-                float penalty = GameMath.Max(penaltyFromStat, penaltyCalc);
-                float pct = penalty * 100f;
-                return string.Format(inv, Lang.Get(LangFmtSlow), pct);
-            }
-
-            case SlowToxHudEffectKind.PoisonDebuff:
-            {
-                float dmg = (0.1f + 0.4f * (intox - SlowToxHudDefaults.OverintoxicationThreshold)) * overMult;
-                const float tickPeriodSec = 6f;
-                float dps = dmg / tickPeriodSec;
-                return string.Format(inv, Lang.Get(LangFmtPoison), dps);
-            }
-
-            default:
-                return string.Format(inv, Lang.Get(LangFmtDr), 0f);
-        }
+        EffectContext ctx = ReadContext(entity, capi, layout);
+        return Lang.Get(LangKeyForKind(kind), ComputeEffectScalar(kind, entity, ctx));
     }
 
     /// <summary>Single scalar aligned with tooltip numbers — for detecting value-driven pulse.</summary>
@@ -132,50 +50,90 @@ internal static class SlowToxStatusTooltipContent
         ICoreClientAPI capi,
         HudLayoutConfig layout)
     {
-        float intox = SlowToxEffectProbe.ResolveIntoxicationForLogic(entity, layout);
-        bool composed = SlowToxEffectProbe.HasComposedTrait(entity, capi);
-        float benefitMult = entity.Stats.GetBlended("slowtox:benefitMult");
-        float overMult = entity.Stats.GetBlended("slowtox:overintoxicationDamageMult");
+        EffectContext ctx = ReadContext(entity, capi, layout);
+        return ComputeEffectScalar(kind, entity, ctx);
+    }
 
+    private static EffectContext ReadContext(Entity entity, ICoreClientAPI capi, HudLayoutConfig layout)
+    {
+        return new EffectContext(
+            SlowToxEffectProbe.ResolveIntoxicationForLogic(entity, layout),
+            SlowToxEffectProbe.HasComposedTrait(entity, capi),
+            entity.Stats.GetBlended("slowtox:benefitMult"),
+            entity.Stats.GetBlended("slowtox:overintoxicationDamageMult"));
+    }
+
+    private static string LangKeyForKind(SlowToxHudEffectKind kind)
+    {
+        switch (kind)
+        {
+            case SlowToxHudEffectKind.DamageReductionBuff:
+                return LangFmtDr;
+
+            case SlowToxHudEffectKind.HealthRegenBuff:
+                return LangFmtHp;
+
+            case SlowToxHudEffectKind.TemporalRecoveryBuff:
+                return LangFmtTemporal;
+
+            case SlowToxHudEffectKind.MeleeDamageBuff:
+                return LangFmtMelee;
+
+            case SlowToxHudEffectKind.MiningSpeedBuff:
+                return LangFmtMining;
+
+            case SlowToxHudEffectKind.SlowDebuff:
+                return LangFmtSlow;
+
+            case SlowToxHudEffectKind.PoisonDebuff:
+                return LangFmtPoison;
+
+            default:
+                return LangFmtDr;
+        }
+    }
+
+    private static float ComputeEffectScalar(SlowToxHudEffectKind kind, Entity entity, EffectContext ctx)
+    {
         switch (kind)
         {
             case SlowToxHudEffectKind.DamageReductionBuff:
                 return SlowToxEffectMath.CalculateBenefit(
-                    benefitMult,
+                    ctx.BenefitMult,
                     SlowToxHudDefaults.DamageReductionMax,
                     SlowToxHudDefaults.DamageReductionIntoxRangeBottom,
                     SlowToxHudDefaults.DamageReductionIntoxRangeTop,
-                    intox,
-                    composed);
+                    ctx.Intox,
+                    ctx.Composed);
 
             case SlowToxHudEffectKind.HealthRegenBuff:
                 return SlowToxEffectMath.CalculateBenefit(
-                    benefitMult,
+                    ctx.BenefitMult,
                     SlowToxHudDefaults.HealthRegenRateMax,
                     SlowToxHudDefaults.HealthRegenIntoxRangeBottom,
                     SlowToxHudDefaults.HealthRegenIntoxRangeTop,
-                    intox,
-                    composed);
+                    ctx.Intox,
+                    ctx.Composed);
 
             case SlowToxHudEffectKind.TemporalRecoveryBuff:
                 return SlowToxEffectMath.CalculateBenefit(
-                    benefitMult,
+                    ctx.BenefitMult,
                     SlowToxHudDefaults.StabilityRegenRateMax,
                     SlowToxHudDefaults.StabilityRegenIntoxRangeBottom,
                     SlowToxHudDefaults.StabilityRegenIntoxRangeTop,
-                    intox,
-                    composed);
+                    ctx.Intox,
+                    ctx.Composed);
 
             case SlowToxHudEffectKind.MeleeDamageBuff:
             {
                 float meleeStat = SlowToxEffectProbe.ReadKeyedStat(entity, "meleeWeaponsDamage", "intoxicated");
                 float strengthCalc = SlowToxEffectMath.CalculateBenefit(
-                    benefitMult,
+                    ctx.BenefitMult,
                     SlowToxHudDefaults.StrengthBonusMultiplierMax,
                     SlowToxHudDefaults.StrengthBonusMultiplierIntoxRangeBottom,
                     SlowToxHudDefaults.StrengthBonusMultiplierIntoxRangeTop,
-                    intox,
-                    composed);
+                    ctx.Intox,
+                    ctx.Composed);
                 return GameMath.Max(meleeStat, strengthCalc) * 100f;
             }
 
@@ -183,12 +141,12 @@ internal static class SlowToxStatusTooltipContent
             {
                 float miningStat = SlowToxEffectProbe.ReadKeyedStat(entity, "miningSpeedMul", "intoxicated");
                 float strengthCalc = SlowToxEffectMath.CalculateBenefit(
-                    benefitMult,
+                    ctx.BenefitMult,
                     SlowToxHudDefaults.StrengthBonusMultiplierMax,
                     SlowToxHudDefaults.StrengthBonusMultiplierIntoxRangeBottom,
                     SlowToxHudDefaults.StrengthBonusMultiplierIntoxRangeTop,
-                    intox,
-                    composed);
+                    ctx.Intox,
+                    ctx.Composed);
                 return GameMath.Max(miningStat, strengthCalc) * 100f;
             }
 
@@ -200,15 +158,13 @@ internal static class SlowToxStatusTooltipContent
                     SlowToxHudDefaults.WalkSpeedPenaltyMax,
                     SlowToxHudDefaults.WalkSpeedPenaltyIntoxBeginApply,
                     SlowToxHudDefaults.WalkSpeedPenaltyIntoxFullApply,
-                    intox);
+                    ctx.Intox);
                 return GameMath.Max(penaltyFromStat, penaltyCalc) * 100f;
             }
 
             case SlowToxHudEffectKind.PoisonDebuff:
             {
-                float dmg = (0.1f + 0.4f * (intox - SlowToxHudDefaults.OverintoxicationThreshold)) * overMult;
-                const float tickPeriodSec = 6f;
-                return dmg / tickPeriodSec;
+                return SlowToxHudDefaults.PoisonDamagePerSecond(ctx.Intox, ctx.OverMult);
             }
 
             default:

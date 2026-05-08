@@ -11,22 +11,8 @@ namespace SlowToxVisualized;
 
 public sealed class SlowToxIntoxicationHud : HudElement
 {
-    private static readonly AssetLocation BeerPath = new("slowtoxvisualized", "textures/icons/jug.png");
+    private static readonly AssetLocation BeerPath = SlowToxHudEffectIcons.Intoxication;
     private static readonly AssetLocation GearSvgPath = new("slowtoxvisualized", "textures/icons/gear.svg");
-
-    private static readonly AssetLocation IconDurability =
-        new("slowtoxvisualized", "textures/icons/durable.png");
-    private static readonly AssetLocation IconHp =
-        new("slowtoxvisualized", "textures/icons/regeneration.png");
-    private static readonly AssetLocation IconTemporalRecovery =
-        new("slowtoxvisualized", "textures/icons/temporal_recovery.png");
-    private static readonly AssetLocation IconMelee =
-        new("slowtoxvisualized", "textures/icons/strength.png");
-    private static readonly AssetLocation IconMining =
-        new("slowtoxvisualized", "textures/icons/mining_speed.png");
-    private static readonly AssetLocation IconSlow = new("slowtoxvisualized", "textures/icons/slow.png");
-    private static readonly AssetLocation IconPoison =
-        new("slowtoxvisualized", "textures/icons/poison.png");
 
     private static readonly Vec4f WhiteTint = new(1f, 1f, 1f, 1f);
 
@@ -48,6 +34,8 @@ public sealed class SlowToxIntoxicationHud : HudElement
     private const float StatusPulseDurationSec = 0.38f;
     private const float StatusPulseAmplitude = 0.11f;
     private const float StatusPopoutDurationSec = 0.24f;
+    private const int TooltipComposeHeightPx = 320;
+    private const double TooltipGapBelowPx = 4;
     /// <summary>Regen/stability DPS use small absolute numbers (~0…0.02); plain absolute epsilon missed e.g. 0.01→0.011 (Δ=0.001).</summary>
     private const float StatusPulseRelativeThreshold = 0.012f;
 
@@ -175,6 +163,7 @@ public sealed class SlowToxIntoxicationHud : HudElement
     private void ComposeHud()
     {
         GuiComposer? previous = SingleComposer;
+        _layout.EnsureDefaults();
 
         float rawHud = IntoxicationResolve.GetRaw(capi.World.Player?.Entity, _layout);
         int displayPercent = DisplayPercent(rawHud);
@@ -183,8 +172,6 @@ public sealed class SlowToxIntoxicationHud : HudElement
         ElementBounds dialogBounds = _layout.DialogBounds();
         ElementBounds innerBounds = _layout.InnerBounds();
         ElementBounds textBounds = _layout.TextBounds();
-
-        _layout.EnsureDefaults();
 
         double[] fillRgba = IntoxicationPalette.FillRgba(rawHud);
         double[] strokeRgba = _layout.TextStrokeMatchFillHue
@@ -277,17 +264,7 @@ public sealed class SlowToxIntoxicationHud : HudElement
 
     private static AssetLocation PngPathForEffectKind(SlowToxHudEffectKind kind)
     {
-        return kind switch
-        {
-            SlowToxHudEffectKind.DamageReductionBuff => IconDurability,
-            SlowToxHudEffectKind.HealthRegenBuff => IconHp,
-            SlowToxHudEffectKind.TemporalRecoveryBuff => IconTemporalRecovery,
-            SlowToxHudEffectKind.MeleeDamageBuff => IconMelee,
-            SlowToxHudEffectKind.MiningSpeedBuff => IconMining,
-            SlowToxHudEffectKind.SlowDebuff => IconSlow,
-            SlowToxHudEffectKind.PoisonDebuff => IconPoison,
-            _ => IconDurability
-        };
+        return SlowToxHudEffectIcons.Resolve(kind, SlowToxHudEffectIcons.DamageReduction);
     }
 
     private void ReloadStatusIconTextures()
@@ -438,7 +415,7 @@ public sealed class SlowToxIntoxicationHud : HudElement
             return;
         }
 
-        ElementBounds richBounds = ElementBounds.Fixed(0, 0, _layout.StatusTooltipMaxWidth, 320);
+        ElementBounds richBounds = ElementBounds.Fixed(0, 0, _layout.StatusTooltipMaxWidth, TooltipComposeHeightPx);
         richBounds.WithFixedPadding(0);
         richBounds.IsDrawingSurface = true;
         richBounds.WithParent(root);
@@ -458,13 +435,12 @@ public sealed class SlowToxIntoxicationHud : HudElement
         if (mainHudVisible && TryPickJug(mx, my, root, mug))
         {
             string vtml = Lang.Get("slowtoxvisualized:tooltip-jug-fmt");
-            const double jugGapBelowPx = 4;
             RenderRichTooltipAt(
                 deltaTime,
                 root,
                 vtml,
                 root.renderX,
-                root.renderY + mug + jugGapBelowPx);
+                root.renderY + mug + TooltipGapBelowPx);
             return;
         }
 
@@ -491,8 +467,7 @@ public sealed class SlowToxIntoxicationHud : HudElement
         string statusVtml = SlowToxStatusTooltipContent.BuildVtml(kind, entity, capi, _layout);
         StatusStripLayout strip = BuildStatusStripLayout(root, _activeEffects.Count);
         GetIconScreen_LTWH(ref strip, pickedIndex, out double left, out double top, out int sz);
-        const double gapBelowPx = 4;
-        RenderRichTooltipAt(deltaTime, root, statusVtml, left, top + sz + gapBelowPx);
+        RenderRichTooltipAt(deltaTime, root, statusVtml, left, top + sz + TooltipGapBelowPx);
     }
 
     private void RenderRichTooltipAt(
@@ -512,7 +487,7 @@ public sealed class SlowToxIntoxicationHud : HudElement
         bool textDirty = vtml != _lastHudTooltipVtml;
         if (textDirty)
         {
-            ElementBounds composeBounds = ElementBounds.Fixed(0, 0, maxW, 320);
+            ElementBounds composeBounds = ElementBounds.Fixed(0, 0, maxW, TooltipComposeHeightPx);
             composeBounds.WithFixedPadding(0);
             composeBounds.IsDrawingSurface = true;
             composeBounds.WithParent(root);

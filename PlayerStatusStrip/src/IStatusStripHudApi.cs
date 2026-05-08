@@ -7,4 +7,6 @@ public interface IStatusStripHudApi
     void RegisterProvider(IStatusStripProvider provider);
 
     void UnregisterProvider(IStatusStripProvider provider);
+
+    void SetPreviewExclusiveProvider(IStatusStripProvider? provider);
 }
