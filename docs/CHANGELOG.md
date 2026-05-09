@@ -2,6 +2,14 @@
 
 **Текущая версия** задаётся в [`modinfo.json`](../modinfo.json) (поле `version`). Ниже — кратко что менялось по релизам.
 
+Публичный baseline на ModDB перед текущим freeze: `1.1.9` (`https://mods.vintagestory.at/slowtoxvisualizer`, релиз "1 day ago" на момент проверки).
+
+## Unreleased
+
+- Refactor: удалён legacy standalone HUD-рендерер (`SlowToxIntoxicationHud`, `IntoxicationPalette`, `StatusTooltipPanelBackend`, `UxColorMath`) после перехода на provider-only модель через `Player Status HUD`.
+- Cleanup: из `HudLayoutConfig` удалены поля/методы, использовавшиеся только старым рендерером; в `SlowToxStatusStripProvider` удалено копирование неактуальных legacy-полей.
+- Поведение в игре не меняется: мод по-прежнему публикует статусы в `Player Status HUD`, без возврата к отдельному HUD-слою.
+
 ## 1.1.35
 
 - Документационный cleanup после разделения репозиториев: удалены устаревшие дублирующиеся compatibility-only записи из changelog.

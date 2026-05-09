@@ -1,7 +1,7 @@
 using System;
 using System.IO;
-using Vintagestory.API.Client;
 using Vintagestory.API.Common;
+using Vintagestory.API.Client;
 
 namespace SlowToxVisualized;
 
@@ -15,21 +15,6 @@ public class HudLayoutConfig
     public double DialogOffsetY { get; set; } = 8;
     public double DialogWidth { get; set; } = 32;
     public double DialogHeight { get; set; } = 54;
-
-    public double ColumnWidth { get; set; } = 32;
-    public double TextOffsetX { get; set; } = -2;
-    public double TextY { get; set; } = 30;
-    public double TextHeight { get; set; } = 18;
-
-    public int MugSize { get; set; } = 32;
-    public int GearDrawSize { get; set; } = 64;
-    public double GearCornerInsetFactor { get; set; } = 0.05;
-    public double GearOffsetX { get; set; } = -2;
-    public double GearOffsetY { get; set; } = -2;
-
-    public float ZBeer { get; set; } = 440f;
-    public float ZGear { get; set; } = 560f;
-    public float ZStatusIcons { get; set; } = 570f;
 
     public int StatusTooltipMaxWidth { get; set; } = 260;
     public float StatusTooltipZ { get; set; } = 600f;
@@ -51,17 +36,6 @@ public class HudLayoutConfig
     public double StatusIconsWavePeriodSec { get; set; } = 2.5;
     public double StatusIconsWaveStaggerSec { get; set; } = 0.2;
 
-    public float GearRotateDegPerSec { get; set; } = 45f;
-
-    public int FontSize { get; set; } = 14;
-    public int StrokeWidth { get; set; } = 1;
-
-    public bool TextStrokeMatchFillHue { get; set; } = true;
-
-    public double[] TextStrokeColor { get; set; } = { 0, 0, 0, 1 };
-    public double GearStrokeWidth { get; set; } = 6;
-    public double[] GearStrokeColor { get; set; } = { 0, 0, 0, 1 };
-
     public bool UseMockIntoxicationOverride { get; set; } = false;
 
     public double MockIntoxicationRaw { get; set; } = 0.1;
@@ -75,8 +49,6 @@ public class HudLayoutConfig
 
     public void EnsureDefaults()
     {
-        TextStrokeColor ??= new double[] { 0, 0, 0, 1 };
-        GearStrokeColor ??= new double[] { 0, 0, 0, 1 };
         StatusStripAnchorMode ??= "Max";
         StatusStripVerticalAlign ??= "Top";
         if (string.IsNullOrWhiteSpace(StatusStripSide))
@@ -165,33 +137,5 @@ public class HudLayoutConfig
         HudLayoutConfig fallback = CreateDefaults();
         fallback.EnsureDefaults();
         return fallback;
-    }
-
-    public ElementBounds DialogBounds()
-    {
-        return ElementBounds.Fixed(ParseDialogArea(DialogArea), DialogOffsetX, DialogOffsetY, DialogWidth, DialogHeight);
-    }
-
-    public ElementBounds InnerBounds()
-    {
-        return ElementBounds.Fixed(0, 0, ColumnWidth, DialogHeight);
-    }
-
-    public ElementBounds TextBounds()
-    {
-        return ElementBounds.Fixed(TextOffsetX, TextY, ColumnWidth, TextHeight);
-    }
-
-    private static EnumDialogArea ParseDialogArea(string code)
-    {
-        return code?.Trim() switch
-        {
-            "CenterBottom" => EnumDialogArea.CenterBottom,
-            "LeftBottom" => EnumDialogArea.LeftBottom,
-            "RightBottom" => EnumDialogArea.RightBottom,
-            "RightTop" => EnumDialogArea.RightTop,
-            "CenterTop" => EnumDialogArea.CenterTop,
-            _ => EnumDialogArea.CenterBottom
-        };
     }
 }
