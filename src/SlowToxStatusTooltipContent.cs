@@ -152,14 +152,7 @@ internal static class SlowToxStatusTooltipContent
 
             case SlowToxHudEffectKind.SlowDebuff:
             {
-                float? walk = SlowToxEffectProbe.ReadKeyedStatNullable(entity, "walkspeed", "intoxicated");
-                float penaltyFromStat = walk.HasValue ? GameMath.Max(0f, -walk.Value) : 0f;
-                float penaltyCalc = SlowToxEffectMath.CalculatePenalty(
-                    SlowToxHudDefaults.WalkSpeedPenaltyMax,
-                    SlowToxHudDefaults.WalkSpeedPenaltyIntoxBeginApply,
-                    SlowToxHudDefaults.WalkSpeedPenaltyIntoxFullApply,
-                    ctx.Intox);
-                return GameMath.Max(penaltyFromStat, penaltyCalc) * 100f;
+                return SlowToxEffectProbe.ResolveSlowPenaltyMetric(entity, ctx.Intox) * 100f;
             }
 
             case SlowToxHudEffectKind.PoisonDebuff:

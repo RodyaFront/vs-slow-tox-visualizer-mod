@@ -12,6 +12,7 @@ internal sealed class SlowToxStatusStripProvider : IStatusStripProvider
     private readonly ICoreClientAPI _capi;
     private readonly HudLayoutConfig _layout;
     private readonly List<SlowToxHudEffectKind> _activeEffects = new(SlowToxHudEffectKindMeta.KindCount);
+    private bool _staleSlowSuppressionLogged;
 
     internal SlowToxStatusStripProvider(ICoreClientAPI capi)
     {
@@ -50,7 +51,21 @@ internal sealed class SlowToxStatusStripProvider : IStatusStripProvider
                 StatusAffectKind.Neutral));
         }
 
-        SlowToxEffectProbe.CollectActiveKinds(player.Entity, capi, raw, _activeEffects);
+        SlowToxEffectProbe.CollectActiveKinds(player.Entity, capi, raw, _activeEffects, out bool staleSlowSuppressed);
+        if (staleSlowSuppressed)
+        {
+            if (!_staleSlowSuppressionLogged)
+            {
+                capi.Logger.Warning(
+                    "[SlowTox Visualized] Suppressed stale slow debuff: intoxication is zero, but walkspeed:intoxicated is still negative (likely post-crash stale state).");
+                _staleSlowSuppressionLogged = true;
+            }
+        }
+        else
+        {
+            _staleSlowSuppressionLogged = false;
+        }
+
         foreach (SlowToxHudEffectKind kind in _activeEffects)
         {
             dest.Add(new StatusDescriptor(

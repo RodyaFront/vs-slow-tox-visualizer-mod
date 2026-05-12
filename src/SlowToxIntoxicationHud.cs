@@ -288,7 +288,7 @@ public sealed class SlowToxIntoxicationHud : HudElement
         IPlayer? player = capi.World.Player;
         Entity? entity = player?.Entity;
         float intox = SlowToxEffectProbe.ResolveIntoxicationForLogic(entity, _layout);
-        SlowToxEffectProbe.CollectActiveKinds(entity, capi, intox, _activeEffects);
+        SlowToxEffectProbe.CollectActiveKinds(entity, capi, intox, _activeEffects, out _);
     }
 
     private static bool IsStatusStripLeft(string? side)
