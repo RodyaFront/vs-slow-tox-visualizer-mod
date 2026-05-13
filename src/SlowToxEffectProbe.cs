@@ -21,9 +21,11 @@ internal static class SlowToxEffectProbe
         Entity? entity,
         ICoreClientAPI capi,
         float intoxForLogic,
-        List<SlowToxHudEffectKind> dest)
+        List<SlowToxHudEffectKind> dest,
+        out bool staleSlowSuppressed)
     {
         dest.Clear();
+        staleSlowSuppressed = false;
 
         if (entity == null)
         {
@@ -111,15 +113,8 @@ internal static class SlowToxEffectProbe
             dest.Add(SlowToxHudEffectKind.MiningSpeedBuff);
         }
 
-        float? walk = ReadKeyedStatNullable(entity, "walkspeed", "intoxicated");
-        float penaltyFromStat = walk.HasValue ? GameMath.Max(0f, -walk.Value) : 0f;
-        float penaltyCalc = SlowToxEffectMath.CalculatePenalty(
-            SlowToxHudDefaults.WalkSpeedPenaltyMax,
-            SlowToxHudDefaults.WalkSpeedPenaltyIntoxBeginApply,
-            SlowToxHudDefaults.WalkSpeedPenaltyIntoxFullApply,
-            intoxForLogic);
-
-        if (GameMath.Max(penaltyFromStat, penaltyCalc) > Epsilon)
+        float slowPenaltyMetric = ResolveSlowPenaltyMetric(entity, intoxForLogic, out staleSlowSuppressed);
+        if (slowPenaltyMetric > Epsilon)
         {
             dest.Add(SlowToxHudEffectKind.SlowDebuff);
         }
@@ -146,6 +141,32 @@ internal static class SlowToxEffectProbe
         return entity.Stats[statCode].ValuesByKey.TryGetValue(key, out EntityStat<float> mod)
             ? mod.Value
             : null;
+    }
+
+    internal static float ResolveSlowPenaltyMetric(Entity entity, float intoxForLogic)
+    {
+        return ResolveSlowPenaltyMetric(entity, intoxForLogic, out _);
+    }
+
+    internal static float ResolveSlowPenaltyMetric(Entity entity, float intoxForLogic, out bool staleSlowSuppressed)
+    {
+        float? walk = ReadKeyedStatNullable(entity, "walkspeed", "intoxicated");
+        float penaltyFromStat = walk.HasValue ? GameMath.Max(0f, -walk.Value) : 0f;
+        float penaltyCalc = SlowToxEffectMath.CalculatePenalty(
+            SlowToxHudDefaults.WalkSpeedPenaltyMax,
+            SlowToxHudDefaults.WalkSpeedPenaltyIntoxBeginApply,
+            SlowToxHudDefaults.WalkSpeedPenaltyIntoxFullApply,
+            intoxForLogic);
+
+        staleSlowSuppressed = intoxForLogic <= Epsilon
+            && penaltyCalc <= Epsilon
+            && penaltyFromStat > Epsilon;
+        if (staleSlowSuppressed)
+        {
+            return 0f;
+        }
+
+        return GameMath.Max(penaltyFromStat, penaltyCalc);
     }
 
     internal static bool HasComposedTrait(Entity entity, ICoreClientAPI capi)
